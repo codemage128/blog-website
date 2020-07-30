@@ -1,0 +1,19 @@
+
+.google {
+  background-color: #dd4b39;
+  color: white;
+  border: 1px solid #dd4b39;
+  margin-top: 10px;
+  width: 100%;
+}
+.google:hover{
+  color: white;
+}
+
+.apple {
+  background-color: gray;
+  color: white;
+  border: 1px solid gray;
+  margin-top: 10px;
+  width: 100%;
+}

@@ -1,0 +1,131 @@
+.popup-back {
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 99999;
+   width: 100%;
+   height: 100%;
+   background-color: white;
+   opacity: 0.85;
+   display: none;
+}
+
+.popupTitle {
+   font-size: 30px !important;
+   font-weight: 900 !important;
+   color: white !important;
+   margin-bottom: 30px !important;
+}
+.popupContent {
+   font-size: 20px !important;
+   color: white !important;
+}
+
+.popupButton:hover {
+   background-color: black;
+   color: white;
+}
+#qualifyPopup {
+   background-image: url("/images/popup/qualifyPopup_background.jpeg");
+   background-size: cover;
+}
+
+.adpopupContainer {
+   color: white;
+   position: absolute;
+   top: 20%;
+   left: 5%;
+   width: 50%;
+   margin: auto;
+   text-align: center;
+}
+.adpopupTitle {
+   font-size: 40px;
+   font-weight: 900;
+}
+.adpopupContent {
+   font-size: 25px;
+}
+
+
+#adPopup {
+   background-image: url("/images/popup/adblocker.jpeg");
+   background-size: cover;
+}
+
+
+@media screen and (max-width: 1000px) {
+   .popup {
+      width: 80%;
+      left: 10%;
+      position: fixed;
+      height: 80%;
+      top: 10%;
+      z-index: 999999;
+      text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: none;
+   }
+   .popupContainer {
+      color: white;
+      position: absolute;
+      top: 10%;
+      left: 5%;
+      width: 90%;
+      margin: auto;
+   }
+   .popupButton {
+      border: 2px solid #98e0f2;
+      padding: 10px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 4px;
+      color: white;
+   }
+   .publish5-btn a {
+      font-size: 10px;
+   }
+}
+@media screen and (min-width: 1000px) {
+
+   .popup {
+      position: fixed;
+      width: 60%;
+      height: 84%;
+      top: 10%;
+      left: 20%;
+      z-index: 999999;
+      text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: none;
+   }
+   .popupContainer {
+      color: white;
+      position: absolute;
+      top: 40%;
+      right: 5%;
+      width: 50%;
+      margin: auto;
+   }
+   .popupButton {
+      border: 2px solid #98e0f2;
+      padding: 14px 40px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      color: white;
+   }
+}
+
+.closepopup{
+   position: absolute;
+   color: white;
+   top: 2%;
+   right: 3%;
+}
+
+.closepopup:hover {
+   color: #98E0F2;
+}

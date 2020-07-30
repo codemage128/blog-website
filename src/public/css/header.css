@@ -1,0 +1,143 @@
+.progress {
+   position: absolute;
+   bottom: 0;
+   margin: 0;
+   height: 5px;
+}
+
+.notification{
+   position: fixed;
+   top: 0;
+   right: 0;
+   z-index: 99999;
+   width: 300px;
+   height: 100%;
+   background-color: white;
+   padding: 30px;
+}
+
+.social-media {
+   padding: 0px;
+}
+
+@media screen and (max-width: 1000px) {
+   .menu-large {
+      display: none;
+   }
+
+   .upvote-btn {
+      display: none;
+   }
+
+   .dropup-mobile {
+      display: block;
+   }
+
+   .dropup {
+      display: none;
+   }
+
+   .menu-small {
+      display: block;
+   }
+
+   .dype-image {
+      display: none;
+   }
+
+   .social-media {
+      margin: 40px;
+   }
+
+   .section-1-right-btn a {
+      font-size: 14px;
+   }
+}
+
+.footercategory:hover {
+   color: #98E0F2 !important;
+}
+
+@media screen and (min-width: 1000px) {
+   .menu-small {
+      display: none;
+   }
+
+   .free-test-button {
+      font-size: 20px;
+      padding: 15px 30px;
+   }
+
+   .dropup-mobile {
+      display: none;
+   }
+
+   .dropup {
+      display: block;
+   }
+
+   .footer-copyright {
+      padding-top: 60px;
+   }
+}
+
+#processbar {
+   background-color: #3452ff;
+}
+
+.show {
+   display: inline !important;
+}
+
+.header {
+   display: flex;
+   align-items: center;
+}
+
+.sidenav {
+   height: 100%;
+   width: 200px;
+   position: fixed;
+   z-index: 1000000;
+   top: 0;
+   right: 0;
+   background-color: white;
+   overflow-x: hidden;
+   padding-top: 20px;
+   display: none;
+   padding: 10px;
+}
+
+.sidenav a {
+   padding: 6px 8px 6px 16px;
+   text-decoration: none;
+   font-size: 14px;
+   color: #818181;
+   display: block;
+   margin-bottom: 5px;
+}
+
+.sidenav a:hover {
+   color: blue;
+}
+.cancelNav {
+   font-size: 40px !important;
+   text-align: right;
+   margin-right: 20px;
+}
+.username_span {
+   font-size: 18px;
+   padding: 20px;
+   display: contents;
+   overflow-wrap: break-word;
+}
+.menu-title {
+   padding-left: 10px;
+   cursor: pointer;
+}
+.menu-large {
+   text-align: right;
+}
+.menu-small {
+   text-align: right;
+}

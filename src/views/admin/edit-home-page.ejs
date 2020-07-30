@@ -1,0 +1,284 @@
+<%- include ./partials/header %>
+<link rel="stylesheet" href="/icofont/icofont.min.css">
+<link rel="stylesheet" href="/css/upload.css">
+<script src="/tinymce/js/tinymce/tinymce.min.js"></script>
+<style>
+   body {
+      background: #f8f9fa !important;
+   }
+
+   .format {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: capitalize;
+      display: block;
+   }
+
+   .form-control {
+      padding: 5px 11px !important;
+   }
+
+   input[type=checkbox] {
+      border: 1px solid #b4b9be;
+      background: #fff;
+      color: #555;
+      clear: none;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 0;
+      height: 16px;
+      margin: -4px 4px 0 0;
+      outline: 0;
+      padding: 0 !important;
+      text-align: center;
+      vertical-align: middle;
+      width: 16px;
+      min-width: 16px;
+      -webkit-appearance: none;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: 0.05s border-color ease-in-out;
+   }
+
+   input[type=checkbox]:checked:before {
+      margin: 1px 0 0 -1px;
+      color: #1e8cbe;
+      content: "";
+      font: normal normal normal 13px/1 FontAwesome;
+   }
+
+   .btn-bsa {
+      background: #acbb16;
+      color: #fff;
+      transition: all ease-in-out .3s;
+   }
+
+   .btn-bsa:hover {
+      background: #000;
+      color: #fff;
+   }
+
+   .tox-statusbar {
+      display: none !important;
+   }
+
+   input[type=radio] {
+      border: 1px solid #b4b9be;
+      background: #fff;
+      color: #555;
+      clear: none;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 0;
+      height: 16px;
+      margin: -4px 4px 0 0;
+      outline: 0;
+      padding: 0 !important;
+      text-align: center;
+      vertical-align: middle;
+      width: 16px;
+      min-width: 16px;
+      -webkit-appearance: none;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: 0.05s border-color ease-in-out;
+   }
+
+   input[type=radio]:checked:before {
+      margin: 1px 0 0 -1px;
+      color: #1e8cbe;
+      content: "";
+      font: normal normal normal 13px/1 FontAwesome;
+   }
+</style>
+<%- include ./partials/sidebar %>
+<!-- Content Body Start -->
+<div class="content-body bg-light">
+   <!-- Page Headings Start -->
+   <div class="row justify-content-between align-items-center mb-10">
+
+      <!-- Page Heading Start -->
+      <div class="col-md-8 col-lg-auto mb-20">
+         <div class="page-heading">
+            <h3>Edit Home Page : </h3>
+         </div>
+      </div><!-- Page Heading End -->
+   </div><!-- Page Headings End -->
+   <%- include ../partials/msg %>
+   <form action="/pages/edit" method="POST">
+      <div class="row ">
+         <!--Manage Product List Start-->
+         <div class="col-md-12">
+            <div class="table-responsive bg-white shadow-sm">
+               <div class="card">
+                  <div class="card-header">
+                     <b>Home Page</b>
+                  </div>
+                  <div class="card-body">
+                     <div class="row" style="background-color: #000; height: 600;">
+                        <div class="col-md-6 col-sm-12"></div>
+                        <div class="col-md-6 col-sm-12" style="color: white;">
+                           <div class="section-1-right-edit">
+                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                           </div>
+                           <div class="section-1-right-heading1">
+                              <input type="text" value="Dype-Unique content." class="form-control"
+                                 style="font-size: 36px; color: white; background-color: #000;" />
+                           </div>
+                           <div class="section-1-right-heading2">
+                              <h2 style="color: white;">[SEARCH BOX AUTOFILL WITH CATEGORY]</h2>
+                              <h3 style="color: white;">Position: Top Right</h3>
+                           </div>
+                           <div class="section-1-right-content">
+                              <textarea rows="10" class="form-control" style="color: white; background-color: black;">Enjoy unique content from countless categories, written by experts, authers, coaches and artists
+                                       who enthusiastically share their knowledge. Our promise: No advertising, no up-selling,
+                                       high-quality contributions.</textarea>
+                           </div>
+                           <div class="section-1-right-btn">
+                              <span>Browse categories</span><span><i class="fa fa-long-arrow-right"
+                                    aria-hidden="true"></i></span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row" style="height: 600;">
+                        <div class="col-md-6 col-sm-12" style="background-color: #f4f4f4; height: 400px;">
+                           <div class="section-2-heading">
+                              <h3>In a nutshell</h3>
+                           </div>
+                           <div class="section-2-content">
+                              <input class="form-control" style="background-color:#f4f4f4 ; font-size: 28px;" type="text" 
+                              value="No theoretical, long boks-conmpressed,p practile and applicable knowledge for the daily injection of knowledge.">
+                           </div>
+                           <div class="section-2-content-2">
+                              <div class="section-2-content-2-icon">
+                                 <i class="fa fa-check" aria-hidden="true"></i>
+                              </div>
+                              <div class="section-2-content-2-brief">
+                                 <textarea class="form-control" style="background-color:#f4f4f4 ; font-size: 25px;">Inspire, Inform, create perspectives - let other inspect you. Find out about topics
+                                    and create your own personal perspective.Consiume content on your favorite topics every day, without any restriction or
+                                    advertising.</textarea>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                        </div>
+                     </div>
+                     <div class="row" style="height: 600;">
+                        <div class="col-md-6">
+                           <img src="/images/img-7.jpeg">
+                        </div>
+                        <div class="col-md-6" style="background-color: #f4f4f4;">
+                           <div class="section-3-heading">
+                              <h3>Du stehst im Mittelpunkt.</h3>
+                           </div>
+                           <div class="section-3-content">
+                              <input style="background-color:#f4f4f4 ; font-size: 28px;" class="form-control" type="text" value="Keine Werbung, kein Datenverkauf - deine Interessen bleiben geheim."/>
+                           </div>
+                           <div class="section-3-content-2-brief">
+                              <textarea class="form-control" style="background-color:#f4f4f4 ; font-size: 25px;">Du wirst schnell bemerken, dass wir ganzlich auf Werbung verzichten. Unsere Autoren
+                                 erhalten eine faire. Entlohnung fur ihre geleistenten Beitrage. Dies biebet dir ein werbefresis Wissenszentrum.</textarea>
+                           </div>
+                           <div class="section-3-right-btn">
+                              <a href="#">Unsere Vision</a>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row" style="color: white; background-color: black; height: 600;">
+                        <div class="col-md-6 col-sm-12"></div>
+                        <div class="col-md-6 col-sm-12" style="height: 400px;">
+                           <br>
+                           <div class="section-4-right-heading">
+                              <input class="form-control" type="text" style="color: white; background-color: #000; font-size: 28px;"
+                                 value="Das wissen was andere nicth wissen." />
+                           </div>
+                           <br>
+                           <div class="section-4-content">
+                              <textarea rows="10" class="form-control" style="color: white; background-color: #000; font-size: 22px;">Das Internet verschafft dir Zugang zu samtlichen Informationen. Doch wer gewahrleistet die
+                                       Seriositat der Information? Unsere Publisher sind verifiziert und ihre Inhalte werden von uns
+                                       gepruft.Lasse dich von den Geschichten und Erfrahrungen unserer Publisher begeistern. Information aus
+                                       erster Hand - von Experten fur Dich!
+                                    -Lerne aus exklusiven Beitragen.
+                                    -Lese aus bis zu 100 Kategorien.
+                                    -Erhalte interessenbasierte Vorschlage.
+                                    -Werde jeden Tag etwas schlauer.
+                                    -Lerne Experten in deinen Bereichen kennen.
+                                    </textarea>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row" style="color: white; background-color: black; height: 600;">
+                        <div class="col-md-6 col-sm-12">
+                           <div class="section-4-left-2-icon">
+                              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                           </div>
+                           <div class="section-4-left-2-content">
+                              <input class="form-control" style="color: white; background-color: #000; font-size: 28px;" type="text"
+                                 value="Unbegrenzt genießen." /><br>
+                              <textarea rows="10" style="color: white; background-color: #000;  font-size: 22px;" class="form-control">Genieße die unzähligen Beiträge unserer qualifizierten Publisher. Folge ihnen, damit du keine
+                                       ihrer Veröffentlichungen mehr verpasst. Markiere Passagen oder einen ganzen Beitrag, der dich
+                                       begeistert, damit du ihn später noch einmal lesen kannst.</textarea>
+                           </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                           <img src="/images/img-8.png">
+                        </div>
+                     </div>
+                     <div class="row"
+                        style="background-image: linear-gradient(#00000073, #00000061),url('/images/banner.jpg'); text-align: center; background-size: cover; background-repeat: no-repeat;height: 400px;">
+                        <div class="col-md-12 col-sm-12" style="margin-top: 100px; color: white;">
+                           <div class="section-5-heading">
+                              <textarea class="form-control" rows="10"
+                                 style="
+                                       font-size: 25px;
+                                       background: transparent;
+                                       color: white;">Wir leben alle unter dem gleichen Himmel, aber wir haben nicth immer den gleichen horizont.- Konrad Adenuer</textarea>
+                           </div>
+                           <div class="section-5-btn">
+                              <a href="#">Erweitere deinen Horizont</a>
+                           </div>
+                        </div>
+                     </div>
+                     <hr>
+                     <div class="row">
+                        <div class="col-md-9 col-sm-12"></div>
+                        <div class="col-md-3 col-sm-12">
+                           <input class="form-control btn btn-primary" type="button" value="Publish" disabled/>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--Manage Product List End-->
+      </div>
+   </form>
+</div><!-- Content Body End -->
+<!-- Footer Section Start -->
+<div class="footer-section">
+   <div class="container-fluid">
+      <div class="footer-copyright text-center">
+         <p class="text-body-light">
+            <script>document.write(new Date().getFullYear())</script> &copy; <a
+               href="<%= siteLink %>"><%= siteTitle %></a></p>
+      </div>
+   </div>
+</div><!-- Footer Section End -->
+
+<!-- JS
+============================================ -->
+
+<!-- Global Vendor, plugins & Activation JS -->
+<script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/assets/js/vendor/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/vendor/popper.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<!--Plugins JS-->
+<script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="/assets/js/plugins/tippy4.min.js.js"></script>
+<script src="/assets/js/plugins/nice-select/jquery.nice-select.min.js"></script>
+<script src="/js/vue.min.js"></script>
+<script src="/js/upload.js"></script>
+<!--Main JS-->
+<script src="/assets/js/main.js"></script>
+</body>
+
+</html>

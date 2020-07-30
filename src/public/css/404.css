@@ -1,0 +1,23 @@
+.btn-home{
+   font-size: 20px;
+   background-color: #000000;
+   padding: 15px;
+   color: #98E0F2;
+   border-radius: 10px;
+ }
+ a:hover, a:focus {
+   color: white;
+ }
+ .return-home{
+   text-align: center;
+   margin-top: 150px;
+   height: 100px;
+ }
+ .inner-onboarding{
+   text-align: center;
+   margin-top: 100px;
+ }
+ .footer-main{
+   width: 100%;
+   bottom: 0;
+ }

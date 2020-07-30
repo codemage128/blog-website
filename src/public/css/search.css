@@ -1,0 +1,8 @@
+.pagenation{
+   background-color: transparent !important;
+   border-color: blue;
+   color: black;
+}
+.pagenation:hover {
+   color: black;
+}

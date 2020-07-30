@@ -1,0 +1,261 @@
+<%- include ./partials/header %>
+<style>
+   @import 'https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&subset=latin-ext';
+   @import url('https://fonts.googleapis.com/css?family=Hind:300,400');
+   *,
+   *:before,
+   *:after {
+      -webkit-box-sizing: inherit;
+      box-sizing: inherit;
+   }
+
+   .container {
+      margin: 0 auto;
+      padding: 4rem;
+      width: 48rem;
+   }
+
+   h3 {
+      font-size: 1.75rem;
+      color: #373d51;
+      padding: 1.3rem;
+      margin: 0;
+   }
+
+   .accordion a {
+      position: relative;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      width: 100%;
+      padding: 1rem 3rem 1rem 1rem;
+      color: #7288a2;
+      font-size: 1.15rem;
+      font-weight: 400;
+      border-bottom: 1px solid #e5e5e5;
+   }
+
+   .accordion a:hover,
+   .accordion a:hover::after {
+      cursor: pointer;
+      color: #03b5d2;
+   }
+   .accordion a:hover::after {
+      border: 1px solid #03b5d2;
+   }
+   .accordion a.active {
+      color: #03b5d2;
+      border-bottom: 1px solid #03b5d2;
+   }
+   .accordion a::after {
+      font-family: 'Fontawesome';
+      content: '\f067';
+      position: absolute;
+      float: right;
+      right: 1rem;
+      font-size: 1rem;
+      color: #7288a2;
+      padding: 5px;
+      width: 30px;
+      height: 30px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      border: 1px solid #7288a2;
+      text-align: center;
+   }
+   .accordion a.active::after {
+      font-family: 'Fontawesome';
+      content: '\f068';
+      color: #03b5d2;
+      border: 1px solid #03b5d2;
+   }
+
+   .accordion .content {
+      opacity: 0;
+      padding: 0 1rem;
+      max-height: 0;
+      border-bottom: 1px solid #e5e5e5;
+      overflow: hidden;
+      clear: both;
+      -webkit-transition: all 0.2s ease 0.15s;
+      -o-transition: all 0.2s ease 0.15s;
+      transition: all 0.2s ease 0.15s;
+   }
+
+   .accordion .content p {
+      font-size: 1rem;
+      font-weight: 300;
+   }
+
+   .accordion .content.active {
+      opacity: 1;
+      padding: 1rem;
+      max-height: 100%;
+      -webkit-transition: all 0.35s ease 0.15s;
+      -o-transition: all 0.35s ease 0.15s;
+      transition: all 0.35s ease 0.15s;
+   }
+</style>
+<%- include ./partials/sidebar %>
+<!-- Content Body Start -->
+<div class="content-body">
+   <!-- Top Report Wrap Start -->
+   <div class="row">
+      <div class="col-12 text-center">
+         <!-- <a target="_blank" href="/Backenddatei_Qualifzieren.pdf"><button class="btn btn-primary">Hilfreiche Tipps zur Gestaltung</button></a> -->
+         <a target="_blank" href="/Backenddatei_Reichweite.pdf"><button class="btn btn-primary">Reichweite</button></a>
+         <a target="_blank" href="/Backenddatei_Qualifzieren.pdf"><button class="btn btn-primary">Qualifizieren bei Dype</button></a>
+      </div>
+   </div>
+   <div class="row">
+      <!-- Top Report Start -->
+      <div class="col-lg-8 col-md-8 col-sm-8 mb-30">
+         <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="accordion">
+               <div class="accordion-item">
+                  <a>Was ist Dype?</a>
+                  <div class="content">
+                     <p>Dype ist eine Blogger-Plattform. Dype will seinen Lesern ein werbefreies Wissenszentrum bieten und Bloggern dabei helfen, eine große Reichweite aufzubauen. Statt der Werbung sollen unsere Blogger monetär für ihre Beiträge entlohnt werden. Die Entlohnung entsteht durch die Beiträge unserer Premium-Mitglieder.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Was benötige ich, um Dype zu nutzen?</a>
+                  <div class="content">
+                     <p>Um Dype zu nutzen benötigst du lediglich eine Internetverbindung und ein Gerät, über das du die Plattform aufrufen kannst. Dort kannst du dich ganz einfach kostenlos registrieren und sofort loslegen. Mit jedem Account hast du die Möglichkeit, Beiträge zu lesen und eigene zu verfassen</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Warum sollte ich auf Dype bloggen?</a>
+                  <div class="content">
+                     <p>Hier findest du einen Beitrag über die Vorzüge des Blogging auf Dype.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wie werde ich für meine Beiträge entlohnt?</a>
+                  <div class="content">
+                     <p>Deine Beiträge werden entlohnt, sobald sie durch Dype qualifiziert wurden. Im Editor deiner Beiträge kannst du sie zur Prüfung einreichen. Nach erfolgreicher Prüfung werden deine Beiträge in Abhängigkeit der Lesezeit unserer Premium-Mitglieder vergütet. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wie viele Menschen kann ich mit meinen Artikeln erreichen?</a>
+                  <div class="content">
+                     <p>Deine Artikel können unzählig viele Menschen erreichen, die nach Beiträgen zu den Themen suchen, über die du schreibst. Deine Beiträge werden nicht nur auf Dype, sondern auch in den Ergebnissen der Suchmaschinen, Sozialen Netzwerken oder auch über Mails platziert.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Behalte ich die Rechte an meinen Beiträgen?</a>
+                  <div class="content">
+                     <p>Du behältst 100% der Rechte an deinem geistigen Eigentum. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Muss ich eigene Abbildungen erstellen?</a>
+                  <div class="content">
+                     <p>Eigene Abbildungen sind nicht essentiell, können bei der Platzierung jedoch eine nicht unbedeutende Rolle spielen. Je größer der Aufwand für die Veranschaulichung deiner Inhalte, desto besser wirst du platziert und desto mehr Leser werden auf deinen Beitrag aufmerksam.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wird Duplicate Content abgestraft?</a>
+                  <div class="content">
+                     <p>Dype schätzt das Recht an dem geistigen Eigentum jedes Bloggers. Deshalb wird Duplicate Content ohne Angabe von Gründen von der Plattform entfernt. Darunter fallen keine Beiträge, die von dir selbst auf anderen Webseiten veröffentlicht wurden.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wird Duplicate Content abgestraft?</a>
+                  <div class="content">
+                     <p>Dype schätzt das Recht an dem geistigen Eigentum jedes Bloggers. Deshalb wird Duplicate Content ohne Angabe von Gründen von der Plattform entfernt. Darunter fallen keine Beiträge, die von dir selbst auf anderen Webseiten veröffentlicht wurden.</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Welche Artikelformen eignen sich am besten?</a>
+                  <div class="content">
+                     <p>Unsere Leser erfreuen sich am meisten an Beiträgen mit persönlichem Bezug zum Autor. Darüber hinaus sind konkrete Action-Steps besonders interessant. Versuche dich immer in die Lage des Lesers hineinzuversetzen und hinterfrage, wie du ihm am besten weiterhelfen kannst. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Was ist der Unterschied zwischen Premium & Free Account?</a>
+                  <div class="content">
+                     <p>In der kostenlosen Mitgliedschaft können lediglich Beiträge aus zwei ausgewählten Kategorien gelesen werden. Als Premium-Mitglied hast du Zugriff auf all unsere Inhalte, kannst Autoren folgen, ihre Beiträge oder einzelne Textpassagen für später markieren und weitere Vorteile genießen. Darüber hinaus kommt ein Großteil der monatlichen Gebühr unseren Bloggern zugute. So werden diese einerseits für ihre Beiträge entlohnt und gewinnen andererseits neue Anreize dafür, weitere interessante Beiträge zu verfassen. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Kann ich einen Beitrag bearbeiten, nachdem ich ihn gepostet habe?</a>
+                  <div class="content">
+                     <p>Beiträge können von dir zu jederzeit vollumfänglich bearbeitet werden. Du wirst von Dype vier Monate nach der Veröffentlichung eines Beitrages sogar darauf hingewiesen, diesen zu aktualisieren. Kontinuierliche Aktualisierung wirkt sich positiv auf die Platzierung aus. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wie funktionieren Upvotes?</a>
+                  <div class="content">
+                     <p>Anders als bei anderen Sozialen Netzwerken kannst du nicht nur einfach ausdrücken, dass dir ein Beitrag gefällt, sondern unendlich oft auf den Upvote-Button klicken. Die Upvotes werden bei der Entlohnung der Blogger jedoch nicht berücksichtigt. </p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Wie kann ich neue Kategorien hinzufügen?Wie kann ich neue Kategorien hinzufügen?</a>
+                  <div class="content">
+                     <p>Wenn du einen Beitrag in einer bisher nicht angelegten Kategorie veröffentlichen möchtest, muss dies bei uns beantragt werden. Wir werden deine Anfrage prüfen und in kürzester Zeit ein Feedback geben. Schreibe einfach eine Mail an: support@dype.me</p>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <a>Kann ich Werbeanzeigen in meinem Beitrag platzieren?</a>
+                  <div class="content">
+                     <p>Dype verzichtet grundsätzlich auf Werbeanzeigen. Display-Ads können also nicht platziert werden. Blogger dürfen jedoch auf eigene Beiträge verweisen. Linkspamming und übermäßige Eigenwerbung führen dazu, dass die Sichtbarkeit deiner Beiträge schwindet und sie nicht entlohnt werden. Bei Richtlinienverstoß folgt eine Sperrung des Beitrags.</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Top Report Start -->
+   </div><!-- Top Report Wrap End -->
+   <!-- Footer Section Start -->
+   <div class="footer-section" style="margin-top: 150px;">
+      <div class="container-fluid">
+         <div class="footer-copyright text-center">
+            <p class="text-body-light">
+               <script>document.write(new Date().getFullYear())</script> &copy;
+               <a href="<%= siteLink %>"><%= siteTitle %></a></p>
+         </div>
+      </div>
+   </div><!-- Footer Section End -->
+</div>
+<!-- JS
+============================================ -->
+<!-- Global Vendor, plugins & Activation JS -->
+<script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/assets/js/vendor/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/vendor/popper.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<!--Plugins JS-->
+<script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="/assets/js/plugins/tippy4.min.js.js"></script>
+<!--Main JS-->
+<script src="/assets/js/main.js"></script>
+<!-- Plugins & Activation JS For Only This Page -->
+<!--Moment-->
+<script src="/assets/js/plugins/moment/moment.min.js"></script>
+<!--Daterange Picker-->
+<script src="/assets/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/assets/js/plugins/daterangepicker/daterangepicker.active.js"></script>
+<!--Echarts-->
+<script src="/assets/js/plugins/nice-select/jquery.nice-select.min.js"></script>
+<script>
+   const items = document.querySelectorAll(".accordion a");
+
+   function toggleAccordion() {
+      this.classList.toggle('active');
+      this.nextElementSibling.classList.toggle('active');
+   }
+
+   items.forEach(item => item.addEventListener('click', toggleAccordion));
+</script>
+</body>
+
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+   <title>Blog Recent</title>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+   <!-- css -->
+   <link rel="shortcut icon" href="<%= favicon %>" type="image/x-icon">
+   <link rel="stylesheet" href="/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="/css/ionicons.min.css">
+   <link rel="stylesheet" href="/css/owl.carousel.css">
+   <link rel="stylesheet" href="/css/owl.theme.css">
+   <link rel="stylesheet" href="/css/animate.css">
+   <link rel="stylesheet" href="/css/style1.css">
+   <link rel="stylesheet" href="/css/style2.css">
+   <link rel="stylesheet" href="/css/style5.css">
+   <link rel="stylesheet" href="/css/header.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <!-- fonts -->
+   <link
+      href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700|Oxygen:400,300,700'
+      rel='stylesheet'>
+
+   <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap"
+      rel="stylesheet">
+
+   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+   <link rel="stylesheet" href="/css/blogrecent.css">
+</head>
+
+<body class="Blog-recent-post">
+   <div class="sidenav" id="sidenav">
+      <a class="cancelNav">
+         &times;
+      </a>
+      <% if(user) { %>
+      <% if (user.paid == "free") { %>
+      <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
+            entdecken</span></a>
+      <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+            werden</span></a>
+      <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+            Inhalte</span></a>
+      <hr>
+      <% } else if(user.paid == 'paid') { %>
+      <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+            Inhalte</span></a>
+      <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
+      </a>
+      <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+            werden</span></a>
+      <% } %>
+      <% if(user.roleId == 'admin') { %>
+      <span class="username_span"><%= user.username%></span>
+      <hr>
+      <a href="/dashboard/index" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+      </a>
+      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein Profil</a>
+      <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+      <% } else {%>
+      <span class="username_span"><%= user.username%></span>
+      <hr>
+      <a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+
+      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein Profil</a>
+      <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+      <% } %>
+      <% } else {%>
+      <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+            werden</span></a>
+      <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
+            entdecken</span></a>
+            
+      <% } %>
+   </div>
+   <header class="sticky" id="header">
+      <section class="container">
+         <section style="display: flex; align-items: center;" class="row" id="logo_menu">
+            <section class="col-xs-1 col-md-1 section-logo">
+               <div class="header-maindiv">
+                  <div class="inner-header-maindiv-icon">
+                     <div class="header-logo">
+                        <a href="/"><img src="/images/GOLDEN-PNG.png"></a>
+                     </div>
+                     <div id="myTopnav" class="topnav">
+                        <form action="/search" method="get" class="search-form d-lg-flex float-right" id="searchForm">
+                           <div class="container">
+                              <a type="button" href="javascript:void(0)" class="closebtn"
+                                 style="right: 15%; padding-left: 10px; padding-right: 10px;" onclick="searchForm()"
+                                 id="closebtn"><i class="fa fa-search"></i></a>
+                              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                              <input id="q" type="text" placeholder="Suche" name="q" value=""
+                                 onfocus="displaySearchbtn()" />
+                              <label>Suche Inhalte, die dich begeistern</label>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </section>
+            <div class="col-xs-11 col-md-11 menu-small">
+               <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                     onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+               <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                     onclick="openSidebar()"><i class="fa fa-bars" aria-hidden="true"></i></span></a>
+            </div>
+            <div class="col-xs-11 col-md-11 menu-large">
+               <% if(user) { %>
+               <% if (user.paid == "free") { %>
+               <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
+                     entdecken</span></a>
+               <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+                     werden</span></a>
+               <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+                     Inhalte</span></a>
+               <% } else if(user.paid == 'paid') { %>
+               <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+                     Inhalte</span></a>
+               <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
+               </a>
+               <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+                     werden</span></a>
+               <% } %>
+               <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                     onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+               <div class="dropdown" style="display: contents;">
+                  <a class="dropdown-toggle" type="button" data-toggle="dropdown" style="font-size: 20px;"><i
+                        class="fa fa-user"></i><span class="caret"></span></a>
+                  <ul class="dropdown-menu profile" style="left: 80%;">
+                     <% if(user.roleId == 'admin') { %>
+                     <li><span class="username_span"><%= user.username%></span></li>
+                     <li><a href="/dashboard/index" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+                     </li>
+                     <li><a href="/author/<%= user.username%>" class="searchbar"><i
+                              class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
+                     <li><a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+                     </li>
+                  </ul>
+                  <% } else {%>
+                  <li><span class="username_span"><%= user.username%></span></li>
+                  <li><a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashbard</a>
+                  </li>
+                  <li><a href="/author/<%= user.username%>" class="searchbar"><i
+                           class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
+                  <li><a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a></li>
+                  <% } %>
+                  </ul>
+               </div>
+               <a class="searchbar" href="javascript:void();"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                     onclick="openNotification()"><i class="fa fa-bell-o" aria-hidden="true"></i></span></a>
+               <% } else {%>
+               <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+                     werden</span></a>
+               <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
+                     entdecken</span></a>
+               <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                     onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+               <a href="/sign-up" class="searchbar"><span style="font-size:20px; padding-left: 10px;cursor:pointer"><i
+                        class="fa fa-user"></i></span></a>
+               <a href="/login" class="searchbar"><span style="font-size:20px; padding-left: 10px;cursor:pointer"><i
+                        class="fa fa-sign-in"></i></span></a>
+               <%}%>
+            </div>
+         </section>
+      </section>
+   </header>
+<div class="blog_recent">
+   <section class="container">
+      <h2>Dein Feed</h2>
+   </section>
+</div>
+<!-- list top featured row start -->
+<div class="list_top_featured">
+   <section class="container">
+      <div class="row featured_inner">
+         <%  var editorsPickerLength = editorsPicker.length;
+         if(editorsPicker.length > 3) {
+            editorsPickerLength = 3;
+         }
+         %>
+         <% for(var i = 0; i < editorsPickerLength; i ++){%>
+         <div class="col-md-12 col-lg-4">
+            <%
+             var url = "#";
+             if(editorsPicker[i].postedBy.roleId == "admin"){
+               url = "/d/" + editorsPicker[i].category.slug + "/" + editorsPicker[i].slug;
+             }else {
+               url = "/p/" + editorsPicker[i].category.slug + "/" + editorsPicker[i].slug;
+             }
+            %>
+            <div class="img-fluid dein-image" url="<%= url%>" style="background-image: url('<%= editorsPicker[i].file %>');">
+            </div>
+            <a class="underline" target="_blank" href="/kategorie/<%= editorsPicker[i].category.slug%>" />
+               <p><%= editorsPicker[i].category.name%></p>
+            </a>
+            <h3><a href="<%= url%>" target="_blank"><%= editorsPicker[i].title%></a></h3>
+         </div>
+         <% } %>
+      </div>
+      <div class="row">
+         <% var length = categories.length;
+            if(length > 6){ length = 6;}
+         %>
+         <% for(var i = 0; i < length; i ++) {%>
+         <div class="col-sm-12 col-md-6 col-lg-4 featured_travel">
+            <a href="/kategorie/<%= categories[i].slug%>" target="_blank">
+               <span class="fea_travel_img">
+                  <img class="img-fluid" 
+                  src="<%= categories[i].background%>"></span>
+               <span class="fea_travel_con">
+                  <p class="underline"><%= categories[i].name%></p>
+                  <!-- <h6><%= categories[i].description%></h6> -->
+               </span>
+            </a>
+         </div>
+         <% } %>
+      </div>
+   </section>
+</div>
+<!-- Multiple Visible Slider start -->
+<div class="multiple_visible_slider">
+   <h3>Beliebt</h3>
+   <div id="owl-carousel" class="owl-carousel owl-theme">
+      <% for(var i = 0; i < trendings.length; i ++) {%>
+         <% 
+         var url="#";
+         if(trendings[i].postedBy.roleId == "admmin"){
+            url = "/d/" + trendings[i].category.slug + "/" + trendings[i].slug;
+          }else {
+            url = "/p/" + trendings[i].category.slug + "/" + trendings[i].slug;
+          }
+         %>
+      <div class="item trending-image" style="background-size: cover;
+      background-image: url('<%= trendings[i].file%>');" url="<%= url%>">
+         <div class="slider_item">
+            <span>
+               <h6><a href=""><%= trendings[i].title%></a></h6>
+               <h3><a href=""><%= trendings[i].summary%></h3>
+               <a class="read_article btn" href="<%= url%>" target="_blank">Mehr erfahren</a>
+            </span>
+         </div>
+      </div>
+      <% }%>
+   </div>
+</div>
+<!-- Classic Enhanced Style start -->
+<% if(authorarticle.length > 3) {%>
+<div class="classic_enhanced_style">
+   <section class="container">
+      <!-- <h6>Classic Enhanced Style</h6> -->
+      <div class="inner-after-login-page-content">
+         <div class="row">
+            
+            <% for(var i = 0; i < authorarticle.length; i ++) {%>
+               <% 
+               var url="#";
+               if(authorarticle[i].postedBy.roleId == "admmin"){
+                  url = "/d/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
+               }else {
+                  url = "/p/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
+               }
+               %>
+            <div class="col-md-12 col-lg-4">
+               <div class="content-one">
+                  <div class="content-one-img authorarticle-image" url="<%= url%>">
+                     <img src="<%= authorarticle[i].file%>">
+                     <a href="#"><%= authorarticle[i].category.name%></a>
+                  </div>
+                  <div class="content-one-text">
+                     <p><%= authorarticle[i].createdAt.toDateString()%></p>
+                     <h2><%= authorarticle[i].title%></h2>
+                     <p><%= authorarticle[i].summary%></p>
+                  </div>
+                  <div class="content-one-likeshare">
+                     <a style="color: black;" href="/author/<%= authorarticle[i].postedBy.usernameslug%>" target="_blank"><i class="fa fa-user" aria-hidden="true"></i> <%= authorarticle[i].postedBy.firstName%> <%= authorarticle[i].postedBy.lastName%></a>
+                     <!-- <span><i class="fa fa-comment-o" aria-hidden="true"></i> 33</span> -->
+                     <a style="color: black;" href="javascript: void();"><i class="fa fa-eye" aria-hidden="true"></i> <%= authorarticle[i].views%></a>
+                  </div>
+               </div>
+            </div>
+            <% } %>
+         </div>
+      </div>
+   </section>
+</div>
+<% }%>
+<!-- Classic Enhanced Style end -->
+<!-- Posts Processbar Slider Style start -->
+<div class="posts_processbar_slider">
+   <div id="owl-carousel6" class="owl-carousel owl-theme">
+      <% for(var i = 0; i < authorarticle.length; i ++) {%>
+         <% 
+         var url="#";
+         if(authorarticle[i].postedBy.roleId == "admmin"){
+            url = "/d/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
+         }else {
+            url = "/p/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
+         }
+         %>
+      <div class="item item_bg1" style="background-image: url('<%= authorarticle[i].file%>');">
+         <div class="slider_item">
+            <a href="/author/<%= authorarticle[i].postedBy.usernameslug%>" target="_blank">
+               <img src="<%= authorarticle[i].postedBy.profilePicture%>" />
+               <%= authorarticle[i].postedBy.username%></a>
+            <h1><%= authorarticle[i].title%></h1>
+            <a class="slider_button" href="<%= url%>" target="_blank">Mehr erfahren<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+         </div>
+      </div>
+      <% } %>
+   </div>
+</div>
+<!-- Our Recent Writings start -->
+<div class="our_recent_writings">
+   <section class="container">
+      <h3>Neueste Beiträge</h3>
+      <div class="inner-after-login-page-content">
+         <div class="row">
+            <% for(var i = 0; i < newest.length; i ++) {%>          
+               <% 
+               var url="#";
+               if(newest[i].postedBy.roleId == "admmin"){
+                  url = "/d/" + newest[i].category.slug + "/" + newest[i].slug;
+               }else {
+                  url = "/p/" + newest[i].category.slug + "/" + newest[i].slug;
+               }
+               %>  
+            <div class="col-12 col-md-6 col-lg-4">
+               <div class="content-one">
+                  <div class="content-one-img new-image" url="<%= url%>">
+                     <img src="<%= newest[i].file%>" style="object-fit: cover;">
+                     <a href="#">
+                        <h5><%= newest[i].category.name%></h5>
+                        <h3 style="overflow-wrap: anywhere; margin-right: 10px;
+                        color: white;"><%= newest[i].title%></h3>
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <% }%>
+         </div>
+      </div>
+   </section>
+</div>
+<!-- Our Recent Writings end -->
+<div class="classic_enhanced_style minimal_stlye">
+   <section class="container">
+      <h3>Entdecken</h3>
+      <div class="inner-after-login-page-content">
+         <div class="row">
+            <% for(var i = 0; i < random.length; i ++) {%>
+               <% 
+               var url="#";
+               if(random[i].postedBy.roleId == "admin"){
+                  url = "/d/" + random[i].category.slug + "/" + random[i].slug;
+               }else {
+                  url = "/p/" + random[i].category.slug + "/" + random[i].slug;
+               }
+               %>
+            <div class="col-md-12 col-lg-4 mt-5">
+               <div class="content-two-text">
+                  <p><%= random[i].category.name%></p>
+                  <h2><%= random[i].title%></h2>
+                  <p><%= random[i].summary%></p>
+                  <a class="read-more" href="<%= url%>" target="_blank">Mehr erfahren<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+               </div>
+            </div>
+            <% }%>
+         </div>
+      </div>
+   </section>
+</div>
+<!-- Posts Parallax Slider2 Style end -->
+<section class="footer-main recent_blog_footer" id="footer">
+   <div class="container">
+      <div class="innner-footer-main">
+         <div class="footer-social-icons">
+            <div class="col-md-12 col-sm-12 social-media">
+               <a href="<%= twitter %>"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                 <a style="padding: 11px 20px;" href="<%= facebook %>"><i class="fa fa-facebook"
+                     aria-hidden="true"></i></a>
+                 <a href="<%= linkedin %>"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                 <a href="<%= youtube %>"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                 <a href="<%= instagram %>"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                 <a href="<%= pinterest %>"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+               </div>
+             </div>
+             <div class="footer-copyright">
+               <p><% if(copyright != undefined) { %><p>
+                   <%= copyright.charAt(0).toUpperCase() + copyright.substring(1) %></a></p><%}%></p>
+         </div>
+         <hr>
+         <div class="row">
+            <div class="col-md-10">
+               <div class="row">
+                  <% for(var i = 0; i < footercategory.length; i ++){%>
+                 <div class="col-md-3 text-left">
+                   <a style="color: black;" href="/kategorie/<%= footercategory[i].slug%>"
+                     class="footercategory"><%= footercategory[i].name %></a>
+                 </div>
+                 <%}%>
+               </div>
+            </div>
+            <div class="col-md-2">
+               <div class="row">
+                  <div class="col-md-12 text-left">
+                     <h4><a style="color:black" href="/d/official/impressum" class="footercategory">Impressum</a></h4>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12 text-left">
+                     <h4><a style="color:black" class="footercategory">AGB</a></h4>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12 text-left">
+                     <h4><a style="color:black" href="/d/official/datenschutz" class="footercategory">Datenschutz</a></h4>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <hr>
+      </div>
+      <a href="#" id="scroll" style="display: none;"><span></span></a>
+   </div>
+</section>
+         <div class="notification" style="display: none;">
+            <div class="row">
+               <div class="col-md-9 col-sm-9 col-xs-9">Noticaition </div>
+               <div class="col-md-3 col-sm-3 col-xs-3"><h3 class="clear-notification" style="color: black;">&times;</i></h3></div>
+            </div>
+            <div class="row">
+               <div class="col-md-4 col-sm-4 col-xs-4">
+                  <img src="<% if(user){%><%= user.profilePicture%><%}%>" style="border-radius: 50px; width: 50px; height: 50px;background-position: center;">
+              </div>
+              <div class="col-md-8 col-sm-8 col-xs-8">
+                <p><%if(user){%><%= user.username%><%}%></p>
+              </div>
+            </div>
+            <hr>
+         </div>
+         <!-- footer end -->
+         <script src="/js/jquery-2.1.3.min.js"></script>
+         <script src="/js/popper.min.js"></script>
+         <script src="/js/bootstrap.min.js"></script>
+         <script src="/js/wow.min.js"></script>
+         <script src="/js/owl.carousel.js"></script>
+         <script src="/js/script.js"></script>
+         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+         <script>
+            AOS.init();
+            function openNotification() {
+               $('.notification').toggle();
+            }
+            $('.clear-notification').click(function () {
+               $('.notification').hide();
+            });
+         </script>
+         <script>
+            $(document).ready(function () {
+               $(window).scroll(function () {
+                  if ($(this).scrollTop() > 100) {
+                     $('#scroll').fadeIn();
+                  } else {
+                     $('#scroll').fadeOut();
+                  }
+               });
+               $('#scroll').click(function () {
+                  $("html, body").animate({ scrollTop: 0 }, 600);
+                  return false;
+               });
+            });
+         </script>
+
+         <script>
+            function openaav() {
+               document.getElementById("myRightnav").style.width = "37%";
+               document.getElementById("right").style.margin = "11vh 37% 11vh 0px";
+               document.getElementById("right").style.height = "78vh";
+               document.getElementById("right").style.overflow = "hidden";
+            }
+
+            function closeaav() {
+               document.getElementById("myRightnav").style.width = "0";
+               document.getElementById("right").style.margin = "0";
+               document.getElementById("right").style.height = "100%";
+               document.getElementById("right").style.overflow = "scroll";
+            }
+         </script>
+
+         <script>
+            function openAav() {
+               document.getElementById("myRightnav").style.width = "80%";
+               document.getElementById("right").style.margin = "11vh 80% 11vh 0px";
+               document.getElementById("right").style.height = "78vh";
+               document.getElementById("right").style.overflow = "hidden";
+            }
+
+            function closeAav() {
+               document.getElementById("myRightnav").style.width = "0";
+               document.getElementById("right").style.margin = "0";
+               document.getElementById("right").style.height = "100%";
+               document.getElementById("right").style.overflow = "scroll";
+            }
+         </script>
+
+         <script>
+            $(function () {
+               $('.cancelNav').click(function () {
+                  $('.sidenav').css('display', 'none');
+               });
+            });
+            function openNav() {
+               document.getElementById("myTopnav").style.height = "220px";
+            }
+
+            function closeNav() {
+               document.getElementById("myTopnav").style.height = "0";
+            }
+            function openSidebar() {
+               document.getElementById("sidenav").style.display = "block";
+            }
+         </script>
+
+         <script>
+            // owlCarousel
+            jQuery(document).ready(function () {
+               $('.dein-image').click(function(){
+                  window.open($(this).attr('url'));
+               });
+
+               $('.trending-image').click(function(){
+                  window.open($(this).attr('url'));
+               });
+               
+               $('.item_bg2').click(function(){
+                  window.open($(this).attr('url'));
+               });
+               $('.authorarticle-image').click(function(){
+                  window.open($(this).attr('url'));
+               });
+
+               $('.new-image').click(function(){
+                  window.open($(this).attr('url'));
+               });
+
+               jQuery('#owl-carousel').owlCarousel({
+                  loop: true,
+                  margin: 0,
+                  responsiveClass: true,
+                  responsive: {
+                     0: {
+                        items: 1,
+                        nav: true
+                     },
+                     600: {
+                        items: 2,
+                        nav: false
+                     },
+                     1000: {
+                        items: 3,
+                        nav: true,
+                        loop: false,
+                     }
+                  }
+               })
+
+               jQuery('#owl-carousel2').owlCarousel({
+                  loop: true,
+                  margin: 0,
+                  responsiveClass: true,
+                  responsive: {
+                     0: {
+                        items: 1,
+                        nav: true
+                     },
+                     600: {
+                        items: 1,
+                        nav: false
+                     },
+                     1000: {
+                        items: 1,
+                        nav: true,
+                        loop: false,
+
+                     }
+                  }
+               })
+
+               jQuery('#owl-carousel3').owlCarousel({
+                  loop: true,
+                  margin: 0,
+                  responsiveClass: true,
+                  responsive: {
+                     0: {
+                        items: 1,
+                        nav: true
+                     },
+                     600: {
+                        items: 1,
+                        nav: false
+                     },
+                     1000: {
+                        items: 1,
+                        nav: true,
+                        loop: false,
+
+                     }
+                  }
+               })
+
+               jQuery('#owl-carousel4').owlCarousel({
+                  loop: true,
+                  margin: 0,
+                  responsiveClass: true,
+                  responsive: {
+                     0: {
+                        items: 1,
+                        nav: true
+                     },
+                     600: {
+                        items: 1,
+                        nav: false
+                     },
+                     1000: {
+                        items: 1,
+                        nav: true,
+                        loop: false,
+
+                     }
+                  }
+               })
+
+               jQuery('#owl-carousel6').owlCarousel({
+                  loop: true,
+                  margin: 0,
+                  responsiveClass: true,
+                  responsive: {
+                     0: {
+                        items: 1,
+                        nav: true
+                     },
+                     600: {
+                        items: 1,
+                        nav: false
+                     },
+                     1000: {
+                        items: 1,
+                        nav: true,
+                        loop: false,
+
+                     }
+                  }
+               })
+
+            })
+         </script>
+
+
+</body>
+
+</html>

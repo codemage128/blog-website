@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <title><%= article.metatitle%></title>
+    <% if(article.addToNoIndex == true){%>
+    <meta name="robots" content="noindex">
+    <% }%>
+    <meta charset="utf-8" />
+    <meta name="name" content="<%= article.metatitle%>" />
+    <meta name="description" content="<%= article.metadescription%>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta itemprop="name" content="<%= article.metatitle%>" />
+    <meta itemprop="description" content="<%= article.metadescription%>" />
+    <meta itemprop="image" content="https://dype.me<%= article.file%>" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="<%= article.metatitle%>" />
+    <meta property="og:description" content="<%= article.metadescription%>" />
+    <meta property="og:image" content="https://dype.me<%= article.file %>" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@<%= article.metatitle%>" />
+    <meta name="twitter:creator" content="@<%= article.postedBy.username %>" />
+    <meta name="twitter:title" content="<%= article.metatitle %>" />
+    <meta name="twitter:description" content="<%= article.metadescription %>" />
+    <meta name="twitter:image" content="<%= siteLink%><%= article.file %>" />
+    <meta name="twitter:domain" content="<%= siteLink%>" />
+    <!-- css -->
+    <link rel="shortcut icon" href="<%= favicon %>" type="image/x-icon">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" async>
+    <link rel="stylesheet" href="/css/ionicons.min.css" async>
+    <link rel="stylesheet" href="/css/owl.carousel.css" async>
+    <link rel="stylesheet" href="/css/owl.theme.css" async>
+    <link rel="stylesheet" href="/css/animate.css" async>
+    <link rel="stylesheet" href="/css/style1.css" async>
+    <link rel="stylesheet" href="/css/style2.css" async>
+    <link rel="stylesheet" href="/css/TextTip.css" async>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="/css/font-awesome.min.css" async> -->
+    <!-- fonts -->
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="3224d967-44a4-4a53-88f6-559eac64c8a5" data-blockingmode="auto" type="text/javascript"></script>
+    <link
+        href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700|Oxygen:400,300,700&display=swap'
+        rel='stylesheet' />
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap&display=swap"
+        rel="stylesheet" />
+    <link href="/css/aos.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+    <link href="/css/single.css" rel="stylesheet" />
+    <script type="application/ld+json">
+            {
+              "@context": "http://schema.org",
+              "@type": "WebSite",
+              "name": "<%= article.metatitle %>",
+              "url": "https://dype.me",
+              "description": "<%= article.metadescription %>",
+              "image": "<%= siteLink%><%= article.file %>"
+            }
+        </script>
+    <%- mainSettings.htmlHeadCode %>
+</head>
+
+<body>
+    <div class="sidenav" id="sidenav">
+        <a class="cancelNav">
+            &times;
+        </a>
+        <% if(user) { %>
+        <% if (user.paid == "free") { %>
+        <a class="searchbar" href="/afterlogin"><span class="menu-title">Inhalte entdecken</span></a>
+        <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+        <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+                Inhalte</span></a>
+        <hr>
+        <% } else if(user.paid == 'paid') { %>
+        <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
+                Inhalte</span></a>
+        <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
+        </a>
+        <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+        <% } %>
+        <% if(user.roleId == 'admin') { %>
+        <span class="username_span"><%= user.username%></span>
+        <hr>
+        <a href="/dashboard/index" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+        </a>
+        <a href="/author/<%= user.usernameslug%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
+            Profil</a>
+        <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+        <% } else {%>
+        <span class="username_span"><%= user.username%></span>
+        <hr>
+        <a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+
+        <a href="/author/<%= user.usernameslug%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
+            Profil</a>
+        <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+        <% } %>
+        <% } else {%>
+        <a class="searchbar" href="/publisher"><span class="menu-title">Publisher
+                werden</span></a>
+        <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
+                entdecken</span></a>
+        <a class="searchbar" href="/login"><i class="fa fa-sign-in"></i><span class="menu-title">Einloggen</span></a>
+        <a class="searchbar" href="/sign-up"><i class="fa fa-user"></i><span class="menu-title">Registrieren</span></a>
+        <% } %>
+    </div>
+    <header class="sticky" id="header">
+        <section class="container">
+            <section class="row header" id="logo_menu">
+                <section class="col-xs-1 col-md-2 menu-logo">
+                    <div class="header-maindiv">
+                        <div class="inner-header-maindiv-icon">
+                            <div class="header-logo">
+                                <a href="/">
+                                    <img id="header-logo-image" src="/images/GOLDEN-PNG.png">
+                                </a>
+                            </div>
+                            <div id="myTopnav" class="topnav">
+                                <form action="/search" method="get" class="search-form d-lg-flex float-right"
+                                    id="searchForm">
+                                    <div class="container">
+                                        <a type="button" href="javascript:void(0)" class="closebtn"
+                                            style="right: 15%; padding-left: 10px; padding-right: 10px;"
+                                            onclick="searchForm()" id="closebtn"><i class="fa fa-search"></i></a>
+                                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                        <input id="q" type="text" placeholder="Suche" name="q" value=""
+                                            onfocus="displaySearchbtn()" />
+                                        <label>Suche Inhalte, die dich begeistern</label>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <div class="col-xs-11 col-md-10 menu-small" style="text-align: right;">
+                    <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                            onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+                    <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                            onclick="openSidebar()"><i class="fa fa-bars" aria-hidden="true"></i></span></a>
+                </div>
+                <div class="col-xs-11 col-md-10 menu-large" style="text-align: right;">
+                    <% if(user) { %>
+                    <% if (user.paid == "free") { %>
+                    <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
+                            entdecken</span></a>
+                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Blogger
+                            werden</span></a>
+                    <a class="searchbar" href="/ourwork"><span style="padding-left: 10px;cursor:pointer">Exklusive
+                            Inhalte</span></a>
+                    <% } else if(user.paid == 'paid') { %>
+                    <a class="searchbar" href="/ourwork"><span style="padding-left: 10px;cursor:pointer">Exklusive
+                            Inhalte</span></a>
+                    <a class="searchbar" href="/blogrecent"><span style="padding-left: 10px;cursor:pointer">Feed</span>
+                    </a>
+                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Publisher
+                            werden</span></a>
+                    <% } %>
+                    <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                            onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+                    <div class="dropdown" style="display: contents;">
+                        <a class="dropdown-toggle" type="button" data-toggle="dropdown" style="font-size: 20px;"><i
+                                class="fa fa-user"></i><span class="caret"></span></a>
+                        <ul class="dropdown-menu profile" style="left: 80%;">
+                            <% if(user.roleId == 'admin') { %>
+                            <li><span class="username_span"><%= user.username%></span></li>
+                            <li><a href="/dashboard/index" class="searchbar"><i
+                                        class="fa fa-cog profileicon"></i>Dashboard</a>
+                            </li>
+                            <li><a href="/author/<%= user.usernameslug%>" class="searchbar"><i
+                                        class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
+                            <li><a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Sign
+                                    Out</a>
+                            </li>
+                        </ul>
+                        <% } else {%>
+                        <li><span class="username_span"><%= user.username%></span></li>
+                        <li><a href="/user/dashboard" class="searchbar"><i
+                                    class="fa fa-cog profileicon"></i>Dashboard</a>
+                        </li>
+                        <li><a href="/author/<%= user.usernameslug%>" class="searchbar"><i
+                                    class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
+                        <li><a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
+                        </li>
+                        <% } %>
+                        </ul>
+                    </div>
+                    <a class="searchbar" href="javascript:void();"><span
+                            style="font-size:20px; padding-left: 10px;cursor:pointer" onclick="openNotification()"><i
+                                class="fa fa-bell-o" aria-hidden="true"></i></span></a>
+                    <% } else {%>
+                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Blogger
+                            werden</span></a>
+                    <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
+                            entdecken</span></a>
+                    <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
+                            onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+                    <a href="/sign-up" class="searchbar"><span
+                            style="font-size:20px; padding-left: 10px;cursor:pointer"><i
+                                class="fa fa-user"></i></span><span
+                            style="position: absolute; bottom: -10px; left: -3px;font-size: 10px;">Registrieren</span></a>
+                    <a href="/login" class="searchbar"><span
+                            style="font-size:20px; padding-left: 10px;cursor:pointer"><i
+                                class="fa fa-sign-in"></i></span><span
+                            style="position: absolute; bottom: -10px;left: 4px; font-size: 10px;">Einloggen</span></a>
+                    <%}%>
+            </div>
+         </section>
+            <!-- <a href="/membership" class="searchbar">Member ship</a> -->
+      </section>
+      <div class="progress">
+         <div class="progress-bar" id="processbar" role="progressbar" aria-valuenow="100"
+         aria-valuemin="0" aria-valuemax="100" style="width:0%">
+         </div>
+       </div>
+    </header>
+    <div class="dark-blog-banner" style="background-image: linear-gradient(#0000008e, #000000) , url('<%= article.file%>');">
+                    <div class="container">
+                        <div class="inner-dark-blog">
+                            <div class="dark-blog-banner-contant">
+                                <div class="food-music-btn row">
+                                    <span>
+                                        <a class="prev-next" url="/kategorie/<%= article.category.slug %>"
+                                            style="color: white;"><%= article.category.name%></a></span>
+                                </div>
+                                <div class="dark-blog-banner-heading text-center row"
+                                    style="text-align: center; margin-left: auto; margin-right: auto;">
+                                    <h1 style="color: white;overflow-wrap: break-word; font-family: EB Garamond;">
+                                        <%= article.title%></h1>
+                                </div>
+                                <div class="dark-blog-banner-headingdown text-center row">
+                                    <span style="color: white;"><%= article.postedBy.firstName%>
+                                        <%= article.postedBy.lastName%></span>
+                                    <span style="color: white; border-left: 3px solid white; ">
+                                        <i class="fa fa-eye" style="margin-right: 10px;"></i>
+                                        <%= article.viewers.length%>
+                                    </span>
+                                    <span style="color: white; border-left: 3px solid white;"><%= time(article.short)%>
+                                        min read</span>
+                                    <span style="color: white; border-left: 3px solid white;">
+                                        <% if(bookmark != true) {%>
+                                        <i class="fa fa-star" style="margin-right: 10px;"></i>
+                                        <a style="color: white;" class="savearticle"
+                                            url="/bookmark/create?articleId=<%= article._id %>">Artikel speichern</a>
+                                        <% } else {%>
+                                        <i class=" fa fa-star" style="margin-right: 10px; color: #98E0F2;"></i>
+                                        <a style=" color: white;" class="deletearticle"
+                                            href="/bookmark/delete?bookmarkId=<%= bookmarkId %>">Artikel nicht mehr
+                                            speichern</a>
+                                        <%}%>
+                    </span>
+                </div>
+            <div class="dark-blog-banner-heading text-center" style="width: 80%;margin: auto;">
+                <p style="color: white; font-size:  20px; overflow-wrap: break-word; font-family: EB Garamond">
+                    <%= article.summary%></p>
+                                        <input type="hidden" id="firstlettercolor" value="<%= article.category.color%>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="dark-blog-content-one"> -->
+
+                <div class="container">
+                    <article class="inner-dark-blog-content-one" id="inner-dark-blog-content-one"
+                        style="overflow:hidden;">
+                        <%- article.body %>
+                    </article>
+                </div>
+                <!-- </div> -->
+                <div class="dark-blog-makedby">
+                    <div class="container">
+                        <div class="inner-dark-blog-makeby">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div class="dark-blog-makedby-img">
+                                        <a class="prev-next" url="/author/<%= article.postedBy.usernameslug%>">
+                                            <% if(article.postedBy.paid == "paid"){%>
+                                            <img src="<%= article.postedBy.profilePicture%>"
+                                                style="border: 3px solid #2fc8c8;" />
+                                            <% } else {%>
+                                            <img src="<%= article.postedBy.profilePicture%>">
+                                            <% }%>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="dark-blog-makedby-details">
+                                        <a class="prev-next" url="/author/<%= article.postedBy.usernameslug%>"
+                                            style="padding: 0;color: black;">
+                                            <h2 class="authorname"><%= article.postedBy.firstName%>
+                                                <%= article.postedBy.lastName%></h2>
+                                        </a>
+                                        <p class="authorname">Follower: <%= article.postedBy.following.length%></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <%if(user){%>
+                                    <% if(article.postedBy._id != user.id){%>
+                                    <% for(var i = 0; i < article.postedBy.following.length;  i ++){
+            if(article.postedBy.following[i]['user'] == user.id){
+                var existuser = true;
+            } }%>
+                                    <div class="follow-btn">
+                                        <% if(article.postedBy.following.length < 1) {%>
+                                        <a class="prev-next"
+                                            url="/follow-user?followerId=<%= article.postedBy._id %>">Follow</a>
+                                        <%} else if(!existuser) {%>
+                                        <a class="prev-next"
+                                            url="/follow-user?followerId=<%= article.postedBy._id %>">Follow</a>
+                                        <% } else {%>
+                                        <a class="prev-next"
+                                            url="/unfollow-user?authorId=<%= article.postedBy._id %>">Unfollow</a>
+                                        <%};%>
+                                    </div>
+                                    <%}%>
+    <%}%>
+                                    <div class="follow-btn"><a class="prev-next"
+                                            url="/author/<%= article.postedBy.usernameslug %>">Profil</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% if (articleCount > 2) {%>
+                <div class="dark-blog-posts">
+                    <div class="container-fluid">
+                        <div class="inner-dark-blog-posts">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="dark-blog-previous-posts"
+                                        style="background-image: linear-gradient(#0000003d, #00000040) , url('<%= previous.file%>');">
+                                        <div class="dark-blog-previous-posts-content">
+                                            <h5>Letzten Artikel ansehen</h5>
+                                            <% if(previous.postedBy){%>
+                                            <% if(previous.postedBy.roleId == "admin") {%>
+                                            <a class="prev-next"
+                                                url="/d/<%= previous.category.slug.toLowerCase();%>/<%= previous.slug %>">
+                                                <h2>
+                                                    <%= previous.title%></h2>
+                                            </a>
+                                            <% } else {%>
+                                            <a class="prev-next"
+                                                url="/p/<%= previous.category.slug.toLowerCase();%>/<%= previous.slug %>">
+                                                <h2>
+                                                    <%= previous.title%></h2>
+                                            </a>
+                                            <%}%>
+                            <%}%>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="dark-blog-next-posts"
+                                        style="background-image: linear-gradient(#0000003d, #00000040) , url('<%= next.file%>');">
+                                        <div class="dark-blog-next-posts-content">
+                                            <h5>Nächsten Artikel ansehen</h5>
+                                            <% if(previous.postedBy){%>
+                                            <% if(next.postedBy.roleId == "admin") {%>
+                                            <a class="prev-next"
+                                                url="/d/<%= next.category.slug.toLowerCase();%>/<%= next.slug %>">
+                                                <h2>
+                                                    <%= next.title%></h2>
+                                            </a>
+                                            <% } else {%>
+                                            <a class="prev-next"
+                                                url="/p/<%= next.category.slug.toLowerCase();%>/<%= next.slug %>">
+                                                <h2>
+                                                    <%= next.title%></h2>
+                                            </a>
+                                            <%}%>
+                                <%}%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+                <div class="recommended-for-you">
+                    <div class="container">
+                        <div class="inner-recommended-for-you">
+                            <div class="recommnet-heading-main">
+                                <h2 class="recommended-txt">Neue Beiträge</h2>
+                            </div>
+                            <div class="row">
+                                <% for(var i = 0; i < related.length; i ++){%>
+                                <div class="col-md-4">
+                                    <div class="recommnet">
+                                        <div class="recommnet-img">
+                                            <img src="<%= related[i].file%>">
+                                        </div>
+                                        <div class="recommnet-cate">
+                                            <a class="prev-next"
+                                                url="/kategorie/<%= related[i].category.slug%>"><span><%= related[i].category.name%></span></a>
+                                        </div>
+                                        <div class="recommnet-heading">
+                                            <% if(related[i].postedBy.roleId == "admin"){%>
+                                            <h2>
+                                                <a class="prev-next"
+                                                    url="/d/<%=related[i].category.slug%>/<%=related[i].slug%>"
+                                                    style="color: black;">
+                                                    <p style="overflow-wrap: break-word;">
+                                                        <%= related[i].title%></p>
+                                                </a>
+                                            </h2>
+                                            <%} else {%>
+                                            <h2>
+                                                <a class="prev-next"
+                                                    url="/p/<%=related[i].category.slug%>/<%=related[i].slug%>"
+                                                    style="color: black;">
+                                                    <p style="overflow-wrap: break-word;">
+                                                        <%= related[i].title%></p>
+                                                </a>
+                                            </h2>
+                                            <%}%>
+                            <p class="re-description"><% if(related[i].summary != undefined) { %>
+                                            <%= related[i].summary %> <% } %></p>
+                                        </div>
+                                        <div class="recommnet-madeby">
+                                            <div class="recommnet-madeby-img">
+                                                <% if(related[i].postedBy.paid == "paid"){%>
+                                                <img src="<%= related[i].postedBy.profilePicture%>"
+                                                    style="border: 3px solid #2fc8c8;" />
+                                                <% } else {%>
+                                                <img src="<%= related[i].postedBy.profilePicture%>">
+                                                <% }%>
+                                            </div>
+                                            <div class="recommnet-madeby-details">
+                                                <h5 class="authorname"><%= related[i].postedBy.firstName%>
+                                                    <%= related[i].postedBy.lastName%></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="footer-main" id="footer">
+                    <div class="container">
+                        <div class="innner-footer-main">
+                            <div class="footer-social-icons">
+                                <div class="col-md-6 col-sm-6 text-right social-media">
+                                    <a href="<%= twitter %>"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                    <a style="padding: 11px 20px;" href="<%= facebook %>"><i class="fa fa-facebook"
+                                            aria-hidden="true"></i></a>
+                                    <a href="<%= linkedin %>"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                </div>
+                                <div class="col-md-6 col-sm-6 text-left social-media">
+                                    <a href="<%= youtube %>"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                                    <a href="<%= instagram %>"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                    <a href="<%= pinterest %>"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                </div>
+
+                            </div>
+                            <div class="footer-copyright">
+                                <p>
+                                    <% if(copyright != undefined) { %>
+                                <p>
+                                    <%= copyright.charAt(0).toUpperCase() + copyright.substring(1) %></a>
+                                </p>
+                                <%}%>
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="row">
+                    <% for(var i = 0; i < footercategory.length; i ++){%>
+                                <div class="col-md-3 text-left">
+                                    <a style="color: black;" class="prev-next"
+                                        url="/kategorie/<%= footercategory[i].slug%>"
+                                        class="footercategory"><%= footercategory[i].name %></a>
+                                </div>
+                                <%}%>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h4><a style="color:black" href="/d/official/impressum" class="footercategory">Impressum</a></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h4><a style="color:black" class="footercategory">AGB</a></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h4><a style="color:black" href="/d/official/datenschutz" class="footercategory">Datenschutz</a></h4>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                                        <div class="dropup">
+                                            <button class="dropbtn"><i class="fa fa-share-alt"
+                                                    aria-hidden="true"></i></button>
+                                            <div class="dropup-content">
+                                                <a  href="https://pinterest.com/pin/create/bookmarklet/?media=<%= article.file%>&url=https://dype.me/p/<%= article.category.slug.toLowerCase()%>/<%= article.slug%>&description=<%= article.title%>"><i
+                                    class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                <a
+                                    href="https://www.linkedin.com/shareArticle?mini=false&url=https://dype.me/p/<%= article.category.slug.toLowerCase()%>/<%= article.slug%>&title=<%= article.metatitle%>&summary=<%= article.metadescription%>&source=https://dype.me/p/<%= article.category.slug.toLowerCase()%>/<%= article.slug%>"><i
+                                        class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                <a
+                                    href="https://twitter.com/intent/tweet?status=<%= article.title%>+<%= siteLink%>/p/<%= article.category.slug.toLowerCase()%>/<%= article.slug%>"><i
+                                        class="fa fa-twitter" aria-hidden="true"></i></a>
+                                <a
+                                    href="https://www.facebook.com/sharer/sharer.php?u=<%= siteLink%>/p/<%= article.category.slug.toLowerCase()%>/<%= article.slug%>&title=<%= article.title%>"><i
+                                        class="fa fa-facebook" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="dropup-mobile" style="display: none;">
+                            <button type="button" class="dropbtn mobile-upvote"><i class="fa fa-arrow-up"
+                                    aria-hidden="true"></i><br>
+                                </p>
+                            </button>
+                        </div>
+                        <div class="upvote-btn">
+                            <form action="/article/upvote" method="POST" id="upvoteForm">
+                                <input type="hidden" name="articleId" id="articleId" value="<%= article._id%>" />
+                                <%if(user){%>
+                                <input type="hidden" name="userId" id="userId" value="<%= user.id%>" />
+                                <%}%>
+</form>
+<div id="return-to-top">
+    <a href="javascript:void(0);" onclick="upvote()"><i class="fa fa-arrow-up" aria-hidden="true"></i>
+        <p>Upvote <%= %></p>
+                                <p id="upvoteCount"><%= article.upvote.count%></p>
+                                </a>
+                                <p style="font-weight: 800px; color: #000000;">
+                                    Dark Mode
+                                </p>
+                                <label class="switch">
+                                    <input type="checkbox" style="font-size: 25px;" id="darkmode" />
+                                    <span class="slider round"></span>
+                                </label>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </section>
+                <div class="notification" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-9 col-xs-9">Noticaition </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <h3 class="clear-notification" style="color: black;">&times;</i></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-4">
+                            <img src="<% if(user){%><%= user.profilePicture%><%}%>" style="border-radius: 50px; width: 50px; height: 50px;background-position: center;">
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8">
+        <p><%if(user){%><%= user.username%><%}%></p>
+        </div>
+    </div>
+    <hr>
+</div>
+<div class="popup" id="savecontentPopup">
+    <div class="popupContainer">
+        <p class="popupTitle">Leider können nur Premium-Mitglieder Beiträge für später speichern.</p>
+        <p class="popupContent">Du möchtest Beiträge speichern, viele weitere exklusive Vorteile genießen und unsere Autoren unterstützen? Dann werde jetzt Premium-Member!</p><br><br>
+        <a class="popupButton" href="/membership">Jetzt Premium-Mitglied werden</a>
+    </div>
+    <div class="closepopup">
+        <h1 class="text-white">&times;</h1>
+    </div>
+</div>
+
+<div class="popup" id="qualifyPopup">
+    <div class="popupContainer">
+      <p class="popupTitle">Leider sind unsere exklusiven Inhalte nur Premium-Mitgliedern zugänglich.</p>
+      <p class="popupContent">Du möchtest qualifizierte Beiträge lesen, viele weitere exklusive Vorteile
+        genießen und unsere Autoren unterstützen? Dann werde jetzt Premium-Member!</p><br><br>
+      <a class="popupButton" href="/membership">Jetzt Premium-Mitglied werden</a>
+    </div>
+</div>
+
+<div class="popup" id="saveMark">
+    <div class="popupContainer">
+        <p class="popupTitle">Leider können nur Premium Mitglieder Sätze markieren, um sie später noch einmal zu lesen.</p>
+        <p class="popupContent">Du möchtest Sätze markieren, viele weitere exklusive Vorteile genießen und unsere Autoren unterstützen? Dann werde jetzt Premium-Member!</p><br><br>
+        <a class="popupButton" href="/membership">Jetzt Premium-Mitglied werden</a>
+    </div>
+    <div class="closepopup">
+        <h1 class="text-white">&times;</h1>
+    </div>
+</div>
+
+<div class="popup" id="upvotePopup">
+    <div class="popupContainer">
+        <p class="popupTitle">Upvote</p>
+        <p class="popupContent">Verteile Upvotes, um den Autoren und Autorinnen zu zeigen, dass dir ihre Beiträge gefallen. So werden sie weitere Beiträge zu dem Thema verfassen und du erfährst noch mehr!</p><br><br>
+    </div>
+    <div class="closepopup">
+        <h1 class="text-white">&times;</h1>
+    </div>
+</div>
+<div class="popup-back"></div>
+                <%- mainSettings.googleAnalyticsCode %>
+                <script src=" /js/aos.js" type="text/javascript"></script>
+                            <script src="/js/jquery-2.1.3.min.js" type="text/javascript"></script>
+                            <script src="/js/bootstrap1.min.js" type="text/javascript"></script>
+                            <script src="/js/owl.carousel.js" type="text/javascript"></script>
+                            <script src="/js/script1.js" type="text/javascript"></script>
+                            <script src="/js/single.js" type="text/javascript"></script>
+                            <script src="/js/TextTip.js" type="text/javascript"></script>
+                            <script type="text/javascript">
+                                var selectedText = "";
+                                function saveText() {
+                                    let userId = "<%if(user){%><%= user._id%><%}%>";
+                                    let articleId = "<%= article._id%>";
+                                    let role = "<%= article.postedBy.roleId%>";
+                                    let categoryslug = "<%= article.category.slug%>";
+                                    let articleslug = "<%= article.slug%>";
+                                    let url = "#";
+                                    if (role == "admin") {
+                                        url = "/d/" + categoryslug + '/' + articleslug;
+                                    } else if (role == 'user') {
+                                        url = "/p/" + categoryslug + '/' + articleslug;
+                                    }
+                                    if (userId != "") {
+                                        $.ajax({
+                                            url: '/savetext',
+                                            dataType: 'json',
+                                            type: 'post',
+                                            data: { userId: userId, text: selectedText, articleId: articleId, url: url },
+                                            success: function (data) {
+
+                                            }
+                                        })
+                                    }
+                                }
+                                var userType = "<%if(user){%><%= user.paid%><%}%>";
+                                var userId = "<%if(user){%><%= user.id%><%}%>";
+                                var articleId = "<%= article._id%>";
+                                const tip4 = new TextTip({
+                                    scope: '.inner-dark-blog-content-one',
+                                    iconFormat: 'font',
+                                    buttons: [
+                                        { title: 'Copy', icon: 'fa fa-pencil', callback: console.log }
+                                    ],
+                                    on: {
+                                        hide: () => {
+                                            if (userType == "paid") {
+                                                saveText()
+                                            }
+                                            if (userType != "paid") {
+                                                $('#saveMark').show();
+                                                $('.popup-back').show();
+                                            }
+                                        }
+                                    }
+                                });
+                                function getSelectionText() {
+                                    var text = "";
+                                    if (window.getSelection) {
+                                        text = window.getSelection().toString();
+                                    } else if (document.selection && document.selection.type != "Control") {
+                                        text = document.selection.createRange().text;
+                                    }
+                                    return text;
+                                }
+                                $('div').mouseup(function (e) {
+                                    var selected = getSelectionText();
+                                    selectedText = selected;
+                                    // alert(selected);
+                                })
+                                // $('div').mousedown(function (e) {
+                                //     var selected = getSelectionText();
+                                //     selectedText = selected;
+                                //     alert(selected);
+                                // })
+                                $(function () {
+                                    $('.inner-dark-blog-content-one a').attr('rel', 'nofollow');
+                                    $('.inner-dark-blog-content-one a').map(function () {
+                                        var url = $(this).attr('href');
+                                        if (url.includes('https://dype.me') || url.includes('https://www.dype.me')) {
+                                            $(this).attr('rel', 'dofollow');
+                                        }
+                                    });
+                                })
+                                function openNotification() {
+                                    $('.notification').toggle();
+                                }
+                                $('.clear-notification').click(function () {
+                                    $('.notification').css('display', 'none');
+                                });
+                                $('.deletearticle').click(function () {
+                                    // alert("save article deleted");
+                                });
+                                $('.savearticle').click(function () {
+                                    var usertype = "<%if(user){%><%= user.paid%><%}%>";
+                                    if ("<%= article.qualify%>" == "qualify") {
+                                        if (usertype == "free") {
+                                            $('#savecontentPopup').css('display', 'block');
+                                            $('.popup-back').css('display', 'block');
+                                        } else if (!usertype) {
+                                            location.replace($(this).attr('url'));
+                                        }
+                                    } else {
+                                        if (usertype == "free") {
+                                            $('#savecontentPopup').css('display', 'block');
+                                            $('.popup-back').css('display', 'block');
+                                        } else {
+                                            location.replace($(this).attr('url'));
+                                        }
+                                    }
+                                });
+                                $('.popup-back').click(function () {
+                                    if (userType != "paid") {
+                                        location.replace('/');
+                                    } else {
+                                        $(".popup").css('display', 'none');
+                                        $(".popup-back").css('display', 'none');
+                                    }
+                                });
+
+                                var spentTime = 0;
+                                requestAnimationFrame(function updateTimeSpent() {
+                                    var timeNow = performance.now();
+                                    spentTime = round(timeNow / 1000);
+                                    requestAnimationFrame(updateTimeSpent);
+                                });
+                                var readingTime = "<%= time(article.short)%>" * 60;
+                                function sendTime() {
+                                    if (userType == "paid") {
+                                        if (spentTime > readingTime * 60) {
+                                            spentTime > readingTime;
+                                        }
+                                        $.ajax({
+                                            url: '/saveTime',
+                                            dataType: 'json',
+                                            type: 'post',
+                                            data: { userId: userId, articleId: articleId, time: spentTime, readingTime: readingTime },
+                                            success: function (data) {
+                                                return data;
+                                            }
+                                        })
+                                    }
+                                    //send the spenttime to the server
+                                    spentTime = 0;
+                                };
+                                $('.closepopup').click(function () {
+                                    $(".popup").css('display', 'none');
+                                    $(".popup-back").css('display', 'none');
+                                });
+                                setTimeout(function () {
+                                    $('#upvotePopup').css('display', 'block');
+                                    $('.popup-back').css('display', 'block');
+                                }, 70000);
+                                $('.prev-next').click(function () {
+                                    sendTime();
+                                    location.replace($(this).attr('url'));
+                                });
+                                var userType = "<%if(user){%><%= user.paid%><%}else{%>free<%}%>";
+                                var articleType = "<%= article.qualify%>";
+                                console.log(userType);
+
+                                if (articleType == "qualify") {
+                                    if (userType != "paid") {
+                                        $('#qualifyPopup').css('display', 'block');
+                                        $('.popup-back').css('display', 'block');
+                                    }
+                                }
+                            </script>
+                            <!-- //calculation part -->
+</body>
+</html>
