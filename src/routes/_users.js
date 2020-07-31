@@ -1102,7 +1102,7 @@ router.get(
   }
 );
 
-router.get('/user/authorstatus', async (req, res, next) => {
+router.get('/user/authorstatus', auth, async (req, res, next) => {
   let filter = req.query.filter;
   let _date = new Date(filter);
   // var date = new Date();
