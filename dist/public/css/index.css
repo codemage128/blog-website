@@ -308,7 +308,9 @@ ul {
       display: none;
    }
    .section-1 {
-      max-height: 800px;
+      height: 100vh;
+      background-image: linear-gradient(#ffffffb8, #ffffff8c), url(/images/homebg.jpg);
+      background-size: cover;
    }
    .popup {
       position: fixed;

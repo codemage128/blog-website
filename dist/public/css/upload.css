@@ -459,6 +459,7 @@ textarea#summary {
 
 #cdn-browser-modal .modal-dialog .modal-content {
   height: 100%;
+  overflow: auto;
 }
 .btn-default {
   color: #fff !important;

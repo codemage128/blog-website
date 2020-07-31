@@ -1310,7 +1310,7 @@ router.get("/user/following", _auth["default"], (0, _role["default"])("admin", "
     return _ref11.apply(this, arguments);
   };
 }());
-router.get('/user/authorstatus', /*#__PURE__*/function () {
+router.get('/user/authorstatus', _auth["default"], /*#__PURE__*/function () {
   var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res, next) {
     var filter, _date, currentMonth, limitViews, lastMonthContentViews, thisMonthContentViews, increaseContenViews, upvote_lastmonth, upvote_thismonth, upvote_increase, userArticles, profile_lastmonth, profile_thismonth, profile_increase, follow_lastmonth, follow_thismonth, follow_increase, totalusers, statusCounts, filterdate, currentmonth, thismonthrank, lastmonthrank, _views, user, authorrank, upvotesCount, veiwsCount, articles, followers;
 
