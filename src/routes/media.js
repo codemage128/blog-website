@@ -22,11 +22,11 @@ router.post("/media/create", async (req, res, next) => {
         localForm.on("end", function(fields, files) {
           for (let x in this.openedFiles) {
             let name =
-              this.openedFiles[x].name.split(".").shift() +
-              "-" +
-              crypto.randomBytes(2).toString("hex") +
+              // this.openedFiles[x].name.split(".").shift() +
+              crypto.randomBytes(10).toString("hex") +
               "." +
               this.openedFiles[x].name.split(".").pop();
+            console.log(name);
             let dest = `${path.join(__dirname, "..", "public", "media", name)}`;
             let data = fs.readFileSync(this.openedFiles[x].path);
             fs.writeFileSync(dest, data);

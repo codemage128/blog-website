@@ -1107,7 +1107,7 @@ router.get('/user/authorstatus', auth, async (req, res, next) => {
   let _date = new Date(filter);
   // var date = new Date();
   // var currentMonth = date.getMonth();
-
+  
   var currentMonth = _date.getMonth() + 1;
   let limitViews = 99999999;
   if (!req.query.filter) {
@@ -1123,7 +1123,7 @@ router.get('/user/authorstatus', auth, async (req, res, next) => {
   let userArticles = await Article.find({ postedBy: req.user.id });
   userArticles.forEach(element => {
     element.viewers.forEach(item => {
-      let viewMonth = item.date.getMonth();
+      let viewMonth = item.date.getMonth() + 1;
       if (currentMonth == viewMonth) {
         thisMonthContentViews++;
       } else if ((viewMonth + 1) == currentMonth) {
@@ -1131,7 +1131,7 @@ router.get('/user/authorstatus', auth, async (req, res, next) => {
       }
     });
     element.upvote.users.forEach(item => {
-      let viewMonth = item.date.getMonth();
+      let viewMonth = item.date.getMonth() + 1;
       if (currentMonth == viewMonth) {
         upvote_thismonth++;
       } else if ((viewMonth + 1) == currentMonth) {
@@ -1161,7 +1161,7 @@ router.get('/user/authorstatus', auth, async (req, res, next) => {
   let totalusers = await User.find({ _id: req.user.id });
   totalusers.forEach(element => {
     element.viewers.forEach(item => {
-      let viewMonth = item.date.getMonth();
+      let viewMonth = item.date.getMonth() + 1;
       if (currentMonth == viewMonth) {
         profile_thismonth++;
       } else if ((viewMonth + 1) == currentMonth) {
@@ -1169,7 +1169,7 @@ router.get('/user/authorstatus', auth, async (req, res, next) => {
       }
     });
     element.following.forEach(item => {
-      let viewMonth = item.date.getMonth();
+      let viewMonth = item.date.getMonth() + 1;
       if (currentMonth == viewMonth) {
         follow_thismonth++;
       } else if ((viewMonth + 1) == currentMonth) {

@@ -77,7 +77,7 @@ router.post(
             );
             return res.redirect("back");
           }
-          
+
           let real = req.body.slug
             ? req.body.slug
               .trim()
@@ -794,26 +794,42 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           { slug: req.params.slug.trim() },
           { $push: { viewers: payload } }
         );
-        Article.updateOne(
-          { slug: req.params.slug.trim() },
-          { $inc: { views: 1 } }
-        ).then(views => {
-          res.render("single", {
-            articleCount: articleCount,
-            title: article[0].title,
-            article: article[0],
-            settings: settings,
-            previous: previousarticle[0],
-            next: nextarticle[0],
-            featured: featured,
-            popular: popular,
-            recommended: recommended,
-            related: related,
-            bookmark: book,
-            bookmarkId: bookmark == null ? null : bookmark._id
-          });
-        })
-          .catch(err => next(err));
+        await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
+        let view_article = await Article.findOne({slug: req.params.slug.trim()});
+        res.render("single", {
+          articleCount: articleCount,
+          title: article[0].title,
+          article: view_article,
+          settings: settings,
+          previous: previousarticle[0],
+          next: nextarticle[0],
+          featured: featured,
+          popular: popular,
+          recommended: recommended,
+          related: related,
+          bookmark: book,
+          bookmarkId: bookmark == null ? null : bookmark._id
+        });
+        // Article.updateOne(
+        //   { slug: req.params.slug.trim() },
+        //   { $inc: { views: 1 } }
+        // ).then(views => {
+        //   res.render("single", {
+        //     articleCount: articleCount,
+        //     title: article[0].title,
+        //     article: article[0],
+        //     settings: settings,
+        //     previous: previousarticle[0],
+        //     next: nextarticle[0],
+        //     featured: featured,
+        //     popular: popular,
+        //     recommended: recommended,
+        //     related: related,
+        //     bookmark: book,
+        //     bookmarkId: bookmark == null ? null : bookmark._id
+        //   });
+        // })
+        //   .catch(err => next(err));
       }
     }
   } catch (error) {
@@ -1066,11 +1082,11 @@ router.get("/all-post", install.redirectToLogin, async (req, res, next) => {
   }
 });
 
-router.post('/api/kategorie', async(req, res, next) => {
+router.post('/api/kategorie', async (req, res, next) => {
   let slug = req.body.slug;
-  let category = await Category.findOne({slug: slug});
-  let articles = await Article.find({category: category.id}).sort({createdAt: -1}).limit(10);
-  return res.json({"data" : articles});
+  let category = await Category.findOne({ slug: slug });
+  let articles = await Article.find({ category: category.id }).sort({ createdAt: -1 }).limit(10);
+  return res.json({ "data": articles });
 });
 
 // Get all the posts in a category
@@ -1246,7 +1262,7 @@ router.post('/article/upvote-ajax', async (req, res, next) => {
       indexof = 1;
     }
   })
-  if(indexof == -1 && articleId != userId){
+  if (indexof == -1 && articleId != userId) {
     await Article.updateOne(
       { _id: req.body.articleId },
       { $push: { "upvote.users": payload }, $inc: { "upvote.count": 1 } }
