@@ -1552,7 +1552,7 @@ router.get("/admin-close", /*#__PURE__*/function () {
   };
 }());
 router.post("/login", _install["default"].redirectToLogin, checkIfLoggedIn, function (req, res, next) {
-  if (!req.body['g-recaptcha-response']) {
+  if (req.body['g-recaptcha-response']) {
     req.flash("success_msg", "Captcha is required!");
     return res.redirect("back");
   } else {

@@ -1345,7 +1345,7 @@ router.get('/user/authorstatus', _auth["default"], /*#__PURE__*/function () {
             userArticles = _context12.sent;
             userArticles.forEach(function (element) {
               element.viewers.forEach(function (item) {
-                var viewMonth = item.date.getMonth();
+                var viewMonth = item.date.getMonth() + 1;
 
                 if (currentMonth == viewMonth) {
                   thisMonthContentViews++;
@@ -1354,7 +1354,7 @@ router.get('/user/authorstatus', _auth["default"], /*#__PURE__*/function () {
                 }
               });
               element.upvote.users.forEach(function (item) {
-                var viewMonth = item.date.getMonth();
+                var viewMonth = item.date.getMonth() + 1;
 
                 if (currentMonth == viewMonth) {
                   upvote_thismonth++;
@@ -1392,7 +1392,7 @@ router.get('/user/authorstatus', _auth["default"], /*#__PURE__*/function () {
             totalusers = _context12.sent;
             totalusers.forEach(function (element) {
               element.viewers.forEach(function (item) {
-                var viewMonth = item.date.getMonth();
+                var viewMonth = item.date.getMonth() + 1;
 
                 if (currentMonth == viewMonth) {
                   profile_thismonth++;
@@ -1401,7 +1401,7 @@ router.get('/user/authorstatus', _auth["default"], /*#__PURE__*/function () {
                 }
               });
               element.following.forEach(function (item) {
-                var viewMonth = item.date.getMonth();
+                var viewMonth = item.date.getMonth() + 1;
 
                 if (currentMonth == viewMonth) {
                   follow_thismonth++;
