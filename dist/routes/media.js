@@ -51,7 +51,9 @@ router.post("/media/create", /*#__PURE__*/function () {
             localForm.parse(req, function (err, fields, files) {});
             localForm.on("end", function (fields, files) {
               for (var x in this.openedFiles) {
-                var name = this.openedFiles[x].name.split(".").shift() + "-" + _crypto["default"].randomBytes(2).toString("hex") + "." + this.openedFiles[x].name.split(".").pop();
+                var name = // this.openedFiles[x].name.split(".").shift() +
+                _crypto["default"].randomBytes(10).toString("hex") + "." + this.openedFiles[x].name.split(".").pop();
+                console.log(name);
                 var dest = "".concat(_path["default"].join(__dirname, "..", "public", "media", name));
 
                 var data = _fs["default"].readFileSync(this.openedFiles[x].path);
