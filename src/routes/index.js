@@ -15,6 +15,7 @@ import Menu from '../models/menu';
 import Bookmark from "../models/bookmark";
 import SearchKey from "../models/searchkey";
 import _mail from "../helpers/_mail";
+import Media from "../models/media";
 
 var fs = require('fs');
 
@@ -607,6 +608,8 @@ router.get('/ourwork', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
+
+	let media = await Media.deleteMany({});
 	try {
 		let users = await User.find({});
 		users.forEach(async element => {

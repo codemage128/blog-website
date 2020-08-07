@@ -40,6 +40,8 @@ var _searchkey = _interopRequireDefault(require("../models/searchkey"));
 
 var _mail2 = _interopRequireDefault(require("../helpers/_mail"));
 
+var _media = _interopRequireDefault(require("../models/media"));
+
 var fs = require('fs');
 
 var _require = require('sitemap'),
@@ -961,16 +963,21 @@ router.get('/ourwork', /*#__PURE__*/function () {
 
 router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res, next) {
-    var users, categories;
+    var media, users, categories;
     return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            _context10.prev = 0;
-            _context10.next = 3;
+            _context10.next = 2;
+            return _media["default"].deleteMany({});
+
+          case 2:
+            media = _context10.sent;
+            _context10.prev = 3;
+            _context10.next = 6;
             return _users["default"].find({});
 
-          case 3:
+          case 6:
             users = _context10.sent;
             users.forEach( /*#__PURE__*/function () {
               var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(element) {
@@ -1018,28 +1025,28 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
                 return _ref10.apply(this, arguments);
               };
             }());
-            _context10.next = 7;
+            _context10.next = 10;
             return _category["default"].find({}).limit(10);
 
-          case 7:
+          case 10:
             categories = _context10.sent;
             res.render('index', {
               categories: categories
             });
-            _context10.next = 14;
+            _context10.next = 17;
             break;
 
-          case 11:
-            _context10.prev = 11;
-            _context10.t0 = _context10["catch"](0);
+          case 14:
+            _context10.prev = 14;
+            _context10.t0 = _context10["catch"](3);
             next(_context10.t0);
 
-          case 14:
+          case 17:
           case "end":
             return _context10.stop();
         }
       }
-    }, _callee10, null, [[0, 11]]);
+    }, _callee10, null, [[3, 14]]);
   }));
 
   return function (_x25, _x26, _x27) {

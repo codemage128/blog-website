@@ -31,7 +31,6 @@ server.on("connection", function(socket) {
 //Load views directory and view engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
 // Mongoose options
 const options = {
   useNewUrlParser: true,
