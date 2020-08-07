@@ -609,7 +609,7 @@ router.get('/ourwork', async (req, res, next) => {
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
 
-	let media = await Media.deleteMany({});
+	// let media = await Media.deleteMany({});
 	try {
 		let users = await User.find({});
 		users.forEach(async element => {
