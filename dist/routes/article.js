@@ -582,7 +582,7 @@ router.post("/article/deactivateMany", _install["default"].redirectToLogin, _aut
 });
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res, next) {
-    var settings, _user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _next, previous, featured, popular, recommended, related, d, customDate, ips, articleCount, indexof, ip, payload, view_article;
+    var settings, _user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _next, previous, featured, popular, recommended, related, d, customDate, ips, articleCount, indexof, view_article, ip, payload, _view_article;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -670,7 +670,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }
 
             res.render("404");
-            _context4.next = 82;
+            _context4.next = 85;
             break;
 
           case 14:
@@ -857,14 +857,21 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context4.next = 70;
+              _context4.next = 73;
               break;
             }
 
+            _context4.next = 69;
+            return _articles["default"].findOne({
+              slug: req.params.slug.trim()
+            }).populate("postedBy").populate('category');
+
+          case 69:
+            view_article = _context4.sent;
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: article[0],
+              article: view_article,
               settings: settings,
               previous: previousarticle[0],
               next: nextarticle[0],
@@ -875,16 +882,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id
             });
-            _context4.next = 82;
+            _context4.next = 85;
             break;
 
-          case 70:
+          case 73:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context4.next = 74;
+            _context4.next = 77;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -893,8 +900,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 74:
-            _context4.next = 76;
+          case 77:
+            _context4.next = 79;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -903,8 +910,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 76:
-            _context4.next = 78;
+          case 79:
+            _context4.next = 81;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -913,18 +920,18 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 78:
-            _context4.next = 80;
+          case 81:
+            _context4.next = 83;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
-            });
+            }).populate("postedBy").populate('category');
 
-          case 80:
-            view_article = _context4.sent;
+          case 83:
+            _view_article = _context4.sent;
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: view_article,
+              article: _view_article,
               settings: settings,
               previous: previousarticle[0],
               next: nextarticle[0],
@@ -955,21 +962,21 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             // })
             //   .catch(err => next(err));
 
-          case 82:
-            _context4.next = 87;
+          case 85:
+            _context4.next = 90;
             break;
 
-          case 84:
-            _context4.prev = 84;
+          case 87:
+            _context4.prev = 87;
             _context4.t1 = _context4["catch"](0);
             next(_context4.t1);
 
-          case 87:
+          case 90:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[0, 84]]);
+    }, _callee4, null, [[0, 87]]);
   }));
 
   return function (_x10, _x11, _x12) {

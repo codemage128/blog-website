@@ -590,6 +590,7 @@ router.post(
   }
 );
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
+  
   try {
     let settings = await Settings.findOne();
     let user = req.params.user;
@@ -762,10 +763,11 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         }
       })
       if (indexof !== -1) {
+        let view_article = await Article.findOne({slug: req.params.slug.trim()}).populate("postedBy").populate('category');
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
-          article: article[0],
+          article: view_article,
           settings: settings,
           previous: previousarticle[0],
           next: nextarticle[0],
@@ -795,7 +797,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           { $push: { viewers: payload } }
         );
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
-        let view_article = await Article.findOne({slug: req.params.slug.trim()});
+        let view_article = await Article.findOne({slug: req.params.slug.trim()}).populate("postedBy").populate('category');
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
