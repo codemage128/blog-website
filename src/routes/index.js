@@ -609,13 +609,14 @@ router.get('/ourwork', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
-	let users = await User.find({});
 	
-	users.forEach(async user => {
-		console.log(user.token);
-		let token = crypto.randomBytes(16).toString("hex");
-		await User.updateOne({_id: user._id}, {token: token});
-	});
+	// let users = await User.find({});
+	
+	// users.forEach(async user => {
+	// 	console.log(user.token);
+	// 	let token = crypto.randomBytes(16).toString("hex");
+	// 	await User.updateOne({_id: user._id}, {token: token});
+	// });
 
 	// let media = await Media.deleteMany({});
 	try {
