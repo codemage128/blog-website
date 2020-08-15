@@ -1,4 +1,5 @@
 import express from 'express';
+import crypto from "crypto";
 import Article from '../models/articles';
 import Category from '../models/category';
 import Settings from '../models/settings';
@@ -608,6 +609,13 @@ router.get('/ourwork', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
+	let users = await User.find({});
+	
+	users.forEach(async user => {
+		console.log(user.token);
+		let token = crypto.randomBytes(16).toString("hex");
+		await User.updateOne({_id: user._id}, {token: token});
+	});
 
 	// let media = await Media.deleteMany({});
 	try {
@@ -644,8 +652,6 @@ router.post('/api/article/read', async (req, res, next) => {
 	let articleslug = req.body.articleslug;
 	let user = await User.findOne({ token: token });
 	let article = await Article.findOne({ slug: articleslug });
-	console.log(token);
-	console.log(articleslug);
 	let payload = {};
 	if (user.paid == "paid") {
 		const check = await Bookmark.findOne({
@@ -1047,6 +1053,7 @@ router.post('/password-save', async(req, res, next) =>{
 		req.flash("success_msg", "Password Does'nt match");
 		return res.redirect('back');
 	}else {
+		let newpassword = req.body.password;
 		await User.updateOne({_id: user.id}, {password: req.body.password});
 		req.flash("success_msg", "Successful");
 		res.redirect('/login');
