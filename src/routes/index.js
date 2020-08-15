@@ -1,5 +1,6 @@
 import express from 'express';
 import crypto from "crypto";
+import bcrypt from "bcrypt-nodejs";
 import Article from '../models/articles';
 import Category from '../models/category';
 import Settings from '../models/settings';
@@ -440,9 +441,9 @@ router.get('/lostpassword', install.redirectToLogin, async (req, res, next) => {
 });
 
 // payout table download as a pdf.
-router.post('/payout/download', install.redirectToLogin, async(req, res, next) =>{
+router.post('/payout/download', install.redirectToLogin, async (req, res, next) => {
 	// console.log(req.user);
-	let user = await User.findOne({_id: req.user.id});
+	let user = await User.findOne({ _id: req.user.id });
 	res.redirect("back");
 })
 
@@ -609,9 +610,9 @@ router.get('/ourwork', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
-	
+
 	// let users = await User.find({});
-	
+
 	// users.forEach(async user => {
 	// 	console.log(user.token);
 	// 	let token = crypto.randomBytes(16).toString("hex");
@@ -1038,7 +1039,7 @@ router.post('/reset-password', async (req, res, next) => {
 
 // This is the password - reset part.
 // Currently password encryption is not working.
-router.get('/password-reset', async(req, res, next) => {
+router.get('/password-reset', async (req, res, next) => {
 	// user token
 	let token = req.query.token;
 	res.render('password-reset', {
@@ -1046,18 +1047,28 @@ router.get('/password-reset', async(req, res, next) => {
 	});
 });
 
-router.post('/password-save', async(req, res, next) =>{
+router.post('/password-save', async (req, res, next) => {
 	//console.log(req.body.token);
 
-	let user = await User.findOne({token: req.body.token});
-	if(req.body.password !== req.body.conform){
+	let user = await User.findOne({ token: req.body.token });
+	if (req.body.password !== req.body.conform) {
 		req.flash("success_msg", "Password Does'nt match");
 		return res.redirect('back');
-	}else {
-		let newpassword = req.body.password;
-		await User.updateOne({_id: user.id}, {password: req.body.password});
-		req.flash("success_msg", "Successful");
-		res.redirect('/login');
+	} else {
+		let newpassword = "";
+		bcrypt.genSalt(12, function (err, salt) {
+			if (err) return next(err);
+
+			bcrypt.hash(req.body.password, salt, null, function (err, hash) {
+				if (err) return next(err);
+				newpassword = hash;
+				User.updateOne({ _id: user.id }, { password: newpassword }).then(result =>{
+					req.flash("success_msg", "Successful");
+					res.redirect('/login');
+				});
+				
+			});
+		});
 	}
 })
 module.exports = router;

@@ -10,6 +10,8 @@ var _express = _interopRequireDefault(require("express"));
 
 var _crypto = _interopRequireDefault(require("crypto"));
 
+var _bcryptNodejs = _interopRequireDefault(require("bcrypt-nodejs"));
+
 var _articles = _interopRequireDefault(require("../models/articles"));
 
 var _category = _interopRequireDefault(require("../models/category"));
@@ -1944,19 +1946,27 @@ router.post('/password-save', /*#__PURE__*/function () {
             return _context25.abrupt("return", res.redirect('back'));
 
           case 8:
-            newpassword = req.body.password;
-            _context25.next = 11;
-            return _users["default"].updateOne({
-              _id: user.id
-            }, {
-              password: req.body.password
+            newpassword = "";
+
+            _bcryptNodejs["default"].genSalt(12, function (err, salt) {
+              if (err) return next(err);
+
+              _bcryptNodejs["default"].hash(req.body.password, salt, null, function (err, hash) {
+                if (err) return next(err);
+                newpassword = hash;
+
+                _users["default"].updateOne({
+                  _id: user.id
+                }, {
+                  password: newpassword
+                }).then(function (result) {
+                  req.flash("success_msg", "Successful");
+                  res.redirect('/login');
+                });
+              });
             });
 
-          case 11:
-            req.flash("success_msg", "Successful");
-            res.redirect('/login');
-
-          case 13:
+          case 10:
           case "end":
             return _context25.stop();
         }
