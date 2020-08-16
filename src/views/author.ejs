@@ -101,10 +101,10 @@
 					<% for(let item of article) { %>
                      <div class="col-md-4 col-sm-6">
                         <div class="startresult">
-                           <div class="bg-1">
+                           <div class="bg-1" style="overflow: hidden;max-height: 170px;">
                               <img src="<%= item.file%>" />
                            </div>
-                           <div class="bg-1-contant">
+                           <div class="bg-1-contant" style="min-height: 300px;">
                               <% if(item.postedBy.roleId == "admin"){%>
                               <p style="overflow-wrap: break-word; font-size: 18px;"><a
                                     href="/d/<%= item.category.slug.toLowerCase()%>/<%= item.slug %>"
