@@ -64,7 +64,7 @@
       <% } else {%>
       <span class="username_span"><%= user.username%></span>
       <hr>
-      <a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+      <a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
 
       <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein Profil</a>
       <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
@@ -142,7 +142,7 @@
                   </ul>
                   <% } else {%>
                   <li><span class="username_span"><%= user.username%></span></li>
-                  <li><a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashbard</a>
+                  <li><a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashbard</a>
                   </li>
                   <li><a href="/author/<%= user.username%>" class="searchbar"><i
                            class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
