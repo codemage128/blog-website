@@ -709,7 +709,7 @@ router.post("/api/sign-up", /*#__PURE__*/function () {
             }
 
             message = {
-              "Error": "Registration Successfull, pls check your email for futher instrcutions"
+              "Error": "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen."
             };
             return _context9.abrupt("return", res.json(message));
 
