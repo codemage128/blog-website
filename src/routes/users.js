@@ -371,7 +371,7 @@ router.post("/api/sign-up", async (req, res, next) => {
           )
           : null;
         if (set.emailVerification == true) {
-          message = { "Error": "Registration Successfull, pls check your email for futher instrcutions" }
+          message = { "Error": "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen." }
           return res.json(message);
         } else {
           if (set.autoLogin == true) {
