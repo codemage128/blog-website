@@ -289,12 +289,20 @@
         $('#filterdate').change(function () {
             var date = $('#filterdate').val();
             var month = new Date(date);
-            // location.replace('https://dype.me/user/authorstatus?filter=' + date);
-            location.replace('http://localhost:9000/user/authorstatus?filter=' + date);
+            location.replace('https://dype.me/user/authorstatus?filter=' + date);
+            // location.replace('http://localhost:9000/user/authorstatus?filter=' + date);
         })
     })
 </script>
-
+<script>
+    $(document).ready(function () {
+        $("[href]").each(function () {
+            if (this.href == window.location.href) {
+                $(this).parent().addClass("active");
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
