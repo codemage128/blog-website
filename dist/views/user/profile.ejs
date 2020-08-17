@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <h3 class="profile_text">Please fill your information. Then you can post the articles</h3>
+                <h3 class="profile_text">Bitte hinterlege alle notwendigen Informationen, um Beiträge veröffentlichen zu können.</h3>
             </div>
             <div class="progress">
                 <div class="progress-bar" style="width:0%">
@@ -104,22 +104,18 @@
                                     <input type="date" name="birthday" class="form-control" value="<% if(user.birthday){%><%= 1900+user.birthday.getYear()%>-<%if(user.birthday.getMonth() < 10){%><%=0%><%}%><%= 1+user.birthday.getMonth()%>-<%if(user.birthday.getDate() < 10){%><%=0%><%}%><%= user.birthday.getDate()%><%}%>"
                                          id="birthday" required />
                                 </div>
-                                <div class="col-sm-6 col-12 mb-20">
-                                    <label for="">Geburtsdatum</label>
-                                    <input type="tel" name="phone" id="phone"
-                                        class="form-control" value="<%= user.phone %>" />
-                                </div>
+                                
                                 <div class="col-sm-12 col-12 mb-20 tax-field" style="display: none;">
                                     <label for="">Steuernummer</label>
                                     <input type="text" name="tax" class="form-control" value="<%= user.tax %>" id="tax">
                                 </div>
                                 <div class="col-12 mb-20">
-                                    <label for="">Über dich (Diese Informationen werden in deinem Profil angezeigt) (*)</label>
-                                    <textarea name="about" required id="about" cols="30" rows="10" class="form-control"
+                                    <label for="">Über dich (Diese Informationen werden in deinem Profil angezeigt)</label>
+                                    <textarea name="about" id="about" cols="30" rows="10" class="form-control"
                                         maxlength="150"><%= user.about %></textarea>
                                 </div>
                                 <div class="col-12 mb-20">
-                                    <label for="">Email Notification</label>
+                                    <label for="">Email Benachrichtigungen</label>
                                     <input type="checkbox" name="emailsend"  style="width: 30px; height: 30px;" <% if(user.emailsend == true){ %>checked<% } %> >
                                 </div>
                                 <div class="col-12 mb-20">
@@ -240,7 +236,6 @@
         var lastname = $('#lastname').val();
         var email = $('#email').val();
         var birthday = $('#birthday').val();
-        var phone = $('#phone').val();
         var about = $('#about').val();
         var sociallinkedin = $('#sociallinkedin').val();
         var socialtwitter = $('#socialtwitter').val();
@@ -260,14 +255,11 @@
         if (birthday != "") {
             percent = percent + 10;
         }
-        if (phone != "") {
-            percent = percent + 10;
-        }
         if (about != "") {
             percent = percent + 10;
         }
         if (sociallinkedin != "" || socialinstagram != "" || socialtwitter != "" || socialfacebook != "") {
-            percent = percent + 40;
+            percent = percent + 60;
         }
         if (percent == 100) {
             $('#postenable').val("true");

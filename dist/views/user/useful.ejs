@@ -135,7 +135,7 @@
                <div class="accordion-item">
                   <a>Warum sollte ich auf Dype bloggen?</a>
                   <div class="content">
-                     <p>Hier findest du einen Beitrag über die Vorzüge des Blogging auf Dype.</p>
+                     <p id="officiallink">Hier findest du einen Beitrag über die Vorzüge des Blogging auf Dype.</p>
                   </div>
                </div>
                <div class="accordion-item">
@@ -199,7 +199,7 @@
                   </div>
                </div>
                <div class="accordion-item">
-                  <a>Wie kann ich neue Kategorien hinzufügen?Wie kann ich neue Kategorien hinzufügen?</a>
+                  <a>Wie kann ich neue Kategorien hinzufügen?</a>
                   <div class="content">
                      <p>Wenn du einen Beitrag in einer bisher nicht angelegten Kategorie veröffentlichen möchtest, muss dies bei uns beantragt werden. Wir werden deine Anfrage prüfen und in kürzester Zeit ein Feedback geben. Schreibe einfach eine Mail an: support@dype.me</p>
                   </div>
@@ -255,6 +255,18 @@
    }
 
    items.forEach(item => item.addEventListener('click', toggleAccordion));
+</script>
+<script>
+   $(document).ready(function () {
+       $("[href]").each(function () {
+           if (this.href == window.location.href) {
+               $(this).parent().addClass("active");
+           }
+       });
+   });
+   $('#officiallink').click(function(){
+      location.replace('https://dype.me/d/official/warum-solltest-du-auf-dypeme-bloggen');
+   })
 </script>
 </body>
 
