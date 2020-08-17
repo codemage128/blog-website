@@ -67,13 +67,13 @@
                 <%- include ../partials/msg %>
                 <div class="md-form">
                     <input type="text" id="form1" class="form-control">
-                    <label for="form1" style="font-size: 1.5rem;">Article title</label>
+                    <label for="form1" style="font-size: 1.5rem;">Article Titel</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-10 offset-2">
-                <button class="btn btn-danger title-next">Continue</button>
+                <button class="btn btn-danger title-next">Weiter</button>
             </div>
         </div>
     </div>
@@ -86,13 +86,13 @@
                 <div class="md-form">
                     <textarea id="textarea-char-counter" class="form-control md-textarea" length="120"
                         rows="3"></textarea>
-                    <label for="textarea-char-counter" style="font-size: 1.25rem;">Article Description</label>
+                    <label for="textarea-char-counter" style="font-size: 1.25rem;">Article Beschreibung</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-10 offset-2">
-                <button class="btn btn-danger description-next">Continue</button>
+                <button class="btn btn-danger description-next">Weiter</button>
             </div>
         </div>
     </div>
@@ -103,9 +103,9 @@
             </div>
             <div class="col-10">
                 <div class="form-group">
-                    <label for="articletitle">Category</label>
+                    <label for="articletitle">Kategorie</label>
                     <select class="browser-default custom-select" id="precategory" required>
-                        <option selected="selected" disabled="disabled">-- Please Select a Category --</option>
+                        <option selected="selected" disabled="disabled">-- Bitte wähle eine Kategorie --</option>
                         <% for(let key in category2) { %>
                         <% if(category2[key].slug != 'official'){%>
                         <option value="<%= category2[key]._id %>"><%= category2[key].name %></option>
@@ -117,7 +117,7 @@
         </div>
         <div class="row">
             <div class="col-10 offset-2">
-                <button class="btn btn-danger category-next">Continue</button>
+                <button class="btn btn-danger category-next">Weiter</button>
             </div>
         </div>
     </div>
@@ -129,13 +129,13 @@
                 <div class="col-4 pl-5">
                     <div class="row card bg-white mt-4">
                         <div class="card-header">
-                            <b>Featured Image</b>
+                            <b>Header-Bild</b>
                         </div>
                         <div class="card-body text-center">
                             <img src="/img/upload.png" alt="" class="img-fluid"
                                 style="border: 1px solid rgba(195, 207, 216, 0.3);" id="imgBox">
                             <a class="btn btn-danger btn-sm text-white" style="margin-top: -25px;"
-                                onclick="uploadImages()">Upload Image</a>
+                                onclick="uploadImages()">Bild hochladen</a>
                         </div>
                     </div>
                     <div class="row card bg-white mt-5">
@@ -158,9 +158,9 @@
                           </div>
                         <div class="form-group mt-4">
                             <% if(user.postenable == "true"){%>
-                            <button class="btn btn-danger" id="publish">Publish</button>
+                            <button class="btn btn-danger" id="publish">Veröffentlichen</button>
                             <% } else { %>
-                            <button class="btn btn-danger" disabled>Publish</button>
+                            <button class="btn btn-danger" disabled>Veröffentlichen</button>
                             <%}%>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="articletitle">Article Title</label>
+                            <label for="articletitle">Titel</label>
                             <input type="text" id="articletitle" class="form-control" name="title"  />
                         </div>
                     </div>
@@ -202,7 +202,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="summary">Article Description</label>
+                            <label for="summary">Beschreibung</label>
                             <textarea name="summary" class="form-control rounded-0" id="summary" rows="10"></textarea>
                           </div>
                     </div>
@@ -210,7 +210,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="summary">Article Category</label>
+                            <label for="summary">Kategorie</label>
                             <select class="browser-default custom-select" id="category" class="form-control mb-4" required name="category">
                                 <option selected="selected"  disabled="disabled">-- Select a Sub-Category --</option>
                                 <% for(let key in category2) { %>

@@ -16,6 +16,7 @@
     .form-control {
         padding: 5px 11px !important;
     }
+
     input[type=checkbox] {
         border: 1px solid #b4b9be;
         background: #fff;
@@ -102,6 +103,7 @@
         transition: all ease-in-out 200ms;
         font-weight: 500 !important;
     }
+
     .btn-bsa {
         background: #acbb16;
         color: #fff;
@@ -127,16 +129,7 @@
         </div><!-- Page Heading End -->
 
         <div class="col-md-4 text-right">
-                <div class="dropdown">
-                        <a href="javascript:void(0);" class="btn text-white button button-info dropdown-toggle btn-sm"
-                            data-toggle="dropdown" aria-expanded="false">Beitrag hinzufügen</a>
-                        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-start"
-                            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
-                            <a class="dropdown-item" href="/user/posts/add-new">Add New Article</a>
-                            <!-- <a class="dropdown-item" href="/user/posts/add-new-audio">Add new Audio</a> -->
-                            <!-- <a class="dropdown-item" href="/user/posts/add-new-video">Add new Video</a> -->
-                        </div>
-                    </div>
+            <a href="/user/posts/add-new" class="btn text-white button button-info btn-sm">Beitrag hinzufügen</a>
         </div>
 
     </div><!-- Page Headings End -->
@@ -156,26 +149,29 @@
             </div>
         </div><!-- Page Heading End -->
         <div class="col-md-3 mb-20">
-                <div class="form-group">
-                    <select id="searchByCategory" class="form-control form-control-sm" onchange="window.location.href = window.origin + '/user/all-posts?category=' + this.value" required>
-                        <option selected="selected" disabled="disabled">-- Filtern nach Kategorie --</option>
-                        <% for(let item of category2) { %>
-    
-                        <option value="<%= item.name %>"><%= item.name %></option>
-                        <% } %>
-                    </select>
-                </div>
+            <div class="form-group">
+                <select id="searchByCategory" class="form-control form-control-sm"
+                    onchange="window.location.href = window.origin + '/user/all-posts?category=' + this.value" required>
+                    <option selected="selected" disabled="disabled">-- Filtern nach Kategorie --</option>
+                    <% for(let item of category2) { %>
+
+                    <option value="<%= item.name %>"><%= item.name %></option>
+                    <% } %>
+                </select>
             </div>
+        </div>
         <!-- Page Heading Start -->
         <div class="col-md-5  mb-20">
-                <form action="/user/all-posts" method="GET">
-                        <div class="input-group">
-                                <input type="search" name="q" class="form-control" placeholder="Suche nach Titel.." aria-describedby="button-addon2" required>
-                                <div class="input-group-append">
-                                    <button class="btn btn-bsa noBorderRadius" id="button-addon2" id="search"><i class="icofont-search-2 mr-1"></i></button>
-                                </div>
-                            </div>
-                </form>
+            <form action="/user/all-posts" method="GET">
+                <div class="input-group">
+                    <input type="search" name="q" class="form-control" placeholder="Suche nach Titel.."
+                        aria-describedby="button-addon2" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-bsa noBorderRadius" id="button-addon2" id="search"><i
+                                class="icofont-search-2 mr-1"></i></button>
+                    </div>
+                </div>
+            </form>
             <!-- <div class="form-group ">
                 <input type="text" placeholder="Search By name" class="form-control form-control-sm" id="searchByName"
                     required>
@@ -195,30 +191,30 @@
                     <table class="table table-vertical-middle">
                         <thead>
                             <tr>
-                                    <th>
-                                            <input type="checkbox" name="" id="selectAll" class="">
-                                        </th>
+                                <th>
+                                    <input type="checkbox" name="" id="selectAll" class="">
+                                </th>
                                 <th>Titel</th>
                                 <th>Kategorie</th>
                                 <th>Datum</th>
                                 <th>Status</th>
-                                <th>Qualifizier ungsstatus</th>
+                                <th>Qualifizierungsstatus</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% for(var key in article) { %>
                             <tr>
-                                    <td class="">
-                                            <input type="checkbox" name="ids" value="<%= article[key]._id %>">
-                                        </td>
+                                <td class="">
+                                    <input type="checkbox" name="ids" value="<%= article[key]._id %>">
+                                </td>
                                 <td class="format" style="width: 160px;">
-                                    <a data-toggle="tooltip"
-                                data-placement="bottom" title="Edit Post" href="/user/all-posts/edit/<%= article[key].slug %>" >
+                                    <a data-toggle="tooltip" data-placement="bottom" title="Edit Post"
+                                        href="/user/all-posts/edit/<%= article[key].slug %>">
                                         <%= article[key].title %>
                                     </a>
                                 </td>
                                 <td><%= article[key].category.name %></td>
-                                
+
                                 <td><%= article[key].createdAt.toLocaleDateString() %></td>
                                 <td>
                                     <% if(article[key].active== true){ %>
@@ -229,19 +225,19 @@
                                 </td>
                                 <td>
                                     <% if(article[key].qualify == "waiting"){ %>
-                                        <span class="badge badge-info">Waiting</span>
+                                    <span class="badge badge-info">Waiting</span>
                                     <% } %>
                                     <% if(article[key].qualify == "message"){ %>
-                                        <span class="badge badge-warning">Message Sent</span>
+                                    <span class="badge badge-warning">Message Sent</span>
                                     <% } %>
                                     <% if(article[key].qualify == "notqualify"){ %>
-                                        <span class="badge badge-danger">Not Qualified</span>
+                                    <span class="badge badge-danger">Nicht Qualifiziert</span>
                                     <% } %>
                                     <% if(article[key].qualify == "qualify"){ %>
-                                        <span class="badge badge-success">Online & Qualifed</span>
+                                    <span class="badge badge-success">Online & Qualifed</span>
                                     <% } %>
                                     <% if(article[key].qualify == "declined"){ %>
-                                        <span class="badge badge-danger">Declined</span>
+                                    <span class="badge badge-danger">Declined</span>
                                     <% } %>
                                 </td>
                             </tr>
@@ -253,57 +249,15 @@
         </div>
         <!--Manage Product List End-->
         <div class="container mt-4">
-            <% if(query == 'yes') { %> 
-                <% if (pages > 0) { %>
-                    <div class="pagination-container pagination-sm">
-                        <ul class="pagination">
-                            <% if (current == 1) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Erste</a>
-                            </li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?category=<%=searchName %>&&page=1"
-                                    class="page-link">First</a></li>
-                            <% } %>
-                            <% var i = (Number(current) > 3 ? Number(current) - 3 : 1) %>
-                            <% if (i !== 1) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
-                            </li>
-                            <% } %>
-                            <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
-                            <% if (i == current) { %>
-                            <li class="diabled page-item active"><a href="javascript:void(0)" style="cursor:default;"
-                                    class="page-link"><%= i %></a></li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?category=<%=searchName %>&&page=<%= i %>"
-                                    class="page-link"><%= i %></a></li>
-                            <% } %>
-                            <% if (i == Number(current) + 2 && i < pages) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
-                            </li>
-                            <% } %>
-                            <% } %>
-                            <% if (current == pages) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Last</a>
-                            </li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?category=<%=searchName %>&&page=<%= pages %>"
-                                    class="page-link">Letzte</a></li>
-                            <% } %>
-                        </ul>
-                    </div>
-                    <div class="clearfix"></div>
-                    <% } %>
-            <% } %>    
-            <% if(query == true) { %>
+            <% if(query == 'yes') { %>
             <% if (pages > 0) { %>
             <div class="pagination-container pagination-sm">
                 <ul class="pagination">
                     <% if (current == 1) { %>
-                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">First</a>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Erste</a>
                     </li>
                     <% } else { %>
-                    <li class="page-item"><a href="?q=<%=searchName %>&&page=1"
-                            class="page-link">First</a></li>
+                    <li class="page-item"><a href="?category=<%=searchName %>&&page=1" class="page-link">First</a></li>
                     <% } %>
                     <% var i = (Number(current) > 3 ? Number(current) - 3 : 1) %>
                     <% if (i !== 1) { %>
@@ -315,7 +269,7 @@
                     <li class="diabled page-item active"><a href="javascript:void(0)" style="cursor:default;"
                             class="page-link"><%= i %></a></li>
                     <% } else { %>
-                    <li class="page-item"><a href="?q=<%=searchName %>&&page=<%= i %>"
+                    <li class="page-item"><a href="?category=<%=searchName %>&&page=<%= i %>"
                             class="page-link"><%= i %></a></li>
                     <% } %>
                     <% if (i == Number(current) + 2 && i < pages) { %>
@@ -327,8 +281,48 @@
                     <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Last</a>
                     </li>
                     <% } else { %>
-                    <li class="page-item"><a href="?q=<%=searchName %>&&page=<%= pages %>"
-                            class="page-link">Last</a></li>
+                    <li class="page-item"><a href="?category=<%=searchName %>&&page=<%= pages %>"
+                            class="page-link">Letzte</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <% } %>
+            <% } %>
+            <% if(query == true) { %>
+            <% if (pages > 0) { %>
+            <div class="pagination-container pagination-sm">
+                <ul class="pagination">
+                    <% if (current == 1) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">First</a>
+                    </li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?q=<%=searchName %>&&page=1" class="page-link">First</a></li>
+                    <% } %>
+                    <% var i = (Number(current) > 3 ? Number(current) - 3 : 1) %>
+                    <% if (i !== 1) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
+                    </li>
+                    <% } %>
+                    <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
+                    <% if (i == current) { %>
+                    <li class="diabled page-item active"><a href="javascript:void(0)" style="cursor:default;"
+                            class="page-link"><%= i %></a></li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?q=<%=searchName %>&&page=<%= i %>" class="page-link"><%= i %></a>
+                    </li>
+                    <% } %>
+                    <% if (i == Number(current) + 2 && i < pages) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
+                    </li>
+                    <% } %>
+                    <% } %>
+                    <% if (current == pages) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Last</a>
+                    </li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?q=<%=searchName %>&&page=<%= pages %>" class="page-link">Last</a>
+                    </li>
                     <% } %>
                 </ul>
             </div>
@@ -338,42 +332,42 @@
             <% } %>
 
             <% if (query == 'no') { %>
-                <% if (pages > 0) { %>
-                    <div class="pagination-container pagination-sm">
-                        <ul class="pagination">
-                            <% if (current == 1) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">First</a>
-                            </li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
-                            <% } %>
-                            <% var i = (Number(current) > 3 ? Number(current) - 3 : 1) %>
-                            <% if (i !== 1) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
-                            </li>
-                            <% } %>
-                            <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
-                            <% if (i == current) { %>
-                            <li class="diabled page-item active"><a href="javascript:void(0)" style="cursor:default;"
-                                    class="page-link"><%= i %></a></li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?page=<%= i %>" class="page-link"><%= i %></a></li>
-                            <% } %>
-                            <% if (i == Number(current) + 2 && i < pages) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
-                            </li>
-                            <% } %>
-                            <% } %>
-                            <% if (current == pages) { %>
-                            <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Last</a>
-                            </li>
-                            <% } else { %>
-                            <li class="page-item"><a href="?page=<%= pages %>" class="page-link">Last</a></li>
-                            <% } %>
-                        </ul>
-                    </div>
-                    <div class="clearfix"></div>
+            <% if (pages > 0) { %>
+            <div class="pagination-container pagination-sm">
+                <ul class="pagination">
+                    <% if (current == 1) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">First</a>
+                    </li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
                     <% } %>
+                    <% var i = (Number(current) > 3 ? Number(current) - 3 : 1) %>
+                    <% if (i !== 1) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
+                    </li>
+                    <% } %>
+                    <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
+                    <% if (i == current) { %>
+                    <li class="diabled page-item active"><a href="javascript:void(0)" style="cursor:default;"
+                            class="page-link"><%= i %></a></li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?page=<%= i %>" class="page-link"><%= i %></a></li>
+                    <% } %>
+                    <% if (i == Number(current) + 2 && i < pages) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">...</a>
+                    </li>
+                    <% } %>
+                    <% } %>
+                    <% if (current == pages) { %>
+                    <li class="disabled page-item"><a href="javascript:void(0);" class="page-link">Last</a>
+                    </li>
+                    <% } else { %>
+                    <li class="page-item"><a href="?page=<%= pages %>" class="page-link">Last</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <% } %>
             <% } %>
         </div>
     </div>
@@ -407,50 +401,50 @@
 <!--Main JS-->
 <script src="/assets/js/main.js"></script>
 <script>
-        $(document).ready(function () {
-            $("#selectAll").click(function () {
-                $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-            });
-            $("select.bulk").change(function () {
-                var val = $(this).children("option:selected").val();
-                if (val == "")
-                    console.log('nothing')
-                else {
-                    switch (val) {
-                        case 'delete':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/deletemany');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'publish':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/activateMany');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'draft':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/deactivateMany');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'addToSlider':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-slider');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'addToBreaking':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-breaking');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'addToFeatured':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-featured');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        case 'addToRecommended':
-                            document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-recommended');
-                            document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
-                            break;
-                        default: break;
-                    }
-                }
-            });
+    $(document).ready(function () {
+        $("#selectAll").click(function () {
+            $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
         });
-    </script>
+        $("select.bulk").change(function () {
+            var val = $(this).children("option:selected").val();
+            if (val == "")
+                console.log('nothing')
+            else {
+                switch (val) {
+                    case 'delete':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/deletemany');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'publish':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/activateMany');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'draft':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/deactivateMany');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'addToSlider':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-slider');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'addToBreaking':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-breaking');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'addToFeatured':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-featured');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    case 'addToRecommended':
+                        document.querySelector('#bulkDeleteForm').setAttribute('action', '/article/add-to-recommended');
+                        document.querySelector('#bulkDeleteForm').setAttribute('method', 'POST');
+                        break;
+                    default: break;
+                }
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         $('select').niceSelect();
@@ -462,6 +456,15 @@
         // Add slideUp animation to Bootstrap dropdown when collapsing.
         $('.dropdown').on('hide.bs.dropdown', function () {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("[href]").each(function () {
+            if (this.href == window.location.href) {
+                $(this).parent().addClass("active");
+            }
         });
     });
 </script>

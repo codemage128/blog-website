@@ -186,9 +186,6 @@
                         <% } %>
                         </ul>
                     </div>
-                    <a class="searchbar" href="javascript:void();"><span
-                            style="font-size:20px; padding-left: 10px;cursor:pointer" onclick="openNotification()"><i
-                                class="fa fa-bell-o" aria-hidden="true"></i></span></a>
                     <% } else {%>
                     <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Blogger
                             werden</span></a>
@@ -289,7 +286,7 @@
                                     <div class="dark-blog-makedby-details">
                                         <a class="prev-next" url="/author/<%= article.postedBy.usernameslug%>"
                                             style="padding: 0;color: black;">
-                                            <h2 class="authorname"><%= article.postedBy.firstName%>
+                                            <h2 class="authorname" id="authorname"><%= article.postedBy.firstName%>
                                                 <%= article.postedBy.lastName%></h2>
                                         </a>
                                         <p class="authorname">Follower: <%= article.postedBy.following.length %></p>
