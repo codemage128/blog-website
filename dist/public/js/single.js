@@ -15,7 +15,7 @@ for (var i = 0; i < articleimages.length; i++) {
       copybtn.style.margin = "10px";
       copybtn.classList.add("copybutton");
       copybtn.classList.add("btn");
-      copybtn.classList.add("btn-primary");
+      copybtn.classList.add("btn-default");
       $('figcaption').empty();
       $('figcaption').append(copybtn);
       p.style.marginLeft = "auto";
@@ -66,6 +66,7 @@ $('#darkmode').click(function () {
       $('.username_span').css('color', 'white');
       $('.dropdown-menu').css('background', 'black');
       $('.sidenav').css('background-color', '#1d1d1b');
+      $('#authorname').css("color", "white");
    } else {
       document.body.style.background = 'white';
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');
@@ -80,9 +81,10 @@ $('#darkmode').click(function () {
       $('.searchbar').css('color', 'rgb(29, 29, 27)');
       $('.dropdown a').css('color', 'black');
       $('.dropdown a:focus, .dropdown a:hover').css('color', 'black');
-      $('.username_span').css('color', 'white');
+      $('.username_span').css('color', 'black');
       $('.dropdown-menu').css('background', 'white');
       $('.sidenav').css('background-color', 'black');
+      $('#authorname').css("color", "black");
    }
 });
 var firstchild = $('.inner-dark-blog-content-one').children(":first");
