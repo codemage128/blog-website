@@ -106,22 +106,22 @@
       <!-- Page Heading Start -->
       <div class="col-md-8">
          <div class="page-heading">
-            <h3>Payout</h3>
+            <h3>Auszahlungen</h3>
          </div>
       </div><!-- Page Heading End -->
       <div class="col-md-2">
          <div class="page-heading">
-            <h4 style="color: red;">Your balance : <%= total%> €</h4>
+            <h4 style="color: red;">Kontostand : <%= total%> €</h4>
          </div>
       </div>
       <div class="col-md-2">
          <div class="page-heading">
             <% if(total > 5){ %>
             <button class="button button-secondary text-left" data-toggle="modal"
-               data-target="#exampleModal">Withdraw</button>
+               data-target="#exampleModal">Geld abheben</button>
             <% } else { %>
             <button class="button button-secondary text-left" data-toggle="modal"
-               data-target="#withdrawmodal">Withdraw</button>
+               data-target="#withdrawmodal">Geld abheben</button>
             <% } %>
          </div>
       </div>
@@ -275,7 +275,15 @@
 
 <!--Echarts-->
 <script src="/assets/js/plugins/nice-select/jquery.nice-select.min.js"></script>
-
+<script>
+   $(document).ready(function () {
+       $("[href]").each(function () {
+           if (this.href == window.location.href) {
+               $(this).parent().addClass("active");
+           }
+       });
+   });
+</script>
 </body>
 
 </html>
