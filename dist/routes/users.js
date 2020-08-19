@@ -2073,7 +2073,7 @@ router.get("/log-out", function (req, res, next) {
         lastLoggedIn: Date.now()
       }).then(function (updated) {
         req.logout();
-        req.flash("success_msg", "Du bist num abgemeldet");
+        req.flash("success_msg", "Du bist nun abgemeldet");
         res.redirect("/login");
       });
     }
