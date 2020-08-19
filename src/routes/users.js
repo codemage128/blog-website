@@ -1242,7 +1242,7 @@ router.get("/log-out", (req, res, next) => {
       User.updateOne({ _id: req.user.id }, { lastLoggedIn: Date.now() }).then(
         updated => {
           req.logout();
-          req.flash("success_msg", "Du bist num abgemeldet");
+          req.flash("success_msg", "Du bist nun abgemeldet");
           res.redirect("/login");
         }
       );
