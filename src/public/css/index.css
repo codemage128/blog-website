@@ -309,7 +309,7 @@ ul {
    }
    .section-1 {
       height: 100vh;
-      background-image: linear-gradient(#ffffffb8, #ffffff8c), url(/images/homebg.jpg);
+      /* background-image: linear-gradient(#ffffffb8, #ffffff8c), url(/images/homebg.jpg); */
       background-size: cover;
    }
    .popup {

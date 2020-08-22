@@ -139,7 +139,7 @@ router.post('/category/show-more', install.redirectToLogin, async (req, res, nex
   }
 });
 router.get('/downgrade', install.redirectToLogin, async (req, res, next) => {
-  await User.updateOne({ _id: req.query.user }, { paid: "free", signupProcess: "/afterlogin" });
+  await User.updateOne({ _id: req.query.user }, { paid: "free", signupProcess: "/blogrecent" });
   // res.redirect('back');
   res.redirect('/onboarding');
 });
@@ -245,15 +245,11 @@ router.post(
     if (categoryCount == 10) {
       paid = 'paid';
     }
-    await User.updateOne({ _id: req.user._id }, { $set: { paid: paid, categoryList: categoryList, signupProcess: "/afterlogin" } });
+    await User.updateOne({ _id: req.user._id }, { $set: { paid: paid, categoryList: categoryList, signupProcess: "/blogrecent" } });
     if (req.body.redirect == "true") {
       return res.redirect('/user/profile');
     } else {
-      if (categoryCount == 10) {
-        return res.redirect('/blogrecent');
-      } else {
-        return res.redirect('/afterlogin');
-      }
+      return res.redirect('/blogrecent');
     }
   }
 );
@@ -618,145 +614,146 @@ router.get(
     res.render("login", { title: res.locals.siteTitle });
   }
 );
-router.get('/afterlogin', install.redirectToLogin, async (req, res, next) => {
-  if (req.user) {
-    let editorsPicker = await Article.find({
-      addToBreaking: true
-    }).populate('category').populate('postedBy').limit(3);
+// router.get('/afterlogin', install.redirectToLogin, async (req, res, next) => {
+//   if (req.user) {
+//     let editorsPicker = await Article.find({
+//       addToBreaking: true
+//     }).populate('category').populate('postedBy').limit(3);
 
-    if (editorsPicker.length == 0) {
-      let a = [];
-      for (var i = 0; i < req.user.categoryList.length; i++) {
-        var usercategory = req.user.categoryList[i];
-        let _category = await Category.find({
-          slug: usercategory
-        });
-        let article = await Article.find({
-          category: _category[0]._id
-        }).populate('category').populate('postedBy');
-        for (var b in article) {
-          if (article[b].category.slug != 'official') {
-            a.push(article[b]);
-          }
-        }
-      }
-      for (var i in a) {
-        if (a[i].short.split(' ').length > 900) {
-          if (editorsPicker.length > 2) {
-            break;
-          }
-          editorsPicker.push(a[i]);
-        }
-      }
-    }
-    let followers = await User.find({
-      "following.user": { $in: req.user.id }
-    }).populate("following").sort({ createdAt: -1 });
-    let authorarticle = [];
-    for (var i in followers) {
-      let art = await Article.find({
-        postedBy: followers[i]._id
-      }).populate('category').populate('postedBy').sort({ createdAt: -1 });
-      for (var j in art) {
-        if (art[j].category.slug != "official") {
-          if (authorarticle.length > 5) {
-            break;
-          } else {
-            authorarticle.push(art[j]);
-          }
-        }
-      }
-    }
+//     if (editorsPicker.length == 0) {
+//       let a = [];
+//       for (var i = 0; i < req.user.categoryList.length; i++) {
+//         var usercategory = req.user.categoryList[i];
+//         let _category = await Category.find({
+//           slug: usercategory
+//         });
+//         let article = await Article.find({
+//           category: _category[0]._id
+//         }).populate('category').populate('postedBy');
+//         for (var b in article) {
+//           if (article[b].category.slug != 'official') {
+//             a.push(article[b]);
+//           }
+//         }
+//       }
+//       for (var i in a) {
+//         if (a[i].short.split(' ').length > 900) {
+//           if (editorsPicker.length > 2) {
+//             break;
+//           }
+//           editorsPicker.push(a[i]);
+//         }
+//       }
+//     }
+//     let followers = await User.find({
+//       "following.user": { $in: req.user.id }
+//     }).populate("following").sort({ createdAt: -1 });
+//     let authorarticle = [];
+//     for (var i in followers) {
+//       let art = await Article.find({
+//         postedBy: followers[i]._id
+//       }).populate('category').populate('postedBy').sort({ createdAt: -1 });
+//       for (var j in art) {
+//         if (art[j].category.slug != "official") {
+//           if (authorarticle.length > 5) {
+//             break;
+//           } else {
+//             authorarticle.push(art[j]);
+//           }
+//         }
+//       }
+//     }
 
-    // let authorarticle = await Article.find({ postedBy: req.user.id }).populate('category');
+//     // let authorarticle = await Article.find({ postedBy: req.user.id }).populate('category');
 
-    let usercategoryList = req.user.categoryList;
-    let popular = await Article.find({
-      active: true,
-    }).populate('category')
-      .sort({ views: -1 })
-    let p = [];
-    usercategoryList.forEach(item => {
-      popular.forEach(element => {
-        if (element.category.slug != "official") {
-          if (item == element.category.slug) {
-            if (p.length < 6) {
-              p.push(element);
-            }
-          }
-        }
-      })
-    })
-    let random = await Article.find({}).populate('category').populate('postedBy');
-    let r = [];
-    random.forEach(element => {
-      if (element.category.slug != "official") {
-        if (r.length < 6) {
-          r.push(element);
-        }
-      }
-    });
-    let e = [];
-    editorsPicker.forEach(element => {
-      if (element.category.slug != 'official') {
-        e.push(element);
-      }
-    });
-    editorsPicker = e;
-    let currentUser = await User.findOne({ _id: req.user._id });
-    let favoriteCat = currentUser.categoryList;
-    let category = await Category.find({});
-    let categories = []
-    favoriteCat.forEach(element => {
-      category.forEach(items => {
-        if (element == items.slug) {
-          categories.push(items);
-        }
-      });
-    });
-    res.render('afterloginuser', {
-      title: "After Login",
-      editorsPicker: editorsPicker,
-      authorarticle: authorarticle,
-      popular: p,
-      random: r,
-      categories: categories
-    });
-  } else {
-    let random = await Article.find({}).populate('category').populate('postedBy');
-    let r = [];
-    random.forEach(element => {
-      if (element.category.slug != "official") {
-        if (r.length < 6) {
-          r.push(element);
-        }
-      }
-    });
-    let e = [];
-    let editorsPicker = [];
-    random.forEach(element => {
-      if (element.category.slug != 'official') {
-        if (e.length < 6) {
-          e.push(element);
-        }
-      }
-    });
-    editorsPicker = e;
-    let categories = await Category.find({}).limit(6);
-    res.render('afterloginuser', {
-      title: "After Login",
-      editorsPicker: editorsPicker,
-      authorarticle: r,
-      popular: r,
-      random: r,
-      categories: categories
-    });
-  }
-});
+//     let usercategoryList = req.user.categoryList;
+//     let popular = await Article.find({
+//       active: true,
+//     }).populate('category')
+//       .sort({ views: -1 })
+//     let p = [];
+//     usercategoryList.forEach(item => {
+//       popular.forEach(element => {
+//         if (element.category.slug != "official") {
+//           if (item == element.category.slug) {
+//             if (p.length < 6) {
+//               p.push(element);
+//             }
+//           }
+//         }
+//       })
+//     })
+//     let random = await Article.find({}).populate('category').populate('postedBy');
+//     let r = [];
+//     random.forEach(element => {
+//       if (element.category.slug != "official") {
+//         if (r.length < 6) {
+//           r.push(element);
+//         }
+//       }
+//     });
+//     let e = [];
+//     editorsPicker.forEach(element => {
+//       if (element.category.slug != 'official') {
+//         e.push(element);
+//       }
+//     });
+//     editorsPicker = e;
+//     let currentUser = await User.findOne({ _id: req.user._id });
+//     let favoriteCat = currentUser.categoryList;
+//     let category = await Category.find({});
+//     let categories = []
+//     favoriteCat.forEach(element => {
+//       category.forEach(items => {
+//         if (element == items.slug) {
+//           categories.push(items);
+//         }
+//       });
+//     });
+//     res.render('afterloginuser', {
+//       title: "After Login",
+//       editorsPicker: editorsPicker,
+//       authorarticle: authorarticle,
+//       popular: p,
+//       random: r,
+//       categories: categories
+//     });
+//   } else {
+//     let random = await Article.find({}).populate('category').populate('postedBy');
+//     let r = [];
+//     random.forEach(element => {
+//       if (element.category.slug != "official") {
+//         if (r.length < 6) {
+//           r.push(element);
+//         }
+//       }
+//     });
+//     let e = [];
+//     let editorsPicker = [];
+//     random.forEach(element => {
+//       if (element.category.slug != 'official') {
+//         if (e.length < 6) {
+//           e.push(element);
+//         }
+//       }
+//     });
+//     editorsPicker = e;
+//     let categories = await Category.find({}).limit(6);
+//     res.render('afterloginuser', {
+//       title: "After Login",
+//       editorsPicker: editorsPicker,
+//       authorarticle: r,
+//       popular: r,
+//       random: r,
+//       categories: categories
+//     });
+//   }
+// });
 
 router.post("/api/login", (req, res, next) => {
   var message = "";
   console.log(req.body);
+
   passport.authenticate("local", function (err, user, info) {
     if (err) return next(err);
     if (!user) {
@@ -792,7 +789,7 @@ router.get("/close", (req, res, next) => {
 
 router.post("/close", async (req, res, next) => {
   await User.updateOne({ _id: req.user.id }, { closed: true });
-  let user = await User.findOne({_id: req.user.id});
+  let user = await User.findOne({ _id: req.user.id });
   if (user.emailsend) {
     let payload = {
       email: user.email.trim(),
@@ -916,7 +913,7 @@ router.get(
   (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }),
       function (req, res) {
-        res.redrect('/afterlogin');
+        res.redrect('/blogrecent');
       }
   }
 );
