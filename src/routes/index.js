@@ -456,25 +456,8 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 	if (req.user) {
 		let userId = req.user._id;
 		let user = await User.findOne({ _id: userId });
-		let editorsPicker = await Article.find({
-			addToBreaking: true
-		}).populate('category')
-			.populate('postedBy')
-			.sort('create_at')
-			.limit(3);
-		let feed = [];
-		let article = await Article.find({ addToBreaking: true })
-			.populate('category')
-			.populate('postedBy')
-			.sort('create_at');
-		article.forEach(element => {
-			editorsPicker.push(element);
-		})
-		editorsPicker.forEach(element => {
-			if (element.category.slug != "official") {
-				feed.push(element);
-			}
-		});
+		let official = await Category.findOne({ slug: "official" });
+		let articles = await Article.find({ "category": { "$ne": official.id } }).populate('postedBy').populate("category");
 		let category = await Category.find({});
 		let usercategoryList = user.categoryList;
 		let categories = [];
@@ -485,30 +468,33 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 				}
 			});
 		});
-		let trendings = await Article.find({})
+		let feed = [];
+		let editorsPickerArticle = [];
+		articles.forEach(article => {
+			categories.forEach(category => {
+				if (article.category.slug == category.slug) {
+					editorsPickerArticle.push(article);
+				}
+			});
+		});
+		for (var i = 0; i < 3; i++) {
+			let r = Math.floor(Math.random() * editorsPickerArticle.length);
+			feed.push(editorsPickerArticle[r]);
+		}
+		let trendings = await Article.find({ 'category': { "$ne": official.id } })
 			.populate('category')
 			.populate('postedBy')
 			.sort({ views: -1 })
 			.sort({ createdAt: -1 });
 		let trends = [];
-		console.log(usercategoryList);
-		usercategoryList.forEach(element => {
-			trendings.forEach(item => {
-				if (item.category.slug != "official") {
-					if (element == item.category.slug) {
-						if (trends.length < 6) {
-							trends.push(item);
-						}
-					}
-				}
-			});
-		});
+		for (var i = 0; i < 6; i++) {
+			let r = Math.floor(Math.random() * editorsPickerArticle.length);
+			trends.push(editorsPickerArticle[r]);
+		}
 		let followers = await User.find({
 			"following.user": { $in: req.user.id }
 		}).populate("following").sort({ createdAt: -1 });
-
 		let authorarticle = [];
-
 		for (var i in followers) {
 			let art = await Article.find({
 				postedBy: followers[i]._id
@@ -525,29 +511,13 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 			}
 		}
 
-		let newest = await Article.find({})
+		let news = await Article.find({ 'category': { "$ne": official.id } })
 			.sort({ createdAt: -1 })
 			.populate('category')
-			.populate('postedBy')
-		let news = [];
-		newest.forEach(element => {
-			if (element.category.slug != "official") {
-				if (news.length != 3) {
-					news.push(element);
-				}
-			}
-		})
-		let random = await Article.find({})
+			.populate('postedBy').limit(3);
+		let randoms = await Article.find({ 'category': { "$ne": official.id } })
 			.populate('category')
-			.populate('postedBy');
-		let randoms = [];
-		random.forEach(element => {
-			if (element.category.slug != "official") {
-				if (randoms.length != 3) {
-					randoms.push(element);
-				}
-			}
-		});
+			.populate('postedBy').limit(6).skip(Math.floor(Math.random() * articles.length));
 
 		let favorites = [];
 		let total_article = await Article.find({})
@@ -566,20 +536,48 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 			categories: categories,
 			trendings: trends,
 			authorarticle: authorarticle,
+			news: feed,
 			newest: news,
 			random: randoms,
 			favorites: favorites
 		});
 	} else {
+		let official = await Category.findOne({ slug: "official" });
+		var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');
+		articlelength = articlelength.length;
+		var r = Math.floor(Math.random() * articlelength);
+		let editorsPicker = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
+		var categorylength = await Category.find({ "slug": { "$ne": "official" } });
+		categorylength = categorylength.length;
+		r = Math.floor(Math.random() * categorylength);
+		let categories = await Category.find({ "slug": { "$ne": "official" } }).limit(6).skip(r);
+		r = Math.floor(Math.random() * articlelength);
+		let trendings = await Article.find({}).populate('postedBy').populate('category').limit(6).skip(r);
+		r = Math.floor(Math.random() * articlelength);
+		let authorarticle = await Article.find({}).populate('postedBy').populate('category').limit(3).skip(r);
+		let newest = await Article.find({})
+			.sort({ createdAt: -1 })
+			.populate('category')
+			.populate('postedBy')
+		let news = [];
+		newest.forEach(element => {
+			if (element.category.slug != "official") {
+				if (news.length != 3) {
+					news.push(element);
+				}
+			}
+		})
+
+		r = Math.floor(Math.random() * articlelength);
+		let random = await Article.find({}).populate('postedBy').populate('category').limit(6).skip(r);
 		res.render('blogrecent', {
 			title: 'Blog recent',
-			editorsPicker: [],
-			categories: [],
-			trendings: [],
-			authorarticle: [],
-			newest: [],
-			random: [],
-			favorites: []
+			editorsPicker: editorsPicker,
+			categories: categories,
+			trendings: trendings,
+			authorarticle: authorarticle,
+			newest: news,
+			random: random,
 		});
 	}
 });

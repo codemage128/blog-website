@@ -16,7 +16,7 @@ var _subscription = _interopRequireDefault(require("../models/subscription"));
 
 var _stripesession = _interopRequireDefault(require("../models/stripesession"));
 
-var _category2 = _interopRequireDefault(require("../models/category"));
+var _category = _interopRequireDefault(require("../models/category"));
 
 var _crypto = _interopRequireDefault(require("crypto"));
 
@@ -219,7 +219,7 @@ router.get('/show-category-all', /*#__PURE__*/function () {
           case 0:
             _context3.prev = 0;
             _context3.next = 3;
-            return _category2["default"].find({}).limit(20);
+            return _category["default"].find({}).limit(20);
 
           case 3:
             categories = _context3.sent;
@@ -256,7 +256,7 @@ router.post('/category/show-more', _install["default"].redirectToLogin, /*#__PUR
             _context4.prev = 0;
             showCnt = req.body.categoryCount;
             _context4.next = 4;
-            return _category2["default"].find({}).limit(20).skip(parseInt(showCnt));
+            return _category["default"].find({}).limit(20).skip(parseInt(showCnt));
 
           case 4:
             categories = _context4.sent;
@@ -292,7 +292,7 @@ router.get('/downgrade', _install["default"].redirectToLogin, /*#__PURE__*/funct
               _id: req.query.user
             }, {
               paid: "free",
-              signupProcess: "/afterlogin"
+              signupProcess: "/blogrecent"
             });
 
           case 2:
@@ -381,7 +381,7 @@ router.get('/onboarding', _install["default"].redirectToLogin, /*#__PURE__*/func
             }
 
             _context6.next = 25;
-            return _category2["default"].find({}).limit(20);
+            return _category["default"].find({}).limit(20);
 
           case 25:
             categories = _context6.sent;
@@ -480,7 +480,7 @@ router.post('/onboarding', _install["default"].redirectToLogin, /*#__PURE__*/fun
 
           case 7:
             _context7.next = 9;
-            return _category2["default"].find({}).limit(20);
+            return _category["default"].find({}).limit(20);
 
           case 9:
             categories = _context7.sent;
@@ -532,7 +532,7 @@ router.post('/choose-category', _install["default"].redirectToLogin, _auth["defa
               $set: {
                 paid: paid,
                 categoryList: categoryList,
-                signupProcess: "/afterlogin"
+                signupProcess: "/blogrecent"
               }
             });
 
@@ -545,17 +545,9 @@ router.post('/choose-category', _install["default"].redirectToLogin, _auth["defa
             return _context8.abrupt("return", res.redirect('/user/profile'));
 
           case 11:
-            if (!(categoryCount == 10)) {
-              _context8.next = 15;
-              break;
-            }
-
             return _context8.abrupt("return", res.redirect('/blogrecent'));
 
-          case 15:
-            return _context8.abrupt("return", res.redirect('/afterlogin'));
-
-          case 16:
+          case 12:
           case "end":
             return _context8.stop();
         }
@@ -1081,293 +1073,139 @@ router.get("/login", _install["default"].redirectToLogin, checkIfLoggedIn, funct
   res.render("login", {
     title: res.locals.siteTitle
   });
-});
-router.get('/afterlogin', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
-    var editorsPicker, a, i, usercategory, _category, article, b, followers, authorarticle, art, j, usercategoryList, popular, p, random, r, e, currentUser, favoriteCat, category, categories, _random, _r, _e, _editorsPicker, _categories;
+}); // router.get('/afterlogin', install.redirectToLogin, async (req, res, next) => {
+//   if (req.user) {
+//     let editorsPicker = await Article.find({
+//       addToBreaking: true
+//     }).populate('category').populate('postedBy').limit(3);
+//     if (editorsPicker.length == 0) {
+//       let a = [];
+//       for (var i = 0; i < req.user.categoryList.length; i++) {
+//         var usercategory = req.user.categoryList[i];
+//         let _category = await Category.find({
+//           slug: usercategory
+//         });
+//         let article = await Article.find({
+//           category: _category[0]._id
+//         }).populate('category').populate('postedBy');
+//         for (var b in article) {
+//           if (article[b].category.slug != 'official') {
+//             a.push(article[b]);
+//           }
+//         }
+//       }
+//       for (var i in a) {
+//         if (a[i].short.split(' ').length > 900) {
+//           if (editorsPicker.length > 2) {
+//             break;
+//           }
+//           editorsPicker.push(a[i]);
+//         }
+//       }
+//     }
+//     let followers = await User.find({
+//       "following.user": { $in: req.user.id }
+//     }).populate("following").sort({ createdAt: -1 });
+//     let authorarticle = [];
+//     for (var i in followers) {
+//       let art = await Article.find({
+//         postedBy: followers[i]._id
+//       }).populate('category').populate('postedBy').sort({ createdAt: -1 });
+//       for (var j in art) {
+//         if (art[j].category.slug != "official") {
+//           if (authorarticle.length > 5) {
+//             break;
+//           } else {
+//             authorarticle.push(art[j]);
+//           }
+//         }
+//       }
+//     }
+//     // let authorarticle = await Article.find({ postedBy: req.user.id }).populate('category');
+//     let usercategoryList = req.user.categoryList;
+//     let popular = await Article.find({
+//       active: true,
+//     }).populate('category')
+//       .sort({ views: -1 })
+//     let p = [];
+//     usercategoryList.forEach(item => {
+//       popular.forEach(element => {
+//         if (element.category.slug != "official") {
+//           if (item == element.category.slug) {
+//             if (p.length < 6) {
+//               p.push(element);
+//             }
+//           }
+//         }
+//       })
+//     })
+//     let random = await Article.find({}).populate('category').populate('postedBy');
+//     let r = [];
+//     random.forEach(element => {
+//       if (element.category.slug != "official") {
+//         if (r.length < 6) {
+//           r.push(element);
+//         }
+//       }
+//     });
+//     let e = [];
+//     editorsPicker.forEach(element => {
+//       if (element.category.slug != 'official') {
+//         e.push(element);
+//       }
+//     });
+//     editorsPicker = e;
+//     let currentUser = await User.findOne({ _id: req.user._id });
+//     let favoriteCat = currentUser.categoryList;
+//     let category = await Category.find({});
+//     let categories = []
+//     favoriteCat.forEach(element => {
+//       category.forEach(items => {
+//         if (element == items.slug) {
+//           categories.push(items);
+//         }
+//       });
+//     });
+//     res.render('afterloginuser', {
+//       title: "After Login",
+//       editorsPicker: editorsPicker,
+//       authorarticle: authorarticle,
+//       popular: p,
+//       random: r,
+//       categories: categories
+//     });
+//   } else {
+//     let random = await Article.find({}).populate('category').populate('postedBy');
+//     let r = [];
+//     random.forEach(element => {
+//       if (element.category.slug != "official") {
+//         if (r.length < 6) {
+//           r.push(element);
+//         }
+//       }
+//     });
+//     let e = [];
+//     let editorsPicker = [];
+//     random.forEach(element => {
+//       if (element.category.slug != 'official') {
+//         if (e.length < 6) {
+//           e.push(element);
+//         }
+//       }
+//     });
+//     editorsPicker = e;
+//     let categories = await Category.find({}).limit(6);
+//     res.render('afterloginuser', {
+//       title: "After Login",
+//       editorsPicker: editorsPicker,
+//       authorarticle: r,
+//       popular: r,
+//       random: r,
+//       categories: categories
+//     });
+//   }
+// });
 
-    return _regenerator["default"].wrap(function _callee13$(_context13) {
-      while (1) {
-        switch (_context13.prev = _context13.next) {
-          case 0:
-            if (!req.user) {
-              _context13.next = 77;
-              break;
-            }
-
-            _context13.next = 3;
-            return _articles["default"].find({
-              addToBreaking: true
-            }).populate('category').populate('postedBy').limit(3);
-
-          case 3:
-            editorsPicker = _context13.sent;
-
-            if (!(editorsPicker.length == 0)) {
-              _context13.next = 28;
-              break;
-            }
-
-            a = [];
-            i = 0;
-
-          case 7:
-            if (!(i < req.user.categoryList.length)) {
-              _context13.next = 19;
-              break;
-            }
-
-            usercategory = req.user.categoryList[i];
-            _context13.next = 11;
-            return _category2["default"].find({
-              slug: usercategory
-            });
-
-          case 11:
-            _category = _context13.sent;
-            _context13.next = 14;
-            return _articles["default"].find({
-              category: _category[0]._id
-            }).populate('category').populate('postedBy');
-
-          case 14:
-            article = _context13.sent;
-
-            for (b in article) {
-              if (article[b].category.slug != 'official') {
-                a.push(article[b]);
-              }
-            }
-
-          case 16:
-            i++;
-            _context13.next = 7;
-            break;
-
-          case 19:
-            _context13.t0 = _regenerator["default"].keys(a);
-
-          case 20:
-            if ((_context13.t1 = _context13.t0()).done) {
-              _context13.next = 28;
-              break;
-            }
-
-            i = _context13.t1.value;
-
-            if (!(a[i]["short"].split(' ').length > 900)) {
-              _context13.next = 26;
-              break;
-            }
-
-            if (!(editorsPicker.length > 2)) {
-              _context13.next = 25;
-              break;
-            }
-
-            return _context13.abrupt("break", 28);
-
-          case 25:
-            editorsPicker.push(a[i]);
-
-          case 26:
-            _context13.next = 20;
-            break;
-
-          case 28:
-            _context13.next = 30;
-            return _users["default"].find({
-              "following.user": {
-                $in: req.user.id
-              }
-            }).populate("following").sort({
-              createdAt: -1
-            });
-
-          case 30:
-            followers = _context13.sent;
-            authorarticle = [];
-            _context13.t2 = _regenerator["default"].keys(followers);
-
-          case 33:
-            if ((_context13.t3 = _context13.t2()).done) {
-              _context13.next = 51;
-              break;
-            }
-
-            i = _context13.t3.value;
-            _context13.next = 37;
-            return _articles["default"].find({
-              postedBy: followers[i]._id
-            }).populate('category').populate('postedBy').sort({
-              createdAt: -1
-            });
-
-          case 37:
-            art = _context13.sent;
-            _context13.t4 = _regenerator["default"].keys(art);
-
-          case 39:
-            if ((_context13.t5 = _context13.t4()).done) {
-              _context13.next = 49;
-              break;
-            }
-
-            j = _context13.t5.value;
-
-            if (!(art[j].category.slug != "official")) {
-              _context13.next = 47;
-              break;
-            }
-
-            if (!(authorarticle.length > 5)) {
-              _context13.next = 46;
-              break;
-            }
-
-            return _context13.abrupt("break", 49);
-
-          case 46:
-            authorarticle.push(art[j]);
-
-          case 47:
-            _context13.next = 39;
-            break;
-
-          case 49:
-            _context13.next = 33;
-            break;
-
-          case 51:
-            // let authorarticle = await Article.find({ postedBy: req.user.id }).populate('category');
-            usercategoryList = req.user.categoryList;
-            _context13.next = 54;
-            return _articles["default"].find({
-              active: true
-            }).populate('category').sort({
-              views: -1
-            });
-
-          case 54:
-            popular = _context13.sent;
-            p = [];
-            usercategoryList.forEach(function (item) {
-              popular.forEach(function (element) {
-                if (element.category.slug != "official") {
-                  if (item == element.category.slug) {
-                    if (p.length < 6) {
-                      p.push(element);
-                    }
-                  }
-                }
-              });
-            });
-            _context13.next = 59;
-            return _articles["default"].find({}).populate('category').populate('postedBy');
-
-          case 59:
-            random = _context13.sent;
-            r = [];
-            random.forEach(function (element) {
-              if (element.category.slug != "official") {
-                if (r.length < 6) {
-                  r.push(element);
-                }
-              }
-            });
-            e = [];
-            editorsPicker.forEach(function (element) {
-              if (element.category.slug != 'official') {
-                e.push(element);
-              }
-            });
-            editorsPicker = e;
-            _context13.next = 67;
-            return _users["default"].findOne({
-              _id: req.user._id
-            });
-
-          case 67:
-            currentUser = _context13.sent;
-            favoriteCat = currentUser.categoryList;
-            _context13.next = 71;
-            return _category2["default"].find({});
-
-          case 71:
-            category = _context13.sent;
-            categories = [];
-            favoriteCat.forEach(function (element) {
-              category.forEach(function (items) {
-                if (element == items.slug) {
-                  categories.push(items);
-                }
-              });
-            });
-            res.render('afterloginuser', {
-              title: "After Login",
-              editorsPicker: editorsPicker,
-              authorarticle: authorarticle,
-              popular: p,
-              random: r,
-              categories: categories
-            });
-            _context13.next = 90;
-            break;
-
-          case 77:
-            _context13.next = 79;
-            return _articles["default"].find({}).populate('category').populate('postedBy');
-
-          case 79:
-            _random = _context13.sent;
-            _r = [];
-
-            _random.forEach(function (element) {
-              if (element.category.slug != "official") {
-                if (_r.length < 6) {
-                  _r.push(element);
-                }
-              }
-            });
-
-            _e = [];
-            _editorsPicker = [];
-
-            _random.forEach(function (element) {
-              if (element.category.slug != 'official') {
-                if (_e.length < 6) {
-                  _e.push(element);
-                }
-              }
-            });
-
-            _editorsPicker = _e;
-            _context13.next = 88;
-            return _category2["default"].find({}).limit(6);
-
-          case 88:
-            _categories = _context13.sent;
-            res.render('afterloginuser', {
-              title: "After Login",
-              editorsPicker: _editorsPicker,
-              authorarticle: _r,
-              popular: _r,
-              random: _r,
-              categories: _categories
-            });
-
-          case 90:
-          case "end":
-            return _context13.stop();
-        }
-      }
-    }, _callee13);
-  }));
-
-  return function (_x36, _x37, _x38) {
-    return _ref13.apply(this, arguments);
-  };
-}());
 router.post("/api/login", function (req, res, next) {
   var message = "";
   console.log(req.body);
@@ -1417,13 +1255,13 @@ router.get("/close", function (req, res, next) {
   });
 });
 router.post("/close", /*#__PURE__*/function () {
-  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
+  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
     var user, payload;
-    return _regenerator["default"].wrap(function _callee14$(_context14) {
+    return _regenerator["default"].wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            _context14.next = 2;
+            _context13.next = 2;
             return _users["default"].updateOne({
               _id: req.user.id
             }, {
@@ -1431,16 +1269,16 @@ router.post("/close", /*#__PURE__*/function () {
             });
 
           case 2:
-            _context14.next = 4;
+            _context13.next = 4;
             return _users["default"].findOne({
               _id: req.user.id
             });
 
           case 4:
-            user = _context14.sent;
+            user = _context13.sent;
 
             if (!user.emailsend) {
-              _context14.next = 9;
+              _context13.next = 9;
               break;
             }
 
@@ -1451,19 +1289,19 @@ router.post("/close", /*#__PURE__*/function () {
               lastName: user.lastName,
               siteLink: res.locals.siteLink
             };
-            _context14.next = 9;
+            _context13.next = 9;
             return (0, _mail2["default"])("Löschung deines Accounts", user.email, "account-delete-email", payload, req.headers.host, function (err, info) {
               if (err) console.log(err);
             });
 
           case 9:
-            _context14.next = 11;
+            _context13.next = 11;
             return _users["default"].deleteOne({
               _id: req.user.id
             });
 
           case 11:
-            _context14.next = 13;
+            _context13.next = 13;
             return _articles["default"].deleteMany({
               postedBy: req.user.id
             });
@@ -1474,33 +1312,33 @@ router.post("/close", /*#__PURE__*/function () {
 
           case 15:
           case "end":
-            return _context14.stop();
+            return _context13.stop();
         }
       }
-    }, _callee14);
+    }, _callee13);
   }));
 
-  return function (_x39, _x40, _x41) {
-    return _ref14.apply(this, arguments);
+  return function (_x36, _x37, _x38) {
+    return _ref13.apply(this, arguments);
   };
 }());
 router.get("/admin-close", /*#__PURE__*/function () {
-  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
+  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
     var user, payload, articles;
-    return _regenerator["default"].wrap(function _callee15$(_context15) {
+    return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context15.next = 2;
+            _context14.next = 2;
             return _users["default"].findOne({
               _id: req.query.user
             });
 
           case 2:
-            user = _context15.sent;
+            user = _context14.sent;
 
             if (!user.emailsend) {
-              _context15.next = 7;
+              _context14.next = 7;
               break;
             }
 
@@ -1511,23 +1349,23 @@ router.get("/admin-close", /*#__PURE__*/function () {
               lastName: user.lastName,
               siteLink: res.locals.siteLink
             };
-            _context15.next = 7;
+            _context14.next = 7;
             return (0, _mail2["default"])("Löschung deines Accounts", user.email, "account-delete-email", payload, req.headers.host, function (err, info) {
               if (err) console.log(err);
             });
 
           case 7:
-            _context15.next = 9;
+            _context14.next = 9;
             return _users["default"].deleteOne({
               _id: req.query.user
             });
 
           case 9:
-            _context15.next = 11;
+            _context14.next = 11;
             return _articles["default"].find({});
 
           case 11:
-            articles = _context15.sent;
+            articles = _context14.sent;
             articles.forEach(function (element) {
               if (element.postedBy == req.query.user) {
                 _articles["default"].deleteOne({
@@ -1541,14 +1379,14 @@ router.get("/admin-close", /*#__PURE__*/function () {
 
           case 14:
           case "end":
-            return _context15.stop();
+            return _context14.stop();
         }
       }
-    }, _callee15);
+    }, _callee14);
   }));
 
-  return function (_x42, _x43, _x44) {
-    return _ref15.apply(this, arguments);
+  return function (_x39, _x40, _x41) {
+    return _ref14.apply(this, arguments);
   };
 }());
 router.post("/login", _install["default"].redirectToLogin, checkIfLoggedIn, function (req, res, next) {
@@ -1589,13 +1427,13 @@ router.post("/login", _install["default"].redirectToLogin, checkIfLoggedIn, func
   }
 });
 router.get('/user/qualify', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res, next) {
+  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
     var article;
-    return _regenerator["default"].wrap(function _callee16$(_context16) {
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context16.next = 2;
+            _context15.next = 2;
             return _articles["default"].update({
               _id: req.query.articleId
             }, {
@@ -1603,20 +1441,20 @@ router.get('/user/qualify', _install["default"].redirectToLogin, /*#__PURE__*/fu
             });
 
           case 2:
-            article = _context16.sent;
+            article = _context15.sent;
             req.flash("success_msg", "Es dauert bis zu 3 Tage, bis dein Artikel qualifiziert wirde. Unser Team meldet sich bei dir!");
-            return _context16.abrupt("return", res.redirect("back"));
+            return _context15.abrupt("return", res.redirect("back"));
 
           case 5:
           case "end":
-            return _context16.stop();
+            return _context15.stop();
         }
       }
-    }, _callee16);
+    }, _callee15);
   }));
 
-  return function (_x45, _x46, _x47) {
-    return _ref16.apply(this, arguments);
+  return function (_x42, _x43, _x44) {
+    return _ref15.apply(this, arguments);
   };
 }()); // Get forgot password page
 
@@ -1629,7 +1467,7 @@ router.get("/google/signin", _install["default"].redirectToLogin, checkIfLoggedI
   _passport["default"].authenticate('google', {
     failureRedirect: '/login'
   }), function (req, res) {
-    res.redrect('/afterlogin');
+    res.redrect('/blogrecent');
   };
 }); // Forgot password route
 
@@ -1706,21 +1544,21 @@ router.post("/reset/:token", _install["default"].redirectToLogin, function (req,
 }); // Update user info route
 
 router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
-  var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee17(req, res, next) {
+  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res, next) {
     var user, status, use;
-    return _regenerator["default"].wrap(function _callee17$(_context17) {
+    return _regenerator["default"].wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context17.prev = _context17.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
-            _context17.prev = 0;
-            _context17.next = 3;
+            _context16.prev = 0;
+            _context16.next = 3;
             return _users["default"].findById(req.user.id);
 
           case 3:
-            user = _context17.sent;
+            user = _context16.sent;
 
             if (!(user.email == req.body.email)) {
-              _context17.next = 20;
+              _context16.next = 20;
               break;
             }
 
@@ -1772,25 +1610,25 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
               return next(err);
             });
 
-            _context17.next = 29;
+            _context16.next = 29;
             break;
 
           case 20:
-            _context17.next = 22;
+            _context16.next = 22;
             return _users["default"].findOne({
               email: req.body.email
             });
 
           case 22:
-            use = _context17.sent;
+            use = _context16.sent;
 
             if (!use) {
-              _context17.next = 28;
+              _context16.next = 28;
               break;
             }
 
             req.flash("success_msg", "The Email you provided has been used");
-            return _context17.abrupt("return", res.redirect("back"));
+            return _context16.abrupt("return", res.redirect("back"));
 
           case 28:
             _users["default"].updateOne({
@@ -1803,24 +1641,24 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
             });
 
           case 29:
-            _context17.next = 34;
+            _context16.next = 34;
             break;
 
           case 31:
-            _context17.prev = 31;
-            _context17.t0 = _context17["catch"](0);
-            next(_context17.t0);
+            _context16.prev = 31;
+            _context16.t0 = _context16["catch"](0);
+            next(_context16.t0);
 
           case 34:
           case "end":
-            return _context17.stop();
+            return _context16.stop();
         }
       }
-    }, _callee17, null, [[0, 31]]);
+    }, _callee16, null, [[0, 31]]);
   }));
 
-  return function (_x48, _x49, _x50) {
-    return _ref17.apply(this, arguments);
+  return function (_x45, _x46, _x47) {
+    return _ref16.apply(this, arguments);
   };
 }()); // Update user profile picture
 
@@ -1829,20 +1667,20 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
  */
 
 router.post("/user/dashboard/update/profile-picture", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
-  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee21(req, res, next) {
+  var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee20(req, res, next) {
     var set, form, s3, awsForm, cloudForm;
-    return _regenerator["default"].wrap(function _callee21$(_context21) {
+    return _regenerator["default"].wrap(function _callee20$(_context20) {
       while (1) {
-        switch (_context21.prev = _context21.next) {
+        switch (_context20.prev = _context20.next) {
           case 0:
-            _context21.prev = 0;
-            _context21.next = 3;
+            _context20.prev = 0;
+            _context20.next = 3;
             return _settings["default"].find();
 
           case 3:
-            set = _context21.sent;
-            _context21.t0 = set[0].media.provider;
-            _context21.next = _context21.t0 === "local" ? 7 : _context21.t0 === "amazons3" ? 10 : _context21.t0 === "cloudinary" ? 15 : 20;
+            set = _context20.sent;
+            _context20.t0 = set[0].media.provider;
+            _context20.next = _context20.t0 === "local" ? 7 : _context20.t0 === "amazons3" ? 10 : _context20.t0 === "cloudinary" ? 15 : 20;
             break;
 
           case 7:
@@ -1874,7 +1712,7 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
                 return next(err);
               });
             });
-            return _context21.abrupt("break", 20);
+            return _context20.abrupt("break", 20);
 
           case 10:
             // AWS configuration
@@ -1900,10 +1738,10 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
                   processData: false
                 };
                 s3.upload(params, /*#__PURE__*/function () {
-                  var _ref19 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee18(err, data) {
-                    return _regenerator["default"].wrap(function _callee18$(_context18) {
+                  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee17(err, data) {
+                    return _regenerator["default"].wrap(function _callee17$(_context17) {
                       while (1) {
-                        switch (_context18.prev = _context18.next) {
+                        switch (_context17.prev = _context17.next) {
                           case 0:
                             if (err) next(err);else {
                               _users["default"].updateOne({
@@ -1922,19 +1760,19 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
 
                           case 1:
                           case "end":
-                            return _context18.stop();
+                            return _context17.stop();
                         }
                       }
-                    }, _callee18);
+                    }, _callee17);
                   }));
 
-                  return function (_x54, _x55) {
-                    return _ref19.apply(this, arguments);
+                  return function (_x51, _x52) {
+                    return _ref18.apply(this, arguments);
                   };
                 }());
               }
             });
-            return _context21.abrupt("break", 20);
+            return _context20.abrupt("break", 20);
 
           case 15:
             // Cloudinary configuration
@@ -1947,21 +1785,21 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
             cloudForm = new _formidable["default"].IncomingForm();
             cloudForm.parse(req, function (err, fields, files) {});
             cloudForm.on("end", /*#__PURE__*/function () {
-              var _ref20 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee20(fields, files) {
+              var _ref19 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee19(fields, files) {
                 var _this = this;
 
                 var _loop, x;
 
-                return _regenerator["default"].wrap(function _callee20$(_context20) {
+                return _regenerator["default"].wrap(function _callee19$(_context19) {
                   while (1) {
-                    switch (_context20.prev = _context20.next) {
+                    switch (_context19.prev = _context19.next) {
                       case 0:
                         _loop = function _loop(x) {
                           _cloudinary.v2.uploader.upload(_this.openedFiles[x].path, /*#__PURE__*/function () {
-                            var _ref21 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee19(err, result) {
-                              return _regenerator["default"].wrap(function _callee19$(_context19) {
+                            var _ref20 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee18(err, result) {
+                              return _regenerator["default"].wrap(function _callee18$(_context18) {
                                 while (1) {
-                                  switch (_context19.prev = _context19.next) {
+                                  switch (_context18.prev = _context18.next) {
                                     case 0:
                                       _fs["default"].unlinkSync(_this.openedFiles[x].path);
 
@@ -1980,14 +1818,14 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
 
                                     case 2:
                                     case "end":
-                                      return _context19.stop();
+                                      return _context18.stop();
                                   }
                                 }
-                              }, _callee19);
+                              }, _callee18);
                             }));
 
-                            return function (_x58, _x59) {
-                              return _ref21.apply(this, arguments);
+                            return function (_x55, _x56) {
+                              return _ref20.apply(this, arguments);
                             };
                           }());
                         };
@@ -1998,37 +1836,37 @@ router.post("/user/dashboard/update/profile-picture", _install["default"].redire
 
                       case 2:
                       case "end":
-                        return _context20.stop();
+                        return _context19.stop();
                     }
                   }
-                }, _callee20, this);
+                }, _callee19, this);
               }));
 
-              return function (_x56, _x57) {
-                return _ref20.apply(this, arguments);
+              return function (_x53, _x54) {
+                return _ref19.apply(this, arguments);
               };
             }());
-            return _context21.abrupt("break", 20);
+            return _context20.abrupt("break", 20);
 
           case 20:
-            _context21.next = 25;
+            _context20.next = 25;
             break;
 
           case 22:
-            _context21.prev = 22;
-            _context21.t1 = _context21["catch"](0);
-            next(_context21.t1);
+            _context20.prev = 22;
+            _context20.t1 = _context20["catch"](0);
+            next(_context20.t1);
 
           case 25:
           case "end":
-            return _context21.stop();
+            return _context20.stop();
         }
       }
-    }, _callee21, null, [[0, 22]]);
+    }, _callee20, null, [[0, 22]]);
   }));
 
-  return function (_x51, _x52, _x53) {
-    return _ref18.apply(this, arguments);
+  return function (_x48, _x49, _x50) {
+    return _ref17.apply(this, arguments);
   };
 }()); // Update user password
 
@@ -2083,13 +1921,13 @@ router.get("/log-out", function (req, res, next) {
 }); // Delete Many User
 
 router.post("/user/dashboard/deleteMany", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
-  var _ref22 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee22(req, res, next) {
-    return _regenerator["default"].wrap(function _callee22$(_context22) {
+  var _ref21 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee21(req, res, next) {
+    return _regenerator["default"].wrap(function _callee21$(_context21) {
       while (1) {
-        switch (_context22.prev = _context22.next) {
+        switch (_context21.prev = _context21.next) {
           case 0:
-            _context22.prev = 0;
-            _context22.next = 3;
+            _context21.prev = 0;
+            _context21.next = 3;
             return _articles["default"].deleteMany({
               postedBy: req.body.ids
             });
@@ -2109,43 +1947,43 @@ router.post("/user/dashboard/deleteMany", _install["default"].redirectToLogin, _
               return next(e);
             });
 
-            _context22.next = 9;
+            _context21.next = 9;
             break;
 
           case 6:
-            _context22.prev = 6;
-            _context22.t0 = _context22["catch"](0);
-            next(_context22.t0);
+            _context21.prev = 6;
+            _context21.t0 = _context21["catch"](0);
+            next(_context21.t0);
 
           case 9:
           case "end":
-            return _context22.stop();
+            return _context21.stop();
         }
       }
-    }, _callee22, null, [[0, 6]]);
+    }, _callee21, null, [[0, 6]]);
   }));
 
-  return function (_x60, _x61, _x62) {
-    return _ref22.apply(this, arguments);
+  return function (_x57, _x58, _x59) {
+    return _ref21.apply(this, arguments);
   };
 }()); // Update another user info
 
 router.post("/user/edit", _auth["default"], /*#__PURE__*/function () {
-  var _ref23 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee23(req, res, next) {
+  var _ref22 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee22(req, res, next) {
     var user, use;
-    return _regenerator["default"].wrap(function _callee23$(_context23) {
+    return _regenerator["default"].wrap(function _callee22$(_context22) {
       while (1) {
-        switch (_context23.prev = _context23.next) {
+        switch (_context22.prev = _context22.next) {
           case 0:
-            _context23.prev = 0;
-            _context23.next = 3;
+            _context22.prev = 0;
+            _context22.next = 3;
             return _users["default"].findById(req.body.userId);
 
           case 3:
-            user = _context23.sent;
+            user = _context22.sent;
 
             if (!(user.email == req.body.email)) {
-              _context23.next = 8;
+              _context22.next = 8;
               break;
             }
 
@@ -2158,25 +1996,25 @@ router.post("/user/edit", _auth["default"], /*#__PURE__*/function () {
               return next(err);
             });
 
-            _context23.next = 17;
+            _context22.next = 17;
             break;
 
           case 8:
-            _context23.next = 10;
+            _context22.next = 10;
             return _users["default"].findOne({
               email: req.body.email
             });
 
           case 10:
-            use = _context23.sent;
+            use = _context22.sent;
 
             if (!use) {
-              _context23.next = 16;
+              _context22.next = 16;
               break;
             }
 
             req.flash("success_msg", "The Email you provided has been used");
-            return _context23.abrupt("return", res.redirect("back"));
+            return _context22.abrupt("return", res.redirect("back"));
 
           case 16:
             _users["default"].updateOne({
@@ -2189,24 +2027,24 @@ router.post("/user/edit", _auth["default"], /*#__PURE__*/function () {
             });
 
           case 17:
-            _context23.next = 22;
+            _context22.next = 22;
             break;
 
           case 19:
-            _context23.prev = 19;
-            _context23.t0 = _context23["catch"](0);
-            next(_context23.t0);
+            _context22.prev = 19;
+            _context22.t0 = _context22["catch"](0);
+            next(_context22.t0);
 
           case 22:
           case "end":
-            return _context23.stop();
+            return _context22.stop();
         }
       }
-    }, _callee23, null, [[0, 19]]);
+    }, _callee22, null, [[0, 19]]);
   }));
 
-  return function (_x63, _x64, _x65) {
-    return _ref23.apply(this, arguments);
+  return function (_x60, _x61, _x62) {
+    return _ref22.apply(this, arguments);
   };
 }()); // Update another user password
 
@@ -2236,6 +2074,54 @@ router.post("/user/password/edit", _auth["default"], function (req, res, next) {
 }); // Confirm user email
 
 router.post("/user/dashboard/confirm-user-email", _auth["default"], /*#__PURE__*/function () {
+  var _ref23 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee23(req, res, next) {
+    return _regenerator["default"].wrap(function _callee23$(_context23) {
+      while (1) {
+        switch (_context23.prev = _context23.next) {
+          case 0:
+            _context23.prev = 0;
+
+            if (req.body.ids) {
+              _context23.next = 4;
+              break;
+            }
+
+            req.flash("success_msg", "Nothing was Updated");
+            return _context23.abrupt("return", res.redirect("back"));
+
+          case 4:
+            _context23.next = 6;
+            return _users["default"].updateOne({
+              _id: req.body.ids
+            }, {
+              $set: {
+                active: true
+              }
+            });
+
+          case 6:
+            req.flash("success_msg", "Users Email Activated successfully");
+            return _context23.abrupt("return", res.redirect("back"));
+
+          case 10:
+            _context23.prev = 10;
+            _context23.t0 = _context23["catch"](0);
+            next(_context23.t0);
+
+          case 13:
+          case "end":
+            return _context23.stop();
+        }
+      }
+    }, _callee23, null, [[0, 10]]);
+  }));
+
+  return function (_x63, _x64, _x65) {
+    return _ref23.apply(this, arguments);
+  };
+}()); // Ban user
+
+router.post("/user/dashboard/ban-user", _auth["default"], (0, _role["default"])("admin"), /*#__PURE__*/function () {
   var _ref24 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee24(req, res, next) {
     return _regenerator["default"].wrap(function _callee24$(_context24) {
       while (1) {
@@ -2257,12 +2143,12 @@ router.post("/user/dashboard/confirm-user-email", _auth["default"], /*#__PURE__*
               _id: req.body.ids
             }, {
               $set: {
-                active: true
+                banned: true
               }
             });
 
           case 6:
-            req.flash("success_msg", "Users Email Activated successfully");
+            req.flash("success_msg", "Users has been banned successfully");
             return _context24.abrupt("return", res.redirect("back"));
 
           case 10:
@@ -2281,69 +2167,21 @@ router.post("/user/dashboard/confirm-user-email", _auth["default"], /*#__PURE__*
   return function (_x66, _x67, _x68) {
     return _ref24.apply(this, arguments);
   };
-}()); // Ban user
-
-router.post("/user/dashboard/ban-user", _auth["default"], (0, _role["default"])("admin"), /*#__PURE__*/function () {
-  var _ref25 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee25(req, res, next) {
-    return _regenerator["default"].wrap(function _callee25$(_context25) {
-      while (1) {
-        switch (_context25.prev = _context25.next) {
-          case 0:
-            _context25.prev = 0;
-
-            if (req.body.ids) {
-              _context25.next = 4;
-              break;
-            }
-
-            req.flash("success_msg", "Nothing was Updated");
-            return _context25.abrupt("return", res.redirect("back"));
-
-          case 4:
-            _context25.next = 6;
-            return _users["default"].updateOne({
-              _id: req.body.ids
-            }, {
-              $set: {
-                banned: true
-              }
-            });
-
-          case 6:
-            req.flash("success_msg", "Users has been banned successfully");
-            return _context25.abrupt("return", res.redirect("back"));
-
-          case 10:
-            _context25.prev = 10;
-            _context25.t0 = _context25["catch"](0);
-            next(_context25.t0);
-
-          case 13:
-          case "end":
-            return _context25.stop();
-        }
-      }
-    }, _callee25, null, [[0, 10]]);
-  }));
-
-  return function (_x69, _x70, _x71) {
-    return _ref25.apply(this, arguments);
-  };
 }()); // Follow a user
 
 router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
-  var _ref26 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee26(req, res, next) {
+  var _ref25 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee25(req, res, next) {
     var date, payload;
-    return _regenerator["default"].wrap(function _callee26$(_context26) {
+    return _regenerator["default"].wrap(function _callee25$(_context25) {
       while (1) {
-        switch (_context26.prev = _context26.next) {
+        switch (_context25.prev = _context25.next) {
           case 0:
             date = new Date();
             payload = {
               date: date,
               user: req.user.id
             };
-            _context26.next = 4;
+            _context25.next = 4;
             return _users["default"].updateOne({
               _id: req.query.followerId
             }, {
@@ -2353,35 +2191,35 @@ router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
             });
 
           case 4:
-            return _context26.abrupt("return", res.redirect("back"));
+            return _context25.abrupt("return", res.redirect("back"));
 
           case 5:
           case "end":
-            return _context26.stop();
+            return _context25.stop();
         }
       }
-    }, _callee26);
+    }, _callee25);
   }));
 
-  return function (_x72, _x73, _x74) {
-    return _ref26.apply(this, arguments);
+  return function (_x69, _x70, _x71) {
+    return _ref25.apply(this, arguments);
   };
 }()); // unfollow a user
 
 router.get("/unfollow-user", _auth["default"], /*#__PURE__*/function () {
-  var _ref27 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee27(req, res, next) {
+  var _ref26 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee26(req, res, next) {
     var user, following, removefield;
-    return _regenerator["default"].wrap(function _callee27$(_context27) {
+    return _regenerator["default"].wrap(function _callee26$(_context26) {
       while (1) {
-        switch (_context27.prev = _context27.next) {
+        switch (_context26.prev = _context26.next) {
           case 0:
-            _context27.next = 2;
+            _context26.next = 2;
             return _users["default"].findOne({
               _id: req.query.authorId
             });
 
           case 2:
-            user = _context27.sent;
+            user = _context26.sent;
             following = user.following;
             removefield = 0;
             following.forEach(function (element) {
@@ -2391,11 +2229,11 @@ router.get("/unfollow-user", _auth["default"], /*#__PURE__*/function () {
             });
 
             if (!req.query.authorId) {
-              _context27.next = 11;
+              _context26.next = 11;
               break;
             }
 
-            _context27.next = 9;
+            _context26.next = 9;
             return _users["default"].updateOne({
               _id: req.query.authorId
             }, {
@@ -2407,11 +2245,11 @@ router.get("/unfollow-user", _auth["default"], /*#__PURE__*/function () {
             });
 
           case 9:
-            _context27.next = 13;
+            _context26.next = 13;
             break;
 
           case 11:
-            _context27.next = 13;
+            _context26.next = 13;
             return _users["default"].updateOne({
               _id: req.query.followerId
             }, {
@@ -2421,9 +2259,27 @@ router.get("/unfollow-user", _auth["default"], /*#__PURE__*/function () {
             });
 
           case 13:
-            return _context27.abrupt("return", res.redirect('back'));
+            return _context26.abrupt("return", res.redirect('back'));
 
           case 14:
+          case "end":
+            return _context26.stop();
+        }
+      }
+    }, _callee26);
+  }));
+
+  return function (_x72, _x73, _x74) {
+    return _ref26.apply(this, arguments);
+  };
+}()); // Subscribe a user to a newsletter digest (Daily / Weekly)
+
+router.post("/subscribe/digest", _auth["default"], /*#__PURE__*/function () {
+  var _ref27 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee27(req, res, next) {
+    return _regenerator["default"].wrap(function _callee27$(_context27) {
+      while (1) {
+        switch (_context27.prev = _context27.next) {
+          case 0:
           case "end":
             return _context27.stop();
         }
@@ -2434,14 +2290,23 @@ router.get("/unfollow-user", _auth["default"], /*#__PURE__*/function () {
   return function (_x75, _x76, _x77) {
     return _ref27.apply(this, arguments);
   };
-}()); // Subscribe a user to a newsletter digest (Daily / Weekly)
-
-router.post("/subscribe/digest", _auth["default"], /*#__PURE__*/function () {
-  var _ref28 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee28(req, res, next) {
+}());
+router.get("/checkout-session", /*#__PURE__*/function () {
+  var _ref28 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee28(req, res) {
+    var sessionId, session;
     return _regenerator["default"].wrap(function _callee28$(_context28) {
       while (1) {
         switch (_context28.prev = _context28.next) {
           case 0:
+            sessionId = req.query.sessionId;
+            _context28.next = 3;
+            return stripe.checkout.sessions.retrieve(sessionId);
+
+          case 3:
+            session = _context28.sent;
+            res.send(session);
+
+          case 5:
           case "end":
             return _context28.stop();
         }
@@ -2449,47 +2314,20 @@ router.post("/subscribe/digest", _auth["default"], /*#__PURE__*/function () {
     }, _callee28);
   }));
 
-  return function (_x78, _x79, _x80) {
+  return function (_x78, _x79) {
     return _ref28.apply(this, arguments);
   };
 }());
-router.get("/checkout-session", /*#__PURE__*/function () {
+router.post("/create-checkout-session", /*#__PURE__*/function () {
   var _ref29 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee29(req, res) {
-    var sessionId, session;
+    var planId, domainURL, session;
     return _regenerator["default"].wrap(function _callee29$(_context29) {
       while (1) {
         switch (_context29.prev = _context29.next) {
           case 0:
-            sessionId = req.query.sessionId;
-            _context29.next = 3;
-            return stripe.checkout.sessions.retrieve(sessionId);
-
-          case 3:
-            session = _context29.sent;
-            res.send(session);
-
-          case 5:
-          case "end":
-            return _context29.stop();
-        }
-      }
-    }, _callee29);
-  }));
-
-  return function (_x81, _x82) {
-    return _ref29.apply(this, arguments);
-  };
-}());
-router.post("/create-checkout-session", /*#__PURE__*/function () {
-  var _ref30 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee30(req, res) {
-    var planId, domainURL, session;
-    return _regenerator["default"].wrap(function _callee30$(_context30) {
-      while (1) {
-        switch (_context30.prev = _context30.next) {
-          case 0:
             planId = process.env.SUBSCRIPTION_PLAN_ID;
             domainURL = process.env.DOMAIN;
-            _context30.next = 4;
+            _context29.next = 4;
             return stripe.checkout.sessions.create({
               payment_method_types: ["card"],
               subscription_data: {
@@ -2502,21 +2340,21 @@ router.post("/create-checkout-session", /*#__PURE__*/function () {
             });
 
           case 4:
-            session = _context30.sent;
+            session = _context29.sent;
             res.send({
               checkoutSessionId: session.id
             });
 
           case 6:
           case "end":
-            return _context30.stop();
+            return _context29.stop();
         }
       }
-    }, _callee30);
+    }, _callee29);
   }));
 
-  return function (_x83, _x84) {
-    return _ref30.apply(this, arguments);
+  return function (_x80, _x81) {
+    return _ref29.apply(this, arguments);
   };
 }());
 router.get("/public-key", function (req, res) {
@@ -2525,31 +2363,31 @@ router.get("/public-key", function (req, res) {
   });
 });
 router.post("/saveTime", /*#__PURE__*/function () {
-  var _ref31 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee33(req, res) {
+  var _ref30 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee32(req, res) {
     var userId, articleId, spentTime, readingTime, message, article, user, payload, check, oldspentTime, newspentTime, id, averageold, averageInfo, totalCountings, totalSpentTime, countings, balanceTime, balance, author, earningList, earning, userlength;
-    return _regenerator["default"].wrap(function _callee33$(_context33) {
+    return _regenerator["default"].wrap(function _callee32$(_context32) {
       while (1) {
-        switch (_context33.prev = _context33.next) {
+        switch (_context32.prev = _context32.next) {
           case 0:
             userId = req.body.userId;
             articleId = req.body.articleId;
             spentTime = parseInt(req.body.time);
             readingTime = req.body.readingTime;
             message = "success";
-            _context33.next = 7;
+            _context32.next = 7;
             return _articles["default"].findOne({
               _id: articleId
             }).populate('postedBy');
 
           case 7:
-            article = _context33.sent;
-            _context33.next = 10;
+            article = _context32.sent;
+            _context32.next = 10;
             return _users["default"].findOne({
               _id: userId
             });
 
           case 10:
-            user = _context33.sent;
+            user = _context32.sent;
 
             if (spentTime % 60 > 30) {
               spentTime = parseInt(spentTime / 60) + 1;
@@ -2567,7 +2405,7 @@ router.post("/saveTime", /*#__PURE__*/function () {
               spentTime: spentTime,
               authorName: article.postedBy.username
             };
-            _context33.next = 16;
+            _context32.next = 16;
             return _counting["default"].findOne({
               $and: [{
                 articleId: articleId
@@ -2577,10 +2415,10 @@ router.post("/saveTime", /*#__PURE__*/function () {
             });
 
           case 16:
-            check = _context33.sent;
+            check = _context32.sent;
 
             if (!check) {
-              _context33.next = 34;
+              _context32.next = 34;
               break;
             }
 
@@ -2588,7 +2426,7 @@ router.post("/saveTime", /*#__PURE__*/function () {
             newspentTime = 0;
 
             if (!(oldspentTime < readingTime)) {
-              _context33.next = 32;
+              _context32.next = 32;
               break;
             }
 
@@ -2599,7 +2437,7 @@ router.post("/saveTime", /*#__PURE__*/function () {
               newspentTime = readingTime / 60;
             }
 
-            _context33.next = 26;
+            _context32.next = 26;
             return _counting["default"].updateOne({
               _id: id
             }, {
@@ -2607,40 +2445,40 @@ router.post("/saveTime", /*#__PURE__*/function () {
             });
 
           case 26:
-            _context33.next = 28;
+            _context32.next = 28;
             return _average["default"].findOne({
               userId: userId
             });
 
           case 28:
-            averageold = _context33.sent;
+            averageold = _context32.sent;
             averageInfo = {
               spentTime: averageold.spentTime + newspentTime,
               spentCount: averageold.spentCount + 1
             };
-            _context33.next = 32;
+            _context32.next = 32;
             return _average["default"].updateOne({
               userId: userId
             }, averageInfo);
 
           case 32:
-            _context33.next = 37;
+            _context32.next = 37;
             break;
 
           case 34:
             if (!(article.qualify == "qualify")) {
-              _context33.next = 37;
+              _context32.next = 37;
               break;
             }
 
-            _context33.next = 37;
+            _context32.next = 37;
             return _counting["default"].create(payload).then( /*#__PURE__*/function () {
-              var _ref32 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee32(created) {
+              var _ref31 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee31(created) {
                 var averageInfo, averageold, _averageInfo;
 
-                return _regenerator["default"].wrap(function _callee32$(_context32) {
+                return _regenerator["default"].wrap(function _callee31$(_context31) {
                   while (1) {
-                    switch (_context32.prev = _context32.next) {
+                    switch (_context31.prev = _context31.next) {
                       case 0:
                         averageInfo = {
                           userId: userId,
@@ -2648,16 +2486,16 @@ router.post("/saveTime", /*#__PURE__*/function () {
                           spentTime: payload.spentTime,
                           spentCount: 1
                         };
-                        _context32.next = 3;
+                        _context31.next = 3;
                         return _average["default"].findOne({
                           userId: userId
                         });
 
                       case 3:
-                        averageold = _context32.sent;
+                        averageold = _context31.sent;
 
                         if (!averageold) {
-                          _context32.next = 10;
+                          _context31.next = 10;
                           break;
                         }
 
@@ -2665,69 +2503,69 @@ router.post("/saveTime", /*#__PURE__*/function () {
                           spentTime: averageold.spentTime + spentTime,
                           spentCount: averageold.spentCount + 1
                         };
-                        _context32.next = 8;
+                        _context31.next = 8;
                         return _average["default"].updateOne({
                           userId: userId
                         }, _averageInfo);
 
                       case 8:
-                        _context32.next = 12;
+                        _context31.next = 12;
                         break;
 
                       case 10:
-                        _context32.next = 12;
+                        _context31.next = 12;
                         return _average["default"].create(averageInfo).then( /*#__PURE__*/function () {
-                          var _ref33 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee31(result) {
-                            return _regenerator["default"].wrap(function _callee31$(_context31) {
+                          var _ref32 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee30(result) {
+                            return _regenerator["default"].wrap(function _callee30$(_context30) {
                               while (1) {
-                                switch (_context31.prev = _context31.next) {
+                                switch (_context30.prev = _context30.next) {
                                   case 0:
                                   case "end":
-                                    return _context31.stop();
+                                    return _context30.stop();
                                 }
                               }
-                            }, _callee31);
+                            }, _callee30);
                           }));
 
-                          return function (_x88) {
-                            return _ref33.apply(this, arguments);
+                          return function (_x85) {
+                            return _ref32.apply(this, arguments);
                           };
                         }());
 
                       case 12:
                       case "end":
-                        return _context32.stop();
+                        return _context31.stop();
                     }
                   }
-                }, _callee32);
+                }, _callee31);
               }));
 
-              return function (_x87) {
-                return _ref32.apply(this, arguments);
+              return function (_x84) {
+                return _ref31.apply(this, arguments);
               };
             }())["catch"](function (e) {
               return next(e);
             });
 
           case 37:
-            _context33.next = 39;
+            _context32.next = 39;
             return _counting["default"].find({
               userId: userId
             });
 
           case 39:
-            totalCountings = _context33.sent;
+            totalCountings = _context32.sent;
             totalSpentTime = 0;
             totalCountings.forEach(function (item) {
               totalSpentTime = totalSpentTime + item.spentTime;
             });
-            _context33.next = 44;
+            _context32.next = 44;
             return _counting["default"].find({
               userId: userId
             });
 
           case 44:
-            countings = _context33.sent;
+            countings = _context32.sent;
             balanceTime = 0;
             countings.forEach(function (element) {
               if (element.authorName == article.postedBy.username) {
@@ -2740,13 +2578,13 @@ router.post("/saveTime", /*#__PURE__*/function () {
               balance = 3.02 * balanceTime / totalSpentTime;
             }
 
-            _context33.next = 51;
+            _context32.next = 51;
             return _users["default"].findOne({
               _id: article.postedBy._id
             });
 
           case 51:
-            author = _context33.sent;
+            author = _context32.sent;
             earningList = author.earning;
             earning = {
               balance: balance,
@@ -2761,16 +2599,16 @@ router.post("/saveTime", /*#__PURE__*/function () {
             });
 
             if (!(userlength == 0)) {
-              _context33.next = 62;
+              _context32.next = 62;
               break;
             }
 
             if (!(balance != 0)) {
-              _context33.next = 60;
+              _context32.next = 60;
               break;
             }
 
-            _context33.next = 60;
+            _context32.next = 60;
             return _users["default"].updateOne({
               _id: article.postedBy._id
             }, {
@@ -2780,7 +2618,7 @@ router.post("/saveTime", /*#__PURE__*/function () {
             });
 
           case 60:
-            _context33.next = 65;
+            _context32.next = 65;
             break;
 
           case 62:
@@ -2790,7 +2628,7 @@ router.post("/saveTime", /*#__PURE__*/function () {
                 earningList[index].date = Date.now();
               }
             });
-            _context33.next = 65;
+            _context32.next = 65;
             return _users["default"].updateOne({
               _id: article.postedBy._id
             }, {
@@ -2798,18 +2636,18 @@ router.post("/saveTime", /*#__PURE__*/function () {
             });
 
           case 65:
-            return _context33.abrupt("return", res.json(message));
+            return _context32.abrupt("return", res.json(message));
 
           case 66:
           case "end":
-            return _context33.stop();
+            return _context32.stop();
         }
       }
-    }, _callee33);
+    }, _callee32);
   }));
 
-  return function (_x85, _x86) {
-    return _ref31.apply(this, arguments);
+  return function (_x82, _x83) {
+    return _ref30.apply(this, arguments);
   };
 }());
 module.exports = router;
