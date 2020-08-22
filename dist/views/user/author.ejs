@@ -1,0 +1,308 @@
+<%- include ./partials/header %>
+<style>
+    @import 'https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&subset=latin-ext';
+
+    .profile-image {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 50px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .15) !important;
+        border: 2px solid transparent !important;
+        object-fit: cover;
+    }
+
+    .small-box {
+        border-radius: 30px;
+        position: relative;
+        display: block;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .small-box .inner {
+        position: relative;
+        color: #fff !important;
+        padding: 20px;
+    }
+
+    .small-box h3 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0 0 10px 0;
+        white-space: nowrap;
+        padding: 0;
+        z-index: 4;
+        color: #a9a9a9;
+        text-transform: uppercase;
+    }
+
+    .percent-up-icon {
+        font-size: 18px;
+        color: green;
+    }
+
+    .percent-down-icon {
+        font-size: 18px;
+        color: rgb(222, 82, 74);
+    }
+
+    .percent-text {
+        color: #a9a9a9;
+        font-size: 15px;
+        text-transform: uppercase;
+        position: absolute;
+        right: 20px;
+    }
+
+    .small-box .inner a {
+        color: #fff !important;
+    }
+
+    .small-box p {
+        z-index: 5;
+        font-size: 15px;
+    }
+
+    .bg-purple {
+        background-color: #605ca8 !important;
+    }
+
+    .bg-success {
+        background-color: #19a185 !important;
+    }
+
+    .bg-danger {
+        background-color: #DE524A !important;
+    }
+
+    .bg-warning {
+        background-color: #f1b740 !important;
+    }
+
+    .bg-gradient-primary {
+        color: #fff !important;
+        background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important;
+    }
+
+    .small-box .icon {
+        top: 0;
+        right: 20px;
+        z-index: 0;
+        font-size: 60px;
+        color: rgba(0, 0, 0, 0.10);
+        transition: all .3s linear;
+        position: absolute;
+    }
+
+    .small-box .icon a {
+        color: rgba(0, 0, 0, 0.10) !important;
+    }
+
+    .small-box:hover .icon a {
+        transform: scale(1.4);
+    }
+
+    .chartJ {
+        border-bottom: solid 2px #17a2b8 !important;
+    }
+
+    .headline {
+        border-bottom: 1px solid #e4e4e4;
+        display: block;
+        padding: 20px 30px;
+        border-bottom: 1px solid #e4e4e4;
+        position: relative;
+    }
+
+    .chart {
+        padding: 30px 20px 17px 18px;
+    }
+</style>
+<%- include ./partials/sidebar %>
+<div class="content-body">
+    <div class="row justify-content-between align-items-center mb-10">
+        <div class="col-8 mb-20">
+            <div class="page-heading">
+                <h3>Author Status </h3>
+            </div>
+        </div>
+        <div class="col-1 mb-20">
+            <h6>Filter : </h6>
+        </div>
+        <div class="col-3 mb-20">
+            <input type="month" class="form-control" name="filterdate" id="filterdate" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-4  col-12 mb-30">
+            <div class="small-box bg-gray shadow-sm">
+                <div class="inner">
+                    <h3 class="increase-count">Content Views</h3>
+                    <h4><%= statusCounts.contentView.count %></h4>
+                    <% if (statusCounts.contentView.increase > 0) { %>
+                    <span class="percent-up-icon"><i class="fa fa-arrow-up"></i><%= statusCounts.contentView.increase %>
+                        %</span>
+                    <% } else { %>
+                    <span class="percent-down-icon"><i
+                            class="fa fa-arrow-down"></i><%= statusCounts.contentView.increase %> %</span>
+                    <% } %>
+                    <span class="percent-text">Since Last Month</span>
+                </div>
+                <div class="icon">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-book"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4  col-12 mb-30">
+            <div class="small-box bg-gray shadow-sm">
+                <div class="inner">
+                    <h3 class="increase-count">Profile Views</h3>
+                    <h4><%= statusCounts.profileView.count %></h4>
+                    <% if (statusCounts.profileView.increase > 0) { %>
+                    <span class="percent-up-icon"><i class="fa fa-arrow-up"></i><%= statusCounts.profileView.increase %>
+                        %</span>
+                    <% } else { %>
+                    <span class="percent-down-icon"><i
+                            class="fa fa-arrow-down"></i><%= statusCounts.profileView.increase %> %</span>
+                    <% } %>
+                    <span class="percent-text">Since Last Month</span>
+                </div>
+                <div class="icon">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4  col-12 mb-30">
+            <div class="small-box bg-gray shadow-sm">
+                <div class="inner">
+                    <h3 class="increase-count">Upvotes</h3>
+                    <h4><%= statusCounts.upvote.count %></h4>
+                    <% if (statusCounts.upvote.increase > 0) { %>
+                    <span class="percent-up-icon"><i class="fa fa-arrow-up"></i><%= statusCounts.upvote.increase %>
+                        %</span>
+                    <% } else { %>
+                    <span class="percent-down-icon"><i class="fa fa-arrow-down"></i><%= statusCounts.upvote.increase %>
+                        %</span>
+                    <% } %>
+                    <span class="percent-text">Since Last Month</span>
+                </div>
+                <div class="icon">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-arrow-circle-up"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4  col-12 mb-30">
+            <div class="small-box bg-gray shadow-sm">
+                <div class="inner">
+                    <h3 class="increase-count">Follow Growth</h3>
+                    <h4><%= statusCounts.follow.count%></h4>
+                    <% if (statusCounts.follow.increase >= 0){ %>
+                    <span class="percent-up-icon"><i class="fa fa-arrow-up"></i><%= statusCounts.follow.increase%>
+                    </span>
+                    <% } else { %>
+                    <span class="percent-down-icon"><i class="fa fa-arrow-down"></i><%= statusCounts.follow.increase%>
+                    </span>
+                    <% } %>
+                    <span class="percent-text">Since Last Month</span>
+                </div>
+                <div class="icon">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-users"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-4  col-12 mb-30">
+            <div class="small-box bg-gray shadow-sm">
+                <div class="inner">
+                    <h3 class="increase-count">Author Rank</h3>
+                    <h4><%= authorrank%></h4>
+                    <span class="percent-up-icon">&nbsp;</span>
+                    <span class="percent-down-icon"></span>
+                    <span class="percent-text">Since Last Month</span>
+                </div>
+                <div class="icon">
+                    <a href="javascript:void(0);">
+                        <i class="	fa fa-bookmark"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-section" style="margin-top: 150px;">
+        <div class="container-fluid">
+            <div class="footer-copyright text-center">
+                <p class="text-body-light">
+                    <script>document.write(new Date().getFullYear())</script> &copy;
+                    <a href="<%= siteLink %>"><%= siteTitle %></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/assets/js/vendor/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/vendor/popper.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<!--Plugins JS-->
+<script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="/assets/js/plugins/tippy4.min.js.js"></script>
+<!--Main JS-->
+<script src="/assets/js/main.js"></script>
+<!-- Plugins & Activation JS For Only This Page -->
+<!--Moment-->
+<script src="/assets/js/plugins/moment/moment.min.js"></script>
+<!--Daterange Picker-->
+<script src="/assets/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/assets/js/plugins/daterangepicker/daterangepicker.active.js"></script>
+<!--Echarts-->
+<script src="/assets/js/plugins/nice-select/jquery.nice-select.min.js"></script>
+
+<script>
+    $(function () {
+        var param = window.location.search;
+        var searchdate = param.split("?filter=")[1];
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        today = yyyy + '-' + mm;
+        $('#filterdate').attr('max', today);
+        if (searchdate) {
+            $('#filterdate').val(searchdate);
+        }
+        $('#filterdate').change(function () {
+            var date = $('#filterdate').val();
+            var month = new Date(date);
+            location.replace('https://dype.me/user/authorstatus?filter=' + date);
+            // location.replace('http://localhost:9000/user/authorstatus?filter=' + date);
+        })
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        $("[href]").each(function () {
+            if (this.href == window.location.href) {
+                $(this).parent().addClass("active");
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
