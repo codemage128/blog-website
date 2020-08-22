@@ -576,6 +576,7 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 			categories: categories,
 			trendings: trendings,
 			authorarticle: authorarticle,
+			news: news,
 			newest: news,
 			random: random,
 		});

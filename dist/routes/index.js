@@ -968,6 +968,7 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
               categories: _categories,
               trendings: _trendings,
               authorarticle: _authorarticle,
+              news: _news,
               newest: _news,
               random: random
             });
