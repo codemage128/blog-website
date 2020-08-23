@@ -118,8 +118,6 @@ router.post(
             if (element == "ü") { array[index] = "ue"; }
           });
           let articleslug = array.join("");
-
-
           let payload1 = {
             week: `${newDate.getWeek()}`,
             month: `${months[newDate.getMonth()]}`,
@@ -180,7 +178,6 @@ router.post(
                 "success_msg",
                 "New article has been posted successfully"
               );
-              console.log(user.roleId);
               return res.redirect("back");
             })
             .catch(e => next(e));
