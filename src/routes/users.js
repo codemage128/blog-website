@@ -912,7 +912,7 @@ router.get(
   (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }),
       function (req, res) {
-        res.redrect('/blogrecent');
+        res.redrect('/enterinformation');
       }
   }
 );

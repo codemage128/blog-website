@@ -1466,7 +1466,7 @@ router.get("/google/signin", _install["default"].redirectToLogin, checkIfLoggedI
   _passport["default"].authenticate('google', {
     failureRedirect: '/login'
   }), function (req, res) {
-    res.redrect('/blogrecent');
+    res.redrect('/enterinformation');
   };
 }); // Forgot password route
 
