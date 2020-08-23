@@ -178,6 +178,7 @@ router.post(
                 "success_msg",
                 "New article has been posted successfully"
               );
+              console.log(user.roleId);
               return res.redirect("back");
             })
             .catch(e => next(e));
