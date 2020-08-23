@@ -575,6 +575,7 @@ router.get(
             );
             return res.redirect("back");
           } else {
+            // user.token = undefined;
             user.active = true;
             user.verified = true;
             user
@@ -912,7 +913,7 @@ router.get(
   (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }),
       function (req, res) {
-        res.redrect('/enterinformation');
+        res.redrect('/blogrecent');
       }
   }
 );

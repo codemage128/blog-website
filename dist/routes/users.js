@@ -1031,6 +1031,7 @@ router.get("/verify-account", _install["default"].redirectToLogin, checkIfLogged
                     req.flash("success_msg", "The token is inavlid, pls check your mail again");
                     return res.redirect("back");
                   } else {
+                    // user.token = undefined;
                     user.active = true;
                     user.verified = true;
                     user.save().then(function (user) {
@@ -1466,7 +1467,7 @@ router.get("/google/signin", _install["default"].redirectToLogin, checkIfLoggedI
   _passport["default"].authenticate('google', {
     failureRedirect: '/login'
   }), function (req, res) {
-    res.redrect('/enterinformation');
+    res.redrect('/blogrecent');
   };
 }); // Forgot password route
 
