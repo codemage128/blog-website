@@ -38,8 +38,15 @@
         }
 
         .btn-danger {
-            color: #98e0f2;
-            background-color: black !important;
+            color: #000000;
+            background-color: white !important;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+
+        .btn-danger:hover {
+            color: #000000;
+            border: 1px solid #000000;
         }
 
         .body {
@@ -121,7 +128,7 @@
             </div>
         </div>
     </div>
-    
+
     <form action="/article/create" method="POST" id="publish-form">
         <input type="hidden" name="postType" value="post">
         <div class="container-fluid body">
@@ -134,7 +141,7 @@
                         <div class="card-body text-center">
                             <img src="/img/upload.png" alt="" class="img-fluid"
                                 style="border: 1px solid rgba(195, 207, 216, 0.3);" id="imgBox">
-                            <a class="btn btn-danger btn-sm text-white" style="margin-top: -25px;"
+                            <a class="btn btn-danger btn-sm text-dark" style="margin-top: -25px;"
                                 onclick="uploadImages()">Bild hochladen</a>
                         </div>
                     </div>
@@ -165,7 +172,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row card bg-white mt-4">
                     <div class="card-header">
                         <b>Tipps</b>
@@ -173,13 +179,13 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group content-editor">
-                                <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" style="width: 100%;"><button type="button" class="btn btn-danger text-white content-button">Hilfreiche Tipps zur Gestaltung</button></a>
+                                <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" style="width: 100%;"><button type="button" class="btn btn-danger content-button text-dark">Hilfreiche Tipps zur Gestaltung</button></a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group content-editor">
                                 <a href="/Backenddatei_Reichweite.pdf" style="width: 100%;" target="_blank"><button type="button"
-                                    class="btn btn-danger text-white content-button">Reichweite</button></a>
+                                    class="btn btn-danger text-dark content-button">Reichweite</button></a>
                             </div>
                         </div>
                         <!-- <div class="row">
@@ -232,6 +238,44 @@
         </div>
         </div>
     </form>
+    <div class="modal fade" id="post-enable" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-exclamation-triangle" style="color: chocolate;"></i>&nbsp;&nbsp;Warning
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div class="alert alert-warning">
+                        You didn't complete your profile. Please complete that and then post the articles. Thanks
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="/user/profile" class="btn btn-danger">Jetzt verifizieren.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="post-policy" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-question-circle" style="color: olivedrab;"></i>&nbsp;&nbsp;Information
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div class="alert alert-warning">
+                        Beachte, dass dein Beitrag mindestens 200 Wörter lang sein sollte.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="cdn-browser-modal" class="modal fade" style="z-index: 9999;">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -442,6 +486,13 @@
 
         })
 
+        // not verified user open modal
+        var postenable = "<%= user.postenable%>";
+        if (!postenable) {
+            $('#post-enable').modal({ backdrop: 'static', keyboard: false });
+        } else {
+            $('#post-policy').modal({});
+        }
     </script>
 
 </body>

@@ -466,6 +466,9 @@
                 $(this).parent().addClass("active");
             }
         });
+        if (window.location.pathname == "/user/all-posts" || window.location.pathname == "/user/update-posts") {
+            $("#all-post").parent().addClass("active");
+        }
     });
 </script>
 </body>

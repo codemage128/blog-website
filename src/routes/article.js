@@ -740,6 +740,11 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         .populate("category")
         .sort({ createdAt: -1 })
         .limit(12);
+      var _length = await Article.find({
+        active:true,
+        slug: { $ne: article[0].slug }
+      });
+      var r = Math.floor(Math.random() * _length.length);
       let related = await Article.find({
         active: true,
         slug: { $ne: article[0].slug },
@@ -747,7 +752,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         .populate("postedBy")
         .populate("category")
         .sort({ createdAt: -1 })
-        .limit(3);
+        .limit(3).skip(r);
       let d = new Date();
       let customDate = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
       let ips =
