@@ -130,6 +130,9 @@ h4 a,
 h5 a,
 h6 a {
    font-family: "EB Garamond";
+   font-size: 1em;
+   color: black;
+   text-decoration: underline;
 }
 
 .progress {

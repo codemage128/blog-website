@@ -156,7 +156,7 @@
                                         <td><%= data.firstName %> <%= data.lastName %></td>
                                         <td>
                                             <!-- <a href="/author/<%= data.username %>" target="_blank"><button type="button" class="btn btn-success btn-sm">View User's Profile</button></a> -->
-                                            <a href="/unfollow-user?followerId=<%= data._id %>"><button class="btn btn-danger btn-sm" type="button">Nicht mehr folgen</button></a>
+                                            <a href="/unfollow-user?authorId=<%= data._id %>"><button class="btn btn-primary btn-sm" type="button">Nicht mehr folgen</button></a>
                                         </td>
                                     </tr>
                                     <% }}) %>

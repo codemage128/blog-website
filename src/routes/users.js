@@ -475,7 +475,7 @@ router.post(
               if (set.emailVerification == true) {
                 req.flash(
                   "success_msg",
-                  "Registration Successfull, pls check your email for futher instrcutions"
+                  "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen."
                 );
                 return res.redirect("back");
               } else {

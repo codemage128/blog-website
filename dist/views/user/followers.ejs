@@ -138,7 +138,7 @@
         <div class="col-12">
             <form action method="GET" id="bulkDeleteForm">
                 <div class="table-responsive bg-white shadow-sm">
-                    <% if(following.following == "") { %>
+                    <% if(following.lenth == 0) { %>
                     <div class="alert alert-primary">Du hast leider noch keine Follower.</div>
                     <% } %>
                     <table class="table table-vertical-middle">
@@ -150,13 +150,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% following.following.map(data => { 
+                            <% following.map(data => { 
                                     if(data.roleId != "admin") {%>
                             <tr>
                                 <td><img src="<%= data.profilePicture%>" style="width: 90px;height: 90px; border-radius: 50px; object-fit: cover;"/></td>
                                 <td><%= data.firstName %> <%= data.lastName %></td>
                                 <td>
-                                    <a href="/author/<%= data.username %>" target="_blank"><button type="button"
+                                    <a href="/author/<%= data.usernameslug %>" target="_blank"><button type="button"
                                             class="btn btn-success btn-sm">Benutzerprofil anzeigen</button></a>
                                     <!-- <a href="/unfollow-user?followerId=<%= data._id %>"><button class="btn btn-danger btn-sm" type="button">Unfollow</button></a> -->
                                 </td>

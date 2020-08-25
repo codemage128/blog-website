@@ -1246,24 +1246,32 @@ router.get("/user/profile", _auth["default"], (0, _role["default"])("admin", "us
 });
 router.get("/user/followers", _auth["default"], (0, _role["default"])("admin", "user"), /*#__PURE__*/function () {
   var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res, next) {
-    var following;
+    var user, user_following, following;
     return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
             _context10.next = 2;
-            return _users["default"].findById(req.user.id).populate("following").sort({
-              createdAt: -1
-            });
+            return _users["default"].findById(req.user.id);
 
           case 2:
-            following = _context10.sent;
-            res.render("./user/followers", {
-              title: "Followers",
-              following: following
+            user = _context10.sent;
+            user_following = user.following;
+            following = [];
+            user_following.forEach(function (element) {
+              _users["default"].findById(element.user, function (error, user) {
+                following.push(user);
+
+                if (following.length == user_following.length) {
+                  res.render("./user/followers", {
+                    title: "Followers",
+                    following: following
+                  });
+                }
+              });
             });
 
-          case 4:
+          case 6:
           case "end":
             return _context10.stop();
         }

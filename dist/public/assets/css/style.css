@@ -2346,9 +2346,9 @@ a.badge-dark.badge-outline {
 
 /*-- Button Colors --*/
 .button-primary, .swal-modal .swal-footer .button-primary, #toast-container .toast .toast-message .btn.btn-primary, .dataTables_wrapper .dt-buttons .dt-button, .footable.table thead tr th .footable-filtering-search .input-group .input-group-btn .btn, .footable.table thead tr th .footable-filtering-search .input-group .input-group-btn .btn.btn-primary, .footable.table tbody tr td.footable-editing .btn-group .btn.footable-edit, .footable.table tfoot tr.footable-editing td .btn.btn-primary, .smart-wizard .sw-toolbar .sw-btn-group .btn {
-  background-color: #98E0F2;
-  border-color: #98E0F2;
-  color: #ffffff;
+  background-color: #ffffff;
+  border-color: #000000;
+  color: #000000;
 }
 
 .button-primary.button-outline, .swal-modal .swal-footer .button-outline.button-primary, #toast-container .toast .toast-message .button-outline.btn.btn-primary, #toast-container .toast .toast-message .footable.table tfoot tr.footable-editing td .btn.btn-primary.footable-hide, .footable.table tfoot tr.footable-editing td #toast-container .toast .toast-message .btn.btn-primary.footable-hide, .dataTables_wrapper .dt-buttons .button-outline.dt-button, .dataTables_wrapper .dt-buttons .footable.table tfoot tr.footable-editing td .dt-button.btn.footable-hide, .footable.table tfoot tr.footable-editing td .dataTables_wrapper .dt-buttons .dt-button.btn.footable-hide, .footable.table thead tr th .footable-filtering-search .input-group .input-group-btn .button-outline.btn, .footable.table thead tfoot tr.footable-editing th .footable-filtering-search .input-group .input-group-btn td .btn.footable-hide, .footable.table tfoot thead tr.footable-editing th .footable-filtering-search .input-group .input-group-btn td .btn.footable-hide, .footable.table thead tfoot tr.footable-editing td th .footable-filtering-search .input-group .input-group-btn .btn.footable-hide, .footable.table tfoot thead tr.footable-editing td th .footable-filtering-search .input-group .input-group-btn .btn.footable-hide, .footable.table thead tfoot tr.footable-editing th .footable-filtering-search .input-group .input-group-btn td .btn.btn-primary.footable-hide, .footable.table tfoot thead tr.footable-editing th .footable-filtering-search .input-group .input-group-btn td .btn.btn-primary.footable-hide, .footable.table thead tfoot tr.footable-editing td th .footable-filtering-search .input-group .input-group-btn .btn.btn-primary.footable-hide, .footable.table tfoot thead tr.footable-editing td th .footable-filtering-search .input-group .input-group-btn .btn.btn-primary.footable-hide, .footable.table tbody tr td.footable-editing .btn-group .button-outline.btn.footable-edit, .footable.table tbody tfoot tr.footable-editing td.footable-editing .btn-group .btn.footable-edit.footable-hide, .footable.table tfoot tbody tr.footable-editing td.footable-editing .btn-group .btn.footable-edit.footable-hide, .footable.table tfoot tr.footable-editing td .button-outline.btn.btn-primary, .footable.table tfoot tr.footable-editing td .btn.btn-primary.footable-hide, .footable.table tfoot tr.footable-editing td .button-primary.btn.footable-hide, .smart-wizard .sw-toolbar .sw-btn-group .button-outline.btn, .smart-wizard .sw-toolbar .sw-btn-group .footable.table tfoot tr.footable-editing td .btn.footable-hide, .footable.table tfoot tr.footable-editing td .smart-wizard .sw-toolbar .sw-btn-group .btn.footable-hide {
@@ -9082,14 +9082,14 @@ body.header-top-green .header-notification-area > li > a .user .name {
   display: -ms-flexbox;
   display: flex;
   font-size: 14px;
-  color: #98E0F2;
+  color: #000000;
   line-height: 20px;
   padding: 12px 0 12px 25px;
 }
 .btn.btn-primary {
-  background-color: black;
+  background-color: white;
   border-color: black;
-  color: #98E0F2;
+  color: black;
 }
 .btn.btn-info {
   background-color: #98E0F2;
@@ -9130,7 +9130,7 @@ body.header-top-green .header-notification-area > li > a .user .name {
 }
 
 .side-header-menu > ul > li.active > a, .side-header-menu > ul > li:hover > a {
-  color: gray;
+  color: #98e0f2;
 }
 
 .side-header-menu > ul > li.active > a::before, .side-header-menu > ul > li:hover > a::before {
@@ -13710,9 +13710,9 @@ body.skin-dark .form-control.bSelect .btn.btn-primary, body.skin-dark #toast-con
 }
 
 body.skin-dark .form-control.bSelect .btn.btn-primary:hover, body.skin-dark #toast-container .toast .toast-message input.bSelect .btn.btn-primary:hover, #toast-container .toast .toast-message body.skin-dark input.bSelect .btn.btn-primary:hover, body.skin-dark .dataTables_wrapper .dataTables_length label input.bSelect .btn.btn-primary:hover, .dataTables_wrapper .dataTables_length label body.skin-dark input.bSelect .btn.btn-primary:hover, body.skin-dark .dataTables_wrapper .dataTables_filter label input.bSelect .btn.btn-primary:hover, .dataTables_wrapper .dataTables_filter label body.skin-dark input.bSelect .btn.btn-primary:hover, body.skin-dark .dataTables_wrapper .dataTables_length label select.bSelect .btn.btn-primary:hover, .dataTables_wrapper .dataTables_length label body.skin-dark select.bSelect .btn.btn-primary:hover, body.skin-dark .dataTables_wrapper .dataTables_filter label select.bSelect .btn.btn-primary:hover, .dataTables_wrapper .dataTables_filter label body.skin-dark select.bSelect .btn.btn-primary:hover, body.skin-dark .jsgrid-grid-header table tr th input.bSelect .btn.btn-primary:hover, .jsgrid-grid-header table tr th body.skin-dark input.bSelect .btn.btn-primary:hover, body.skin-dark .jsgrid-grid-header table tr th select.bSelect .btn.btn-primary:hover, .jsgrid-grid-header table tr th body.skin-dark select.bSelect .btn.btn-primary:hover, body.skin-dark .jsgrid-grid-header table tr td input.bSelect .btn.btn-primary:hover, .jsgrid-grid-header table tr td body.skin-dark input.bSelect .btn.btn-primary:hover, body.skin-dark .jsgrid-grid-header table tr td select.bSelect .btn.btn-primary:hover, .jsgrid-grid-header table tr td body.skin-dark select.bSelect .btn.btn-primary:hover, body.skin-dark .footable.table thead tr th .footable-filtering-search .input-group .bSelect.form-control .btn.btn-primary:hover, body.skin-dark .jsgrid-table tr th input.bSelect:not(.jsgrid-button) .btn.btn-primary:hover, body.skin-dark .jsgrid-table tr td input.bSelect:not(.jsgrid-button) .btn.btn-primary:hover, body.skin-dark .jsgrid-table tr th select.bSelect .btn.btn-primary:hover, body.skin-dark .jsgrid-table tr td select.bSelect .btn.btn-primary:hover {
-  background-color: #297cf9;
-  border-color: #297cf9;
-  color: #ffffff;
+  background-color: #ffffff;
+  border-color: #000000;
+  color: #000000;
 }
 
 body.skin-dark .form-control.bSelect .btn.btn-secondary, body.skin-dark #toast-container .toast .toast-message input.bSelect .btn.btn-secondary, #toast-container .toast .toast-message body.skin-dark input.bSelect .btn.btn-secondary, body.skin-dark .dataTables_wrapper .dataTables_length label input.bSelect .btn.btn-secondary, .dataTables_wrapper .dataTables_length label body.skin-dark input.bSelect .btn.btn-secondary, body.skin-dark .dataTables_wrapper .dataTables_filter label input.bSelect .btn.btn-secondary, .dataTables_wrapper .dataTables_filter label body.skin-dark input.bSelect .btn.btn-secondary, body.skin-dark .dataTables_wrapper .dataTables_length label select.bSelect .btn.btn-secondary, .dataTables_wrapper .dataTables_length label body.skin-dark select.bSelect .btn.btn-secondary, body.skin-dark .dataTables_wrapper .dataTables_filter label select.bSelect .btn.btn-secondary, .dataTables_wrapper .dataTables_filter label body.skin-dark select.bSelect .btn.btn-secondary, .footable.table thead tr th .footable-filtering-search .input-group body.skin-dark .bSelect.form-control .btn.btn-secondary, body.skin-dark .jsgrid-grid-header table tr th input.bSelect .btn.btn-secondary, .jsgrid-grid-header table tr th body.skin-dark input.bSelect .btn.btn-secondary, body.skin-dark .jsgrid-grid-header table tr th select.bSelect .btn.btn-secondary, .jsgrid-grid-header table tr th body.skin-dark select.bSelect .btn.btn-secondary, body.skin-dark .jsgrid-grid-header table tr td input.bSelect .btn.btn-secondary, .jsgrid-grid-header table tr td body.skin-dark input.bSelect .btn.btn-secondary, body.skin-dark .jsgrid-grid-header table tr td select.bSelect .btn.btn-secondary, .jsgrid-grid-header table tr td body.skin-dark select.bSelect .btn.btn-secondary, body.skin-dark .footable.table thead tr th .footable-filtering-search .input-group .bSelect.form-control .btn.btn-secondary, body.skin-dark .jsgrid-table tr th input.bSelect:not(.jsgrid-button) .btn.btn-secondary, body.skin-dark .jsgrid-table tr td input.bSelect:not(.jsgrid-button) .btn.btn-secondary, body.skin-dark .jsgrid-table tr th select.bSelect .btn.btn-secondary, body.skin-dark .jsgrid-table tr td select.bSelect .btn.btn-secondary {

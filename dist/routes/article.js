@@ -181,6 +181,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
 
             _articles["default"].create(payload1).then(function (created) {
               req.flash("success_msg", "New article has been posted successfully");
+              console.log(user.roleId);
               return res.redirect("back");
             })["catch"](function (e) {
               return next(e);
@@ -581,7 +582,7 @@ router.post("/article/deactivateMany", _install["default"].redirectToLogin, _aut
 });
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res, next) {
-    var settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _next, previous, featured, popular, recommended, _length, r, related, d, customDate, ips, articleCount, indexof, view_article, ip, payload, _view_article;
+    var settings, _user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _next, previous, featured, popular, recommended, _length, r, related, d, customDate, ips, articleCount, indexof, view_article, ip, payload, _view_article;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -593,7 +594,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
           case 3:
             settings = _context4.sent;
-            user = req.params.user;
+            _user = req.params.user;
             slug = req.params.slug;
             category = req.params.category;
             _context4.next = 9;

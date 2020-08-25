@@ -873,7 +873,7 @@ router.post("/sign-up", _install["default"].redirectToLogin, checkIfLoggedIn, /*
               break;
             }
 
-            req.flash("success_msg", "Registration Successfull, pls check your email for futher instrcutions");
+            req.flash("success_msg", "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen.");
             return _context10.abrupt("return", res.redirect("back"));
 
           case 42:

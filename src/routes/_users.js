@@ -1085,8 +1085,17 @@ router.get(
   auth,
   role("admin", "user"),
   async (req, res, next) => {
-    const following = await User.findById(req.user.id).populate("following").sort({ createdAt: -1 });
-    res.render("./user/followers", { title: "Followers", following });
+    const user = await User.findById(req.user.id);
+    let user_following = user.following;
+    let following = [];
+    user_following.forEach(element => {
+      User.findById(element.user, (error, user)=>{
+        following.push(user);
+        if(following.length == user_following.length){
+          res.render("./user/followers", { title: "Followers", following: following });
+        }
+      });
+    })
   }
 );
 

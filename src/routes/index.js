@@ -477,20 +477,44 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 				}
 			});
 		});
-		for (var i = 0; i < 3; i++) {
-			let r = Math.floor(Math.random() * editorsPickerArticle.length);
-			feed.push(editorsPickerArticle[r]);
+		switch (editorsPickerArticle.length) {
+			case 0:
+				var r0 = Math.floor(Math.random() * articles.length);
+				let _editorsPicker = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r0);
+				feed = _editorsPicker;
+				break;
+			case 1:
+				var r1 = Math.floor(Math.random() * articles.length);
+				let _editorsPicker1 = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(2).skip(r1);
+				feed.push(_editorsPicker1);
+				break;
+			case 2:
+				var r2 = Math.floor(Math.random() * articles.length);
+				let _editorsPicker2 = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(1).skip(r2);
+				feed.push(_editorsPicker2);
+				break;
+			case 3:
+				feed = editorsPickerArticle;
+				break;
+			default:
+				for (var i = feed.length; i < 3; i++) {
+					let r = Math.floor(Math.random() * editorsPickerArticle.length);
+					feed.push(editorsPickerArticle[r]);
+				}
+				break;
 		}
+		let rtrend = Math.floor(Math.random() * articles.length);
 		let trendings = await Article.find({ 'category': { "$ne": official.id } })
 			.populate('category')
 			.populate('postedBy')
 			.sort({ views: -1 })
-			.sort({ createdAt: -1 });
-		let trends = [];
-		for (var i = 0; i < 6; i++) {
-			let r = Math.floor(Math.random() * editorsPickerArticle.length);
-			trends.push(editorsPickerArticle[r]);
-		}
+			.sort({ createdAt: -1 }).limit(6).skip(rtrend);
+		let trends = trendings;
+		console.log(trends);
+		// for (var i = 0; i < 6; i++) {
+		// 	let r = Math.floor(Math.random() * editorsPickerArticle.length);
+		// 	trends.push(editorsPickerArticle[r]);
+		// }
 		let followers = await User.find({
 			"following.user": { $in: req.user.id }
 		}).populate("following").sort({ createdAt: -1 });
@@ -510,11 +534,13 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 				}
 			}
 		}
-
+		let _newslength = await Article.find({ 'category': { "$ne": official.id } });
+		_newslength = _newslength.length;
+		let r = Math.floor(Math.random() * _newslength);
 		let news = await Article.find({ 'category': { "$ne": official.id } })
 			.sort({ createdAt: -1 })
 			.populate('category')
-			.populate('postedBy').limit(3);
+			.populate('postedBy').limit(3).skip(r);
 		let randoms = await Article.find({ 'category': { "$ne": official.id } })
 			.populate('category')
 			.populate('postedBy').limit(6).skip(Math.floor(Math.random() * articles.length));
