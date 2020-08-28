@@ -67,6 +67,7 @@ $('#darkmode').click(function () {
       $('.dropdown-menu').css('background', 'black');
       $('.sidenav').css('background-color', '#1d1d1b');
       $('#authorname').css("color", "white");
+      $('.inner-dark-blog-content-one p a').attr("style", "color: white !important");
    } else {
       document.body.style.background = 'white';
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');

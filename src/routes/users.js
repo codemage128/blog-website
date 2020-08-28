@@ -999,7 +999,6 @@ router.post("/reset/:token", install.redirectToLogin, (req, res, next) => {
     next(e);
   }
 });
-
 // Update user info route
 router.post(
   "/user/dashboard/update/info",
@@ -1010,13 +1009,11 @@ router.post(
       let user = await User.findById(req.user.id);
       if (user.email == req.body.email) {
         var status = 0;
-        if (req.body.firstname != 'Not Specified') { status = status + 10; }
-        if (req.body.lastname != 'Not Specified') { status = status + 10; }
-        if (req.body.email != '') { status = status + 10; }
-        if (req.body.birthday != '') { status = status + 10; }
-        if (req.body.phone != '') { status = status + 10; }
-        if (req.body.about != '') { status = status + 10; }
-        if (req.body['social.linkedin'] != "" || req.body['social.instagram'] != "" || req.body['social.twitter'] != "" || req.body['social.facebook'] != "") { status = status + 40; }
+        if (req.body.firstname != 'Not Specified') { status = status + 20; }
+        if (req.body.lastname != 'Not Specified') { status = status + 20; }
+        if (req.body.email != '') { status = status + 20; }
+        if (req.body.birthday != '') { status = status + 20; }
+        if (req.body.about != '') { status = status + 20; }
         req.body.postenable = "false";
         if (status == 100) {
           req.body.postenable = "true";

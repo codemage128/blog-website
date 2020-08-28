@@ -3,9 +3,13 @@
 
 <head>
   <title>Entdecke einzigartige Inhalte und Artikel von unzähligen Autoren.</title>
-  <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="3224d967-44a4-4a53-88f6-559eac64c8a5" data-blockingmode="auto" type="text/javascript"></script>
+
+  <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="3224d967-44a4-4a53-88f6-559eac64c8a5"
+    data-blockingmode="auto" type="text/javascript"></script>
 
   <meta charset="utf-8">
+  <meta name="name" content="Blogger werden - Jetzt kostenlos Blogger werden bei Dype" />
+  <meta name="description" content="Blogger werden - Jetzt kostenlos Blogger werden bei Dype" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="<%= mainSettings.homeMeta%>" />
@@ -17,11 +21,20 @@
   <link rel="stylesheet" href="/css/style2.min.css" async>
   <!-- <link rel="shortcut icon" href="<%= favicon %>" type="image/x-icon"> -->
   <link type="image/ico" href="<%= favicon %>" rel="Shortcut Icon" />
-  <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" rel="preload"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- fonts -->
   <!-- <link href="/css/aos.css" rel="stylesheet" async /> -->
   <link href="/css/header.css" rel="stylesheet" async />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+
+  <style>
+    .random_image:hover{
+      box-shadow: 0px 5px 60px 0px #b4b4b4;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      }
+  </style>
 </head>
 
 <body>
@@ -33,7 +46,7 @@
     <% if (user.paid == "free") { %>
     <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
         entdecken</span></a>
-    <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+    <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
         werden</span></a>
     <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
         Inhalte</span></a>
@@ -43,7 +56,7 @@
         Inhalte</span></a>
     <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
     </a>
-    <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+    <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
         werden</span></a>
     <% } %>
     <% if(user.roleId == 'admin') { %>
@@ -57,14 +70,14 @@
     <% } else {%>
     <span class="username_span"><%= user.username%></span>
     <hr>
-    <a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+    <a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
 
     <a href="/author/<%= user.usernameslug%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
       Profil</a>
     <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
     <% } %>
     <% } else {%>
-    <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+    <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
         werden</span></a>
     <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
         entdecken</span></a>
@@ -106,11 +119,20 @@
               onclick="openSidebar()"><i class="fa fa-bars" aria-hidden="true"></i></span></a>
         </div>
         <div class="col-xs-11 col-md-10 menu-large">
+
+          <!-- <a class="searchbar kategorien">Kategorien</a>
+          <div style="position: absolute;top: 5vh;left: 35vh;background: white;padding: 10px;z-index: 100;">
+            <% for(var i = 0; i < categories.length; i ++) {%>
+            <span><%= categories[i].name %></span><br>
+            <% }%>
+          </div> -->
+
           <% if(user) { %>
           <% if (user.paid == "free") { %>
-          <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
+          <a class="searchbar" href="/blogrecent">
+            <span class="menu-title">Inhalte
               entdecken</span></a>
-          <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
               werden</span></a>
           <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
               Inhalte</span></a>
@@ -119,7 +141,7 @@
               Inhalte</span></a>
           <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
           </a>
-          <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
               werden</span></a>
           <% } %>
           <a class="searchbar" href="javascript:void(0);"><span
@@ -140,7 +162,7 @@
             </ul>
             <% } else {%>
             <li><span class="username_span"><%= user.username%></span></li>
-            <li><a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+            <li><a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
             </li>
             <li><a href="/author/<%= user.usernameslug%>" class="searchbar"><i
                   class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
@@ -149,7 +171,7 @@
             </ul>
           </div>
           <% } else {%>
-          <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
               werden</span></a>
           <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
               entdecken</span></a>
@@ -160,7 +182,7 @@
               style="position: absolute; bottom: -10px; left: -3px;font-size: 10px;">Registrieren</span></a>
           <a href="/login" class="searchbar"><span style="font-size:20px; padding-left: 10px;cursor:pointer"><i
                 class="fa fa-sign-in"></i></span>
-                <span style="position: absolute; bottom: -10px;left: 4px; font-size: 10px;">Einloggen</span></a>
+            <span style="position: absolute; bottom: -10px;left: 4px; font-size: 10px;">Einloggen</span></a>
           <%}%>
             </div>
          </section>
@@ -194,14 +216,14 @@
               <p>Genieße einzigartige Inhalte von einzigartigen Persönlichkeiten, die mit Begeisterung ihr Wissen teilen. Unsere Blogger liefern hochqualitative Beiträge in unzähligen Kategorien.</p>
             </div>
             <% if(!user){%>
-                <div class="section-1-right-btn">
-                  <a href="/show-category-all"><span>Jetzt Artikel entdecken</span><span><i
-                        class="fa fa-long-arrow-right" aria-hidden="true"></i></span></a>
-                </div>
-                <% }%>
-              </div>
-            </div>
+          <div class="section-1-right-btn">
+            <a href="/show-category-all"><span>Jetzt Artikel entdecken</span><span><i class="fa fa-long-arrow-right"
+                  aria-hidden="true"></i></span></a>
           </div>
+          <% }%>
+        </div>
+        </div>
+        </div>
         </div>
         </div>
         </div>
@@ -344,20 +366,34 @@
           </div>
         </div>
 
-        <div class="section-5"
-          style="background-image:linear-gradient(#00000073, #00000061), url(/images/Dype_Vision_VideoImage.jpg); height: 100vh;">
+        <div class="container-fluid" style="background-color: #f4f4f4;">
           <div class="container">
-            <div class="inner-section-5 vision-our">
-              <div class="section-5-heading">
-                <p style="font-size: 56px; text-align: center; font-weight: 400; color: white;">Vision</p>
+            <div class="row">
+              <% for(var i = 0; i < random.length; i ++){%>
+                <%
+             var url = "#";
+             if(random[i].postedBy.roleId == "admin"){
+               url = "/d/" + random[i].category.slug + "/" + random[i].slug;
+             }else {
+               url = "/p/" + random[i].category.slug + "/" + random[i].slug;
+             }
+            %>
+            
+              <div class="col-md-4 col-12">
+                <div class="random_image" style="background-image: url('<%= random[i].file %>'); background-size: cover; height: 400px !important;border-radius: 10px">
+                </div>
+                <a target="_blank" href="/kategorie/<%= random[i].category.slug%>"><p style="font-size: 1.75em;
+                  color: black;
+                  font-weight: 600;"><%= random[i].category.name%></p></a>
+                <a href="<%= url%>" target="_blank"><p style="font-size: 1.5em;
+                  color: black;
+                  text-align: center;"><%= random[i].title%></p></a>
               </div>
-              <div class="section-5-btn">
-                <a href="/vision" target="_blank" class="video-play-button"><i class="fa fa-play"
-                    style="padding-left: 5px;"></i></a>
-              </div>
+              <% } %>
             </div>
           </div>
         </div>
+
 
         <div class="section-2" style="height: 90vh;">
           <div class="container-fluid">

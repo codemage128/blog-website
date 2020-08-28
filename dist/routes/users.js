@@ -1558,38 +1558,30 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
             user = _context16.sent;
 
             if (!(user.email == req.body.email)) {
-              _context16.next = 20;
+              _context16.next = 18;
               break;
             }
 
             status = 0;
 
             if (req.body.firstname != 'Not Specified') {
-              status = status + 10;
+              status = status + 20;
             }
 
             if (req.body.lastname != 'Not Specified') {
-              status = status + 10;
+              status = status + 20;
             }
 
             if (req.body.email != '') {
-              status = status + 10;
+              status = status + 20;
             }
 
             if (req.body.birthday != '') {
-              status = status + 10;
-            }
-
-            if (req.body.phone != '') {
-              status = status + 10;
+              status = status + 20;
             }
 
             if (req.body.about != '') {
-              status = status + 10;
-            }
-
-            if (req.body['social.linkedin'] != "" || req.body['social.instagram'] != "" || req.body['social.twitter'] != "" || req.body['social.facebook'] != "") {
-              status = status + 40;
+              status = status + 20;
             }
 
             req.body.postenable = "false";
@@ -1610,27 +1602,27 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
               return next(err);
             });
 
-            _context16.next = 29;
+            _context16.next = 27;
             break;
 
-          case 20:
-            _context16.next = 22;
+          case 18:
+            _context16.next = 20;
             return _users["default"].findOne({
               email: req.body.email
             });
 
-          case 22:
+          case 20:
             use = _context16.sent;
 
             if (!use) {
-              _context16.next = 28;
+              _context16.next = 26;
               break;
             }
 
             req.flash("success_msg", "The Email you provided has been used");
             return _context16.abrupt("return", res.redirect("back"));
 
-          case 28:
+          case 26:
             _users["default"].updateOne({
               _id: req.user.id
             }, req.body).then(function (user) {
@@ -1640,21 +1632,21 @@ router.post("/user/dashboard/update/info", _install["default"].redirectToLogin, 
               return next(err);
             });
 
-          case 29:
-            _context16.next = 34;
+          case 27:
+            _context16.next = 32;
             break;
 
-          case 31:
-            _context16.prev = 31;
+          case 29:
+            _context16.prev = 29;
             _context16.t0 = _context16["catch"](0);
             next(_context16.t0);
 
-          case 34:
+          case 32:
           case "end":
             return _context16.stop();
         }
       }
-    }, _callee16, null, [[0, 31]]);
+    }, _callee16, null, [[0, 29]]);
   }));
 
   return function (_x45, _x46, _x47) {

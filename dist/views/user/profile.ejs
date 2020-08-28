@@ -129,7 +129,7 @@
                                     <a style="color:#98E0F2" href="/onboarding?redirect=true">Ändere deine ausgewählten Kategorien</a>
                                 </div>
                                 <div class="col-12 mb-20">
-                                    <b>Soziale Netzwerke (Füge deine Account-Links hinzu) (*)</b>
+                                    <b>Soziale Netzwerke (Füge deine Account-Links hinzu)</b>
                                 </div>
                                 <div class="col-sm-6 col-12 mb-20">
                                     <label for="">Facebook</label>
@@ -244,23 +244,21 @@
         var tax = $('#tax').val();
         var percent = 0;
         if (firstname != 'Not Specified') {
-            percent = percent + 10;
+            percent = percent + 20;
         }
         if (lastname != 'Not Specified') {
-            percent = percent + 10;
+            percent = percent + 20;
         }
         if (email != "") {
-            percent = percent + 10;
+            percent = percent + 20;
         }
         if (birthday != "") {
-            percent = percent + 10;
+            percent = percent + 20;
         }
         if (about != "") {
-            percent = percent + 10;
+            percent = percent + 20;
         }
-        if (sociallinkedin != "" || socialinstagram != "" || socialtwitter != "" || socialfacebook != "") {
-            percent = percent + 60;
-        }
+      
         if (percent == 100) {
             $('#postenable').val("true");
             $('.profile_text').text('Glückwunsch! Veröffentliche jetzt deinen ersten Artikel.');

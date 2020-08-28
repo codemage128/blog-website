@@ -377,9 +377,9 @@ router.use(async function (req, res, next) {
 // });
 
 
-router.get('/publisher', install.redirectToLogin, async (req, res, next) => {
+router.get('/blogger-werden', install.redirectToLogin, async (req, res, next) => {
 	res.render('publisher', {
-		title: "Publisher"
+		title: "blogger-werden"
 	});
 });
 
@@ -452,6 +452,16 @@ router.get('/paycontent', install.redirectToLogin, async (req, res, next) => {
 		title: "Pay Content"
 	});
 });
+router.post("/loadmore", async (req, res, next) => {
+	let count = req.body.count;
+	let official = await Category.findOne({ slug: "official" });
+	let articles = await Article.find({ "category": { "$ne": official.id } }).populate('postedBy').populate("category");
+	let randoms = await Article.find({ 'category': { "$ne": official.id } })
+		.populate('category')
+		.populate('postedBy').limit(6).skip(parseInt(count));
+	let result = randoms;
+	res.json(result);
+})
 router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 	if (req.user) {
 		let userId = req.user._id;
@@ -510,7 +520,6 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 			.sort({ views: -1 })
 			.sort({ createdAt: -1 }).limit(6).skip(rtrend);
 		let trends = trendings;
-		console.log(trends);
 		// for (var i = 0; i < 6; i++) {
 		// 	let r = Math.floor(Math.random() * editorsPickerArticle.length);
 		// 	trends.push(editorsPickerArticle[r]);
@@ -556,6 +565,7 @@ router.get('/blogrecent', install.redirectToLogin, async (req, res, next) => {
 				}
 			});
 		});
+		console.log(randoms.length)
 		res.render('blogrecent', {
 			title: 'Blog recent',
 			editorsPicker: feed,
@@ -659,10 +669,10 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 
 	// let media = await Media.deleteMany({});
 	/** This is the after login process initialize part */
-	let users = await User.find({});
-	users.forEach(async user => {
-		await User.updateOne({ _id: user._id }, { signupProcess: "/blogrecent" });
-	});
+	// let users = await User.find({});
+	// users.forEach(async user => {
+	// 	await User.updateOne({ _id: user._id }, { signupProcess: "/blogrecent" });
+	// });
 
 	try {
 		let users = await User.find({});
@@ -684,9 +694,15 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 			);
 		});
 
-		var categories = await Category.find({}).limit(10);
+		var categories = await Category.find({});
+		let official = await Category.findOne({ slug: "official" });
+		var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');
+		articlelength = articlelength.length;
+		var r = Math.floor(Math.random() * articlelength);
+		let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
 		res.render('index', {
 			categories: categories,
+			random: random
 		});
 	} catch (error) {
 		next(error);

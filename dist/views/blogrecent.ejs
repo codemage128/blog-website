@@ -40,7 +40,7 @@
       <% if(user) { %>
       <% if (user.paid == "free") { %>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
-         entdecken</span></a>
+            entdecken</span></a>
       <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
             werden</span></a>
       <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
@@ -59,22 +59,24 @@
       <hr>
       <a href="/dashboard/index" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
       </a>
-      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein Profil</a>
+      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
+         Profil</a>
       <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
       <% } else {%>
       <span class="username_span"><%= user.username%></span>
       <hr>
       <a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
 
-      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein Profil</a>
+      <a href="/author/<%= user.username%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
+         Profil</a>
       <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
       <% } %>
       <% } else {%>
       <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
             werden</span></a>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
-         entdecken</span></a>
-            
+            entdecken</span></a>
+
       <% } %>
    </div>
    <header class="sticky" id="header">
@@ -112,7 +114,7 @@
                <% if(user) { %>
                <% if (user.paid == "free") { %>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
-                  entdecken</span></a>
+                     entdecken</span></a>
                <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
                      werden</span></a>
                <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
@@ -154,7 +156,7 @@
                <a class="searchbar" href="/publisher"><span class="menu-title">Blogger
                      werden</span></a>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
-                  entdecken</span></a>
+                     entdecken</span></a>
                <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
                      onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
                <a href="/sign-up" class="searchbar"><span style="font-size:20px; padding-left: 10px;cursor:pointer"><i
@@ -180,9 +182,9 @@
             editorsPickerLength = 3;
          }
          %>
-         <% for(var i = 0; i < editorsPickerLength; i ++){%>
-         <div class="col-md-12 col-lg-4">
-            <%
+               <% for(var i = 0; i < editorsPickerLength; i ++){%>
+               <div class="col-md-12 col-lg-4">
+                  <%
              var url = "#";
              if(editorsPicker[i].postedBy.roleId == "admin"){
                url = "/d/" + editorsPicker[i].category.slug + "/" + editorsPicker[i].slug;
@@ -190,41 +192,41 @@
                url = "/p/" + editorsPicker[i].category.slug + "/" + editorsPicker[i].slug;
              }
             %>
-            <div class="img-fluid dein-image" url="<%= url%>" style="background-image: url('<%= editorsPicker[i].file %>');">
+                  <div class="img-fluid dein-image" url="<%= url%>"
+                     style="background-image: url('<%= editorsPicker[i].file %>');">
+                  </div>
+                  <a class="underline" target="_blank" href="/kategorie/<%= editorsPicker[i].category.slug%>">
+                  <p><%= editorsPicker[i].category.name%></p>
+                  </a>
+                  <h3><a href="<%= url%>" target="_blank"><%= editorsPicker[i].title%></a></h3>
+               </div>
+               <% } %>
             </div>
-            <a class="underline" target="_blank" href="/kategorie/<%= editorsPicker[i].category.slug%>" />
-               <p><%= editorsPicker[i].category.name%></p>
-            </a>
-            <h3><a href="<%= url%>" target="_blank"><%= editorsPicker[i].title%></a></h3>
-         </div>
-         <% } %>
-      </div>
-      <div class="row">
-         <% var length = categories.length;
+            <div class="row">
+               <% var length = categories.length;
             if(length > 6){ length = 6;}
          %>
-         <% for(var i = 0; i < categories.length; i ++) {%>
-         <div class="col-sm-12 col-md-6 col-lg-4 featured_travel">
-            <a href="/kategorie/<%= categories[i].slug%>" target="_blank">
-               <span class="fea_travel_img">
-                  <img class="img-fluid" 
-                  src="<%= categories[i].background%>"></span>
-               <span class="fea_travel_con">
-                  <p class="underline"><%= categories[i].name%></p>
-                  <!-- <h6><%= categories[i].description%></h6> -->
-               </span>
-            </a>
+               <% for(var i = 0; i < categories.length; i ++) {%>
+               <div class="col-sm-12 col-md-6 col-lg-4 featured_travel">
+                  <a href="/kategorie/<%= categories[i].slug%>" target="_blank">
+                     <span class="fea_travel_img">
+                        <img class="img-fluid" src="<%= categories[i].background%>"></span>
+                     <span class="fea_travel_con">
+                        <p class="underline"><%= categories[i].name%></p>
+                        <!-- <h6><%= categories[i].description%></h6> -->
+                     </span>
+                  </a>
+               </div>
+               <% } %>
+            </div>
+         </section>
          </div>
-         <% } %>
-      </div>
-   </section>
-</div>
-<!-- Multiple Visible Slider start -->
-<div class="multiple_visible_slider">
-   <h3>Beliebt</h3>
-   <div id="owl-carousel" class="owl-carousel owl-theme">
-      <% for(var i = 0; i < trendings.length; i ++) {%>
-         <% 
+         <!-- Multiple Visible Slider start -->
+         <div class="multiple_visible_slider">
+            <h3>Beliebt</h3>
+            <div id="owl-carousel" class="owl-carousel owl-theme">
+               <% for(var i = 0; i < trendings.length; i ++) {%>
+               <% 
          var url="#";
          if(trendings[i].postedBy.roleId == "admmin"){
             url = "/d/" + trendings[i].category.slug + "/" + trendings[i].slug;
@@ -232,28 +234,29 @@
             url = "/p/" + trendings[i].category.slug + "/" + trendings[i].slug;
           }
          %>
-      <div class="item trending-image" style="background-size: cover; background-image: url('<%= trendings[i].file%>');" url="<%= url%>">
-         <div class="slider_item">
-            <span>
-               <h6><a href=""><%= trendings[i].title%></a></h6>
-               <h3><a href=""><%= trendings[i].summary%></h3>
-               <a class="read_article btn" href="<%= url%>" target="_blank">Mehr erfahren</a>
-            </span>
+               <div class="item trending-image"
+                  style="background-size: cover; background-image: url('<%= trendings[i].file%>');" url="<%= url%>">
+                  <div class="slider_item">
+                     <span>
+                        <h6><a href=""><%= trendings[i].title%></a></h6>
+                        <h3><a href=""><%= trendings[i].summary%></h3>
+                        <a class="read_article btn" href="<%= url%>" target="_blank">Mehr erfahren</a>
+                     </span>
+                  </div>
+               </div>
+               <% }%>
+            </div>
          </div>
-      </div>
-      <% }%>
-   </div>
-</div>
-<!-- Classic Enhanced Style start -->
-<% if(authorarticle.length > 3) {%>
-<div class="classic_enhanced_style">
-   <section class="container">
-      <!-- <h6>Classic Enhanced Style</h6> -->
-      <div class="inner-after-login-page-content">
-         <div class="row">
-            
-            <% for(var i = 0; i < authorarticle.length; i ++) {%>
-               <% 
+         <!-- Classic Enhanced Style start -->
+         <% if(authorarticle.length > 3) {%>
+         <div class="classic_enhanced_style">
+            <section class="container">
+               <!-- <h6>Classic Enhanced Style</h6> -->
+               <div class="inner-after-login-page-content">
+                  <div class="row">
+
+                     <% for(var i = 0; i < authorarticle.length; i ++) {%>
+                     <% 
                var url="#";
                if(authorarticle[i].postedBy.roleId == "admmin"){
                   url = "/d/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
@@ -261,37 +264,40 @@
                   url = "/p/" + authorarticle[i].category.slug + "/" + authorarticle[i].slug;
                }
                %>
-            <div class="col-md-12 col-lg-4">
-               <div class="content-one">
-                  <div class="content-one-img authorarticle-image" url="<%= url%>">
-                     <img src="<%= authorarticle[i].file%>">
-                     <a href="#"><%= authorarticle[i].category.name%></a>
-                  </div>
-                  <div class="content-one-text">
-                     <p><%= authorarticle[i].createdAt.toDateString()%></p>
-                     <h2><%= authorarticle[i].title%></h2>
-                     <p><%= authorarticle[i].summary%></p>
-                  </div>
-                  <div class="content-one-likeshare">
-                     <a style="color: black;" href="/author/<%= authorarticle[i].postedBy.usernameslug%>" target="_blank"><i class="fa fa-user" aria-hidden="true"></i> <%= authorarticle[i].postedBy.firstName%> <%= authorarticle[i].postedBy.lastName%></a>
-                     <!-- <span><i class="fa fa-comment-o" aria-hidden="true"></i> 33</span> -->
-                     <a style="color: black;" href="javascript: void();"><i class="fa fa-eye" aria-hidden="true"></i> <%= authorarticle[i].views%></a>
+                     <div class="col-md-12 col-lg-4">
+                        <div class="content-one">
+                           <div class="content-one-img authorarticle-image" url="<%= url%>">
+                              <img src="<%= authorarticle[i].file%>">
+                              <a href="#"><%= authorarticle[i].category.name%></a>
+                           </div>
+                           <div class="content-one-text">
+                              <p><%= authorarticle[i].createdAt.toDateString()%></p>
+                              <h2><%= authorarticle[i].title%></h2>
+                              <p><%= authorarticle[i].summary%></p>
+                           </div>
+                           <div class="content-one-likeshare">
+                              <a style="color: black;" href="/author/<%= authorarticle[i].postedBy.usernameslug%>"
+                                 target="_blank"><i class="fa fa-user" aria-hidden="true"></i>
+                                 <%= authorarticle[i].postedBy.firstName%> <%= authorarticle[i].postedBy.lastName%></a>
+                              <!-- <span><i class="fa fa-comment-o" aria-hidden="true"></i> 33</span> -->
+                              <a style="color: black;" href="javascript: void();"><i class="fa fa-eye"
+                                    aria-hidden="true"></i> <%= authorarticle[i].views%></a>
+                           </div>
+                        </div>
+                     </div>
+                     <% } %>
                   </div>
                </div>
-            </div>
-            <% } %>
+            </section>
          </div>
-      </div>
-   </section>
-</div>
-<% }%>
-<!-- Classic Enhanced Style end -->
+         <% }%>
+         <!-- Classic Enhanced Style end -->
 
-<!-- Posts Processbar Slider Style start -->
-<div class="posts_processbar_slider">
-   <div id="owl-carousel6" class="owl-carousel owl-theme">
-      <% for(var i = 0; i < news.length; i ++) {%>
-         <% 
+         <!-- Posts Processbar Slider Style start -->
+         <div class="posts_processbar_slider">
+            <div id="owl-carousel6" class="owl-carousel owl-theme">
+               <% for(var i = 0; i < news.length; i ++) {%>
+               <% 
          var url="#";
          if(news[i].postedBy.roleId == "admin"){
             url = "/d/" + news[i].category.slug + "/" + news[i].slug;
@@ -299,58 +305,59 @@
             url = "/p/" + news[i].category.slug + "/" + news[i].slug;
          }
          %>
-      <div class="item item_bg1" style="background-image: url('<%= news[i].file%>');">
-         <div class="slider_item">
-            <a href="/author/<%= news[i].postedBy.usernameslug%>" target="_blank">
-               <img src="<%= news[i].postedBy.profilePicture%>" />
-               <%= news[i].postedBy.username%></a>
-            <h1><%= news[i].title%></h1>
-            <a class="slider_button" href="<%= url%>" target="_blank">Mehr erfahren<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+               <div class="item item_bg1" style="background-image: url('<%= news[i].file%>');">
+                  <div class="slider_item">
+                     <a href="/author/<%= news[i].postedBy.usernameslug%>" target="_blank">
+                        <img src="<%= news[i].postedBy.profilePicture%>" />
+                        <%= news[i].postedBy.username%></a>
+                     <h1><%= news[i].title%></h1>
+                     <a class="slider_button" href="<%= url%>" target="_blank">Mehr erfahren<i class="fa fa-arrow-right"
+                           aria-hidden="true"></i></a>
+                  </div>
+               </div>
+               <% } %>
+            </div>
          </div>
-      </div>
-      <% } %>
-   </div>
-</div>
-<!-- Our Recent Writings start -->
-<div class="our_recent_writings">
-   <section class="container">
-      <h3>Neueste Beiträge</h3>
-      <div class="inner-after-login-page-content">
-         <div class="row">
-            <% for(var i = 0; i < newest.length; i ++) {%>          
-               <% 
+         <!-- Our Recent Writings start -->
+         <div class="our_recent_writings">
+            <section class="container">
+               <h3>Neueste Beiträge</h3>
+               <div class="inner-after-login-page-content">
+                  <div class="row">
+                     <% for(var i = 0; i < newest.length; i ++) {%>
+                     <% 
                var url="#";
                if(newest[i].postedBy.roleId == "admmin"){
                   url = "/d/" + newest[i].category.slug + "/" + newest[i].slug;
                }else {
                   url = "/p/" + newest[i].category.slug + "/" + newest[i].slug;
                }
-               %>  
-            <div class="col-12 col-md-6 col-lg-4">
-               <div class="content-one">
-                  <div class="content-one-img new-image" url="<%= url%>">
-                     <img src="<%= newest[i].file%>" style="object-fit: cover;">
-                     <a href="#">
-                        <h5><%= newest[i].category.name%></h5>
-                        <h3 style="overflow-wrap: anywhere; margin-right: 10px;
+               %>
+                     <div class="col-12 col-md-6 col-lg-4">
+                        <div class="content-one">
+                           <div class="content-one-img new-image" url="<%= url%>">
+                              <img src="<%= newest[i].file%>" style="object-fit: cover;">
+                              <a href="#">
+                                 <h5><%= newest[i].category.name%></h5>
+                                 <h3 style="overflow-wrap: anywhere; margin-right: 10px;
                         color: white;"><%= newest[i].title%></h3>
-                     </a>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                     <% }%>
                   </div>
                </div>
-            </div>
-            <% }%>
+            </section>
          </div>
-      </div>
-   </section>
-</div>
-<!-- Our Recent Writings end -->
-<div class="classic_enhanced_style minimal_stlye">
-   <section class="container">
-      <h3>Entdecken</h3>
-      <div class="inner-after-login-page-content">
-         <div class="row">
-            <% for(var i = 0; i < random.length; i ++) {%>
-               <% 
+         <!-- Our Recent Writings end -->
+         <div class="classic_enhanced_style minimal_stlye">
+            <section class="container">
+               <h3>Entdecken</h3>
+               <div class="inner-after-login-page-content">
+                  <div class="row random-container">
+                     <% for(var i = 0; i < random.length; i ++) {%>
+                     <% 
                var url="#";
                if(random[i].postedBy.roleId == "admin"){
                   url = "/d/" + random[i].category.slug + "/" + random[i].slug;
@@ -358,47 +365,55 @@
                   url = "/p/" + random[i].category.slug + "/" + random[i].slug;
                }
                %>
-            <div class="col-md-12 col-lg-4 mt-5">
-               <div class="content-two-text">
-                  <h2><%= random[i].title%></h2>
-                  <p><%= random[i].summary%></p>
-                  <a class="read-more" href="<%= url%>" target="_blank">Mehr erfahren<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                     <div class="col-md-12 col-lg-4 mt-5 random-article">
+                        <div class="content-two-text">
+                           <h2><%= random[i].title%></h2>
+                           <p><%= random[i].summary%></p>
+                           <a class="read-more" href="<%= url%>" target="_blank">Mehr erfahren<i
+                                 class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                     </div>
+                     <% }%>
+                  </div>
+                  <div class="row">
+                     <div class="col-2 offset-10 mt-5">
+                        <input type="hidden" id="length">
+                        <button class="form-control" id="loadmore">Load more...</button>
+                     </div>
+                  </div>
                </div>
-            </div>
-            <% }%>
+            </section>
          </div>
-      </div>
-   </section>
-</div>
-<!-- Posts Parallax Slider2 Style end -->
-<section class="footer-main recent_blog_footer" id="footer">
-   <div class="container">
-      <div class="innner-footer-main">
-         <div class="footer-social-icons">
-            <div class="col-md-12 col-sm-12 social-media">
-               <a href="<%= twitter %>"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                 <a style="padding: 11px 20px;" href="<%= facebook %>"><i class="fa fa-facebook"
-                     aria-hidden="true"></i></a>
-                 <a href="<%= linkedin %>"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                 <a href="<%= youtube %>"><i class="fa fa-youtube" aria-hidden="true"></i></a>
-                 <a href="<%= instagram %>"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                 <a href="<%= pinterest %>"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-               </div>
-             </div>
-             <div class="footer-copyright">
-               <p><% if(copyright != undefined) { %><p>
-                   <%= copyright.charAt(0).toUpperCase() + copyright.substring(1) %></a></p><%}%></p>
+         <!-- Posts Parallax Slider2 Style end -->
+         <section class="footer-main recent_blog_footer" id="footer">
+            <div class="container">
+               <div class="innner-footer-main">
+                  <div class="footer-social-icons">
+                     <div class="col-md-12 col-sm-12 social-media">
+                        <a href="<%= twitter %>"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        <a style="padding: 11px 20px;" href="<%= facebook %>"><i class="fa fa-facebook"
+                              aria-hidden="true"></i></a>
+                        <a href="<%= linkedin %>"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="<%= youtube %>"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                        <a href="<%= instagram %>"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="<%= pinterest %>"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                     </div>
+                  </div>
+                  <div class="footer-copyright">
+                     <p><% if(copyright != undefined) { %>
+                     <p>
+                        <%= copyright.charAt(0).toUpperCase() + copyright.substring(1) %></a></p><%}%></p>
          </div>
          <hr>
          <div class="row">
             <div class="col-md-10">
                <div class="row">
                   <% for(var i = 0; i < footercategory.length; i ++){%>
-                 <div class="col-md-3 text-left">
-                   <a style="color: black;" href="/kategorie/<%= footercategory[i].slug%>"
-                     class="footercategory"><%= footercategory[i].name %></a>
-                 </div>
-                 <%}%>
+                     <div class="col-md-3 text-left">
+                        <a style="color: black;" href="/kategorie/<%= footercategory[i].slug%>"
+                           class="footercategory"><%= footercategory[i].name %></a>
+                     </div>
+                     <%}%>
                </div>
             </div>
             <div class="col-md-2">
@@ -527,22 +542,22 @@
          <script>
             // owlCarousel
             jQuery(document).ready(function () {
-               $('.dein-image').click(function(){
+               $('.dein-image').click(function () {
                   window.open($(this).attr('url'));
                });
 
-               $('.trending-image').click(function(){
-                  window.open($(this).attr('url'));
-               });
-               
-               $('.item_bg2').click(function(){
-                  window.open($(this).attr('url'));
-               });
-               $('.authorarticle-image').click(function(){
+               $('.trending-image').click(function () {
                   window.open($(this).attr('url'));
                });
 
-               $('.new-image').click(function(){
+               $('.item_bg2').click(function () {
+                  window.open($(this).attr('url'));
+               });
+               $('.authorarticle-image').click(function () {
+                  window.open($(this).attr('url'));
+               });
+
+               $('.new-image').click(function () {
                   window.open($(this).attr('url'));
                });
 
@@ -655,6 +670,39 @@
                   }
                })
 
+            })
+           
+
+            $('#loadmore').click(function () {
+               var count = $('#length').val();
+               console.log(count);
+               $.ajax({
+                  url: "/loadmore",
+                  type: "post",
+                  dataType: 'json',
+                  data: { count: count },
+                  success: function (data) {
+                     console.log("asajc call is success ful");
+                     data.forEach(article => {
+                        var url = "";
+                        if(article.postedBy.roleId == "admin"){
+                           url = "/d/" + article.category.slug + "/" + article.slug;
+                        }else {
+                           url = "/p/" + article.category.slug + "/" + article.slug
+                        }
+                        var tempalte = '<div class="col-md-12 col-lg-4 mt-5 random-article">' +
+                           '<div class="content-two-text">' +
+                           '<h2>' + article.title + '</h2>' +
+                           '<p>' + article.summary + '</p>' +
+                           '<a class="read-more" href="' + url + '" target="_blank">Mehr erfahren<i class="fa fa-arrow-right" aria-hidden="true"></i></a>' +
+                           '</div>' +
+                           '</div>';
+                        $('.random-container').append(tempalte);
+                        $('#length').val($('.random-article').length);
+                     });
+
+                  }
+               });
             })
          </script>
 
