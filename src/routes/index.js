@@ -378,8 +378,15 @@ router.use(async function (req, res, next) {
 
 
 router.get('/blogger-werden', install.redirectToLogin, async (req, res, next) => {
-	res.render('publisher', {
-		title: "blogger-werden"
+	var categories = await Category.find({});
+	let official = await Category.findOne({ slug: "official" });
+	var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');
+	articlelength = articlelength.length;
+	var r = Math.floor(Math.random() * articlelength);
+	let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
+	res.render('index', {
+		categories: categories,
+		random: random
 	});
 });
 
@@ -700,10 +707,30 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 		articlelength = articlelength.length;
 		var r = Math.floor(Math.random() * articlelength);
 		let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
-		res.render('index', {
-			categories: categories,
+		let articles = await Article.find({}).populate('postedBy').populate('category');
+		let result = [];
+
+
+		categories.forEach(category => {
+			let category_articles = [];
+			articles.forEach(article => {
+				if (article.category.id == category.id) {
+					category_articles.push(article);
+				}
+			});
+			let object = {
+				name: category.name,
+				articles: category_articles
+			}
+			if (object.articles.length != 0) {
+				result.push(object);
+			}
+		});
+		res.render('publisher', {
+			categories: result,
 			random: random
 		});
+
 	} catch (error) {
 		next(error);
 	}

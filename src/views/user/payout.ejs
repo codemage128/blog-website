@@ -114,36 +114,9 @@
             <h4 style="color: red;">Kontostand : <%= total%> €</h4>
          </div>
       </div>
-      <div class="col-md-2">
-         <div class="page-heading">
-            <% if(total > 5){ %>
-            <button class="button button-secondary text-left" data-toggle="modal"
-               data-target="#exampleModal">Geld abheben</button>
-            <% } else { %>
-            <button class="button button-secondary text-left" data-toggle="modal"
-               data-target="#withdrawmodal">Geld abheben</button>
-            <% } %>
-         </div>
-      </div>
    </div><!-- Page Headings End -->
 
-   <div class="modal fade" id="withdrawmodal" tabindex="-1" style="z-index: 9999;" role="dialog"
-      aria-labelledby="withdrawmodal" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h5 class="modal-title" id="withdrawmodal">Withdraw</h5>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-            </div>
-            <div class="modal-body withdraw">
-            </div>
-            <div class="modal-footer">
-            </div>
-         </div>
-      </div>
-   </div>
+   
 
 
    <div class="modal fade" id="exampleModal" tabindex="-1" style="z-index: 9999;" role="dialog"
@@ -166,46 +139,39 @@
    </div>
 
    <%- include ../partials/msg %>
-   <div class="row">
-      <div class="col-12">
-         <div class="alert alert-solid-primary">
-            <h4>You can withdraw the money less than 5 € every time.</h4>
-         </div>
-      </div>
-   </div>
+  
    <div class="row mt-4">
       <!--Manage Product List Start-->
-      <div class="col-6">
-         <form action method="GET" id="bulkDeleteForm">
-            <div class="table-responsive bg-white shadow-sm">
-               <table class="table table-vertical-middle">
-                  <thead>
-                     <tr>
-                        <th>#</th>
-                        <th>Avatar</th>
-                        <th>User Name</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <% for(key in earningList) {%>
-                     <tr>
-                        <td><%= (parseInt(key) + 1)%></td>
-                        <td><img src="<%= earningList[key].reader.profilePicture%>"
-                              style="width: 90px;height: 90px; border-radius: 50px; object-fit: cover;" /></td>
-                        <td><%= earningList[key].reader.username%></td>
-                        <td><%= earningList[key].balance%> €</td>
-                        <td><%= earningList[key].date.toDateString()%></td>
-                     </tr>
-                     <% } %>
-                  </tbody>
-               </table>
-            </div>
-         </form>
-      </div>
-
-      <div class="col-6">
+      <div class="col-8">
+         <!-- <div class="row">
+            <form action method="GET" id="bulkDeleteForm">
+               <div class="table-responsive bg-white shadow-sm">
+                  <table class="table table-vertical-middle">
+                     <thead>
+                        <tr>
+                           <th>#</th>
+                           <th>Avatar</th>
+                           <th>User Name</th>
+                           <th>Amount</th>
+                           <th>Date</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <% for(key in earningList) {%>
+                        <tr>
+                           <td><%= (parseInt(key) + 1)%></td>
+                           <td><img src="<%= earningList[key].reader.profilePicture%>"
+                                 style="width: 90px;height: 90px; border-radius: 50px; object-fit: cover;" /></td>
+                           <td><%= earningList[key].reader.username%></td>
+                           <td><%= earningList[key].balance%> €</td>
+                           <td><%= earningList[key].date.toDateString()%></td>
+                        </tr>
+                        <% } %>
+                     </tbody>
+                  </table>
+               </div>
+            </form>
+         </div> -->
          <div class="table-responsive bg-white shadow-sm">
             <table class="table table-vertical-middle">
                <thead>
@@ -215,7 +181,8 @@
                      <th>Payout</th>
                      <th>Status
                         <form action="/payout/download" method="POST">
-                           <button style="position: absolute;top: 12%;right: 10%;" class="btn btn-success" type="submit"><i class="fa fa-download"></i></button>
+                           <button style="position: absolute;top: 0.8vh;right: 4vh;" class="btn btn-success"
+                              type="submit"><i class="fa fa-download"></i></button>
                         </form>
                      </th>
                   </tr>
@@ -225,8 +192,65 @@
             </table>
          </div>
       </div>
+      <div class="col-4">
+         <div class="card" style="border-radius: 10px !important; border: 1px solid #e0e0e0 !important;">
+            <div class="card-header">
+               <div class="card-title">
+                  <h5>Payout</h5>
+               </div>
+            </div>
+            <div class="card-body">
+               <div class="alert alert-info">
+                  You can get the money using paypal.
+               </div>
+               <hr>
+               <div class="form-group row">
+                  <label class="control-label col-4 mt-15">E-Mail Adresse : </label>
+                  <input type="email" class="form-control col-8" />
+               </div>
+               <div class="form-group row mt-15">
+                  <label class="control-label col-4 mt-15">Amount :</label>
+                  <input type="number" class="form-control col-8" />
+               </div>
+               <div class="row form-group mt-50">
+                  <div class="col-12 text-center">
+                     <% if(total < 5){ %>
+                     <button class="button button-secondary text-left" data-toggle="modal" data-target="#exampleModal"
+                        type="button">Geld
+                        abheben</button>
+                     <% } else { %>
+                     <button class="button button-secondary text-left" data-toggle="modal" data-target="#withdrawmodal"
+                        type="button">Geld
+                        abheben</button>
+                     <% } %>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
    </div>
 </div>
+<div class="modal fade" id="withdrawmodal" tabindex="-1" style="z-index: 9999;" role="dialog"
+      aria-labelledby="withdrawmodal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="withdrawmodal">Really?</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body withdraw">
+               <div class="form-group row">
+                  <label class="control-label col-8 mt-15">400 Euro --- dmitry@dmitry.com</label>
+                  <input type="submit" value="confirm" class="col-4 button button-danger"/>
+               </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 <!-- Global Vendor, plugins & Activation JS -->
 <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -238,30 +262,31 @@
 <script src="/assets/js/plugins/tippy4.min.js.js"></script>
 <!--Main JS-->
 <script src="/assets/js/main.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=Ac__9y8nnJBHSkeoMZTbcDKS0BYpF9LwBioDHrC7Fj-7AoBVi_X8zoWIn2dQzLJ53rmicDzdZ8_7MdO-"></script>
+<script
+   src="https://www.paypal.com/sdk/js?client-id=Ac__9y8nnJBHSkeoMZTbcDKS0BYpF9LwBioDHrC7Fj-7AoBVi_X8zoWIn2dQzLJ53rmicDzdZ8_7MdO-"></script>
 <!-- <script>paypal.Buttons().render('.withdraw');</script> -->
 <!-- Plugins & Activation JS For Only This Page -->
 <script>
-   paypal.Buttons({
-     createOrder: function(data, actions) {
-       // This function sets up the details of the transaction, including the amount and line item details.
-       return actions.order.create({
-         purchase_units: [{
-           amount: {
-             value: '5.99'
-           }
-         }]
-       });
-     },
-     onApprove: function(data, actions) {
-      // This function captures the funds from the transaction.
-      return actions.order.capture().then(function(details) {
-        // This function shows a transaction success message to your buyer.
-        alert('Transaction completed by ' + details.payer.name.given_name);
-      });
-    }
-   }).render('.withdraw');
- </script>
+   // paypal.Buttons({
+   //    createOrder: function (data, actions) {
+   //       // This function sets up the details of the transaction, including the amount and line item details.
+   //       return actions.order.create({
+   //          purchase_units: [{
+   //             amount: {
+   //                value: '5.99'
+   //             }
+   //          }]
+   //       });
+   //    },
+   //    onApprove: function (data, actions) {
+   //       // This function captures the funds from the transaction.
+   //       return actions.order.capture().then(function (details) {
+   //          // This function shows a transaction success message to your buyer.
+   //          alert('Transaction completed by ' + details.payer.name.given_name);
+   //       });
+   //    }
+   // }).render('.withdraw');
+</script>
 <!--Moment-->
 <script src="/assets/js/plugins/moment/moment.min.js"></script>
 
@@ -273,11 +298,11 @@
 <script src="/assets/js/plugins/nice-select/jquery.nice-select.min.js"></script>
 <script>
    $(document).ready(function () {
-       $("[href]").each(function () {
-           if (this.href == window.location.href) {
-               $(this).parent().addClass("active");
-           }
-       });
+      $("[href]").each(function () {
+         if (this.href == window.location.href) {
+            $(this).parent().addClass("active");
+         }
+      });
    });
 </script>
 </body>

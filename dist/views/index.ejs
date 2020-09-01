@@ -29,11 +29,15 @@
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
 
   <style>
-    .random_image:hover{
+    .random_image:hover {
       box-shadow: 0px 5px 60px 0px #b4b4b4;
       margin-top: -10px;
       margin-bottom: 20px;
-      }
+    }
+
+    .categoryblock {
+      display: none;
+    }
   </style>
 </head>
 
@@ -119,14 +123,6 @@
               onclick="openSidebar()"><i class="fa fa-bars" aria-hidden="true"></i></span></a>
         </div>
         <div class="col-xs-11 col-md-10 menu-large">
-
-          <!-- <a class="searchbar kategorien">Kategorien</a>
-          <div style="position: absolute;top: 5vh;left: 35vh;background: white;padding: 10px;z-index: 100;">
-            <% for(var i = 0; i < categories.length; i ++) {%>
-            <span><%= categories[i].name %></span><br>
-            <% }%>
-          </div> -->
-
           <% if(user) { %>
           <% if (user.paid == "free") { %>
           <a class="searchbar" href="/blogrecent">
@@ -370,7 +366,7 @@
           <div class="container">
             <div class="row">
               <% for(var i = 0; i < random.length; i ++){%>
-                <%
+              <%
              var url = "#";
              if(random[i].postedBy.roleId == "admin"){
                url = "/d/" + random[i].category.slug + "/" + random[i].slug;
@@ -378,16 +374,21 @@
                url = "/p/" + random[i].category.slug + "/" + random[i].slug;
              }
             %>
-            
+
               <div class="col-md-4 col-12">
-                <div class="random_image" style="background-image: url('<%= random[i].file %>'); background-size: cover; height: 400px !important;border-radius: 10px">
+                <div class="random_image"
+                  style="background-image: url('<%= random[i].file %>'); background-size: cover; height: 400px !important;border-radius: 10px">
                 </div>
-                <a target="_blank" href="/kategorie/<%= random[i].category.slug%>"><p style="font-size: 1.75em;
+                <a target="_blank" href="/kategorie/<%= random[i].category.slug%>">
+                  <p style="font-size: 1.75em;
                   color: black;
-                  font-weight: 600;"><%= random[i].category.name%></p></a>
-                <a href="<%= url%>" target="_blank"><p style="font-size: 1.5em;
+                  font-weight: 600;"><%= random[i].category.name%></p>
+                </a>
+                <a href="<%= url%>" target="_blank">
+                  <p style="font-size: 1.5em;
                   color: black;
-                  text-align: center;"><%= random[i].title%></p></a>
+                  text-align: center;"><%= random[i].title%></p>
+                </a>
               </div>
               <% } %>
             </div>
@@ -524,6 +525,20 @@
             $(".popup").css('display', 'none');
             $(".popup-back").css('display', 'none');
           });
+
+          //navber
+          
+          $(document).on('click', '.kategorien', function (event) {
+            if($('.categoryblock').css('display') == 'block'){
+              $('.categoryblock').css('display', 'none');
+            }else{
+              $('.categoryblock').css('left', $('.kategorien').position().left - 100);
+              $('.categoryblock').css('display', 'block');
+            }
+          })
+          $(document).on('mouseenter', '.categoryblock', function (event) {
+            $('.categoryblock').css('display', 'block');
+          })
         </script>
 
         <%- include ./partials/footer %>

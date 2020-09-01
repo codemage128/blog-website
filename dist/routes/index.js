@@ -468,15 +468,49 @@ router.use( /*#__PURE__*/function () {
 
 router.get('/blogger-werden', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
+    var categories, official, articlelength, r, random;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            res.render('publisher', {
-              title: "blogger-werden"
+            _context2.next = 2;
+            return _category["default"].find({});
+
+          case 2:
+            categories = _context2.sent;
+            _context2.next = 5;
+            return _category["default"].findOne({
+              slug: "official"
             });
 
-          case 1:
+          case 5:
+            official = _context2.sent;
+            _context2.next = 8;
+            return _articles["default"].find({
+              "category": {
+                $ne: official.id
+              }
+            }).populate('postedBy').populate('category');
+
+          case 8:
+            articlelength = _context2.sent;
+            articlelength = articlelength.length;
+            r = Math.floor(Math.random() * articlelength);
+            _context2.next = 13;
+            return _articles["default"].find({
+              "category": {
+                $ne: official.id
+              }
+            }).populate('postedBy').populate('category').limit(3).skip(r);
+
+          case 13:
+            random = _context2.sent;
+            res.render('index', {
+              categories: categories,
+              random: random
+            });
+
+          case 15:
           case "end":
             return _context2.stop();
         }
@@ -1178,7 +1212,7 @@ router.get('/ourwork', /*#__PURE__*/function () {
 
 router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res, next) {
-    var users, categories, official, articlelength, r, random;
+    var users, categories, official, articlelength, r, random, articles, result;
     return _regenerator["default"].wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
@@ -1267,24 +1301,46 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
 
           case 18:
             random = _context11.sent;
-            res.render('index', {
-              categories: categories,
+            _context11.next = 21;
+            return _articles["default"].find({}).populate('postedBy').populate('category');
+
+          case 21:
+            articles = _context11.sent;
+            result = [];
+            categories.forEach(function (category) {
+              var category_articles = [];
+              articles.forEach(function (article) {
+                if (article.category.id == category.id) {
+                  category_articles.push(article);
+                }
+              });
+              var object = {
+                name: category.name,
+                articles: category_articles
+              };
+
+              if (object.articles.length != 0) {
+                result.push(object);
+              }
+            });
+            res.render('publisher', {
+              categories: result,
               random: random
             });
-            _context11.next = 25;
+            _context11.next = 30;
             break;
 
-          case 22:
-            _context11.prev = 22;
+          case 27:
+            _context11.prev = 27;
             _context11.t0 = _context11["catch"](0);
             next(_context11.t0);
 
-          case 25:
+          case 30:
           case "end":
             return _context11.stop();
         }
       }
-    }, _callee11, null, [[0, 22]]);
+    }, _callee11, null, [[0, 27]]);
   }));
 
   return function (_x28, _x29, _x30) {

@@ -1378,11 +1378,33 @@ router.get("/follow-user", auth, async (req, res, next) => {
     date: date,
     user: req.user.id
   }
+  let user = await User.findById({id: req.user.id});
+  let follower = await User.findById({id: req.query.followerId});
   await User.updateOne(
     { _id: req.query.followerId },
     { $push: { following: payload } }
   );
-  // req.flash("success_msg", "User added to followers list Successfully");
+
+  let useremail = user.email;
+  let followeremail = follower.email;
+
+  let _payload = {
+    user: user,
+    follower: follower
+  }
+  await _mail(
+    "Du hast einen neuen Follower",
+    followeremail,
+    "reset-password-email",
+    _payload,
+    req.headers.host,
+    (err, info) => {
+      if (err) console.log(err);
+    }
+  )
+
+
+
   return res.redirect("back");
 });
 

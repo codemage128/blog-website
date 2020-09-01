@@ -313,7 +313,7 @@ router.get('/downgrade', _install["default"].redirectToLogin, /*#__PURE__*/funct
 }());
 router.get('/onboarding', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res, next) {
-    var redirect, categoryCount, stripeSession_id, session, stripesession, user, payload, categories, _user, _payload;
+    var redirect, categoryCount, stripeSession_id, session, stripesession, user, payload, categories, _user, _payload2;
 
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
@@ -406,7 +406,7 @@ router.get('/onboarding', _install["default"].redirectToLogin, /*#__PURE__*/func
               break;
             }
 
-            _payload = {
+            _payload2 = {
               email: _user.email.trim(),
               username: _user.username.trim().toLowerCase(),
               firstName: _user.firstName,
@@ -414,7 +414,7 @@ router.get('/onboarding', _install["default"].redirectToLogin, /*#__PURE__*/func
               siteLink: res.locals.siteLink
             };
             _context6.next = 36;
-            return (0, _mail2["default"])("Herzlichen Glückwunsch", _user.email, "onboarding-email", _payload, req.headers.host, function (err, info) {
+            return (0, _mail2["default"])("Herzlichen Glückwunsch", _user.email, "onboarding-email", _payload2, req.headers.host, function (err, info) {
               if (err) console.log(err);
             });
 
@@ -2163,7 +2163,8 @@ router.post("/user/dashboard/ban-user", _auth["default"], (0, _role["default"])(
 
 router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
   var _ref25 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee25(req, res, next) {
-    var date, payload;
+    var date, payload, user, follower, useremail, followeremail, _payload;
+
     return _regenerator["default"].wrap(function _callee25$(_context25) {
       while (1) {
         switch (_context25.prev = _context25.next) {
@@ -2174,6 +2175,20 @@ router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
               user: req.user.id
             };
             _context25.next = 4;
+            return _users["default"].findById({
+              id: req.user.id
+            });
+
+          case 4:
+            user = _context25.sent;
+            _context25.next = 7;
+            return _users["default"].findById({
+              id: req.query.followerId
+            });
+
+          case 7:
+            follower = _context25.sent;
+            _context25.next = 10;
             return _users["default"].updateOne({
               _id: req.query.followerId
             }, {
@@ -2182,10 +2197,22 @@ router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
               }
             });
 
-          case 4:
+          case 10:
+            useremail = user.email;
+            followeremail = follower.email;
+            _payload = {
+              user: user,
+              follower: follower
+            };
+            _context25.next = 15;
+            return (0, _mail2["default"])("Du hast einen neuen Follower", followeremail, "reset-password-email", _payload, req.headers.host, function (err, info) {
+              if (err) console.log(err);
+            });
+
+          case 15:
             return _context25.abrupt("return", res.redirect("back"));
 
-          case 5:
+          case 16:
           case "end":
             return _context25.stop();
         }
