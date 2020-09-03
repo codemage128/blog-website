@@ -73,7 +73,7 @@
         <% if(user) { %>
         <% if (user.paid == "free") { %>
         <a class="searchbar" href="/afterlogin"><span class="menu-title">Inhalte entdecken</span></a>
-        <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+        <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger werden</span></a>
         <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
                 Inhalte</span></a>
         <hr>
@@ -82,7 +82,7 @@
                 Inhalte</span></a>
         <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
         </a>
-        <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+        <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger werden</span></a>
         <% } %>
         <% if(user.roleId == 'admin') { %>
         <span class="username_span"><%= user.username%></span>
@@ -102,7 +102,7 @@
         <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
         <% } %>
         <% } else {%>
-        <a class="searchbar" href="/publisher"><span class="menu-title">Publisher
+        <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
                 werden</span></a>
         <a class="searchbar" href="/afterlogin"><span class="menu-title">Artikel
                 entdecken</span></a>
@@ -150,7 +150,7 @@
                     <% if (user.paid == "free") { %>
                     <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
                             entdecken</span></a>
-                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Blogger
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Blogger
                             werden</span></a>
                     <a class="searchbar" href="/ourwork"><span style="padding-left: 10px;cursor:pointer">Exklusive
                             Inhalte</span></a>
@@ -159,7 +159,7 @@
                             Inhalte</span></a>
                     <a class="searchbar" href="/blogrecent"><span style="padding-left: 10px;cursor:pointer">Feed</span>
                     </a>
-                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Publisher
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Blogger
                             werden</span></a>
                     <% } %>
                     <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
@@ -192,7 +192,7 @@
                         </ul>
                     </div>
                     <% } else {%>
-                    <a class="searchbar" href="/publisher"><span style="padding-left: 10px;cursor:pointer">Blogger
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Blogger
                             werden</span></a>
                     <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
                             entdecken</span></a>
