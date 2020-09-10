@@ -36,9 +36,11 @@ router.get(
   auth,
   role("admin", "user"),
   async (req, res, next) => {
+    let categories = await Category.find({});
     try {
       res.render("./user/add-new-post", {
-        title: "Article - Add new post"
+        title: "Article - Add new post",
+        categories: categories
       });
     } catch (error) {
       next(error);

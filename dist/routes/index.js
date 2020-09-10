@@ -46,6 +46,8 @@ var _mail2 = _interopRequireDefault(require("../helpers/_mail"));
 
 var _media = _interopRequireDefault(require("../models/media"));
 
+var suggest = require('suggestion');
+
 var fs = require('fs');
 
 var _require = require('sitemap'),
@@ -1208,27 +1210,56 @@ router.get('/ourwork', /*#__PURE__*/function () {
   return function (_x25, _x26, _x27) {
     return _ref9.apply(this, arguments);
   };
+}());
+router.post('/suggestion', /*#__PURE__*/function () {
+  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res, next) {
+    var term;
+    return _regenerator["default"].wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            term = req.body.term;
+            console.log(req.body);
+            suggest(term, function (err, suggestions) {
+              if (err) throw err;
+              console.log(term);
+              return res.json({
+                'data': suggestions
+              });
+            });
+
+          case 3:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10);
+  }));
+
+  return function (_x28, _x29, _x30) {
+    return _ref10.apply(this, arguments);
+  };
 }()); // Get index page
 
 router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res, next) {
+  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res, next) {
     var users, categories, official, articlelength, r, random, articles, result;
-    return _regenerator["default"].wrap(function _callee11$(_context11) {
+    return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context11.prev = 0;
-            _context11.next = 3;
+            _context12.prev = 0;
+            _context12.next = 3;
             return _users["default"].find({});
 
           case 3:
-            users = _context11.sent;
+            users = _context12.sent;
             users.forEach( /*#__PURE__*/function () {
-              var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(element) {
+              var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(element) {
                 var username, array, usernameslug;
-                return _regenerator["default"].wrap(function _callee10$(_context10) {
+                return _regenerator["default"].wrap(function _callee11$(_context11) {
                   while (1) {
-                    switch (_context10.prev = _context10.next) {
+                    switch (_context11.prev = _context11.next) {
                       case 0:
                         username = element.username.toLowerCase().replace(" ", "");
                         array = username.split('');
@@ -1250,7 +1281,7 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
                           }
                         });
                         usernameslug = array.join("");
-                        _context10.next = 6;
+                        _context11.next = 6;
                         return _users["default"].updateOne({
                           _id: element._id
                         }, {
@@ -1259,29 +1290,29 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
 
                       case 6:
                       case "end":
-                        return _context10.stop();
+                        return _context11.stop();
                     }
                   }
-                }, _callee10);
+                }, _callee11);
               }));
 
-              return function (_x31) {
-                return _ref11.apply(this, arguments);
+              return function (_x34) {
+                return _ref12.apply(this, arguments);
               };
             }());
-            _context11.next = 7;
+            _context12.next = 7;
             return _category["default"].find({});
 
           case 7:
-            categories = _context11.sent;
-            _context11.next = 10;
+            categories = _context12.sent;
+            _context12.next = 10;
             return _category["default"].findOne({
               slug: "official"
             });
 
           case 10:
-            official = _context11.sent;
-            _context11.next = 13;
+            official = _context12.sent;
+            _context12.next = 13;
             return _articles["default"].find({
               "category": {
                 $ne: official.id
@@ -1289,10 +1320,10 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
             }).populate('postedBy').populate('category');
 
           case 13:
-            articlelength = _context11.sent;
+            articlelength = _context12.sent;
             articlelength = articlelength.length;
             r = Math.floor(Math.random() * articlelength);
-            _context11.next = 18;
+            _context12.next = 18;
             return _articles["default"].find({
               "category": {
                 $ne: official.id
@@ -1300,12 +1331,12 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
             }).populate('postedBy').populate('category').limit(3).skip(r);
 
           case 18:
-            random = _context11.sent;
-            _context11.next = 21;
+            random = _context12.sent;
+            _context12.next = 21;
             return _articles["default"].find({}).populate('postedBy').populate('category');
 
           case 21:
-            articles = _context11.sent;
+            articles = _context12.sent;
             result = [];
             categories.forEach(function (category) {
               var category_articles = [];
@@ -1327,78 +1358,78 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
               categories: result,
               random: random
             });
-            _context11.next = 30;
+            _context12.next = 30;
             break;
 
           case 27:
-            _context11.prev = 27;
-            _context11.t0 = _context11["catch"](0);
-            next(_context11.t0);
+            _context12.prev = 27;
+            _context12.t0 = _context12["catch"](0);
+            next(_context12.t0);
 
           case 30:
           case "end":
-            return _context11.stop();
+            return _context12.stop();
         }
       }
-    }, _callee11, null, [[0, 27]]);
+    }, _callee12, null, [[0, 27]]);
   }));
 
-  return function (_x28, _x29, _x30) {
-    return _ref10.apply(this, arguments);
+  return function (_x31, _x32, _x33) {
+    return _ref11.apply(this, arguments);
   };
 }());
 router.post('/api/article/read', /*#__PURE__*/function () {
-  var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res, next) {
+  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
     var token, articleslug, user, article, payload, check;
-    return _regenerator["default"].wrap(function _callee12$(_context12) {
+    return _regenerator["default"].wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
             token = req.body.token;
             articleslug = req.body.articleslug;
-            _context12.next = 4;
+            _context13.next = 4;
             return _users["default"].findOne({
               token: token
             });
 
           case 4:
-            user = _context12.sent;
-            _context12.next = 7;
+            user = _context13.sent;
+            _context13.next = 7;
             return _articles["default"].findOne({
               slug: articleslug
             });
 
           case 7:
-            article = _context12.sent;
+            article = _context13.sent;
             payload = {};
 
             if (!(user.paid == "paid")) {
-              _context12.next = 22;
+              _context13.next = 22;
               break;
             }
 
-            _context12.next = 12;
+            _context13.next = 12;
             return _bookmark["default"].findOne({
               articleId: article.id,
               userId: user.id
             });
 
           case 12:
-            check = _context12.sent;
+            check = _context13.sent;
 
             if (!check) {
-              _context12.next = 17;
+              _context13.next = 17;
               break;
             }
 
             payload = {
               error: "This article Already saved!"
             };
-            _context12.next = 20;
+            _context13.next = 20;
             break;
 
           case 17:
-            _context12.next = 19;
+            _context13.next = 19;
             return _bookmark["default"].create({
               articleId: article.id,
               userId: user.id
@@ -1410,7 +1441,7 @@ router.post('/api/article/read', /*#__PURE__*/function () {
             };
 
           case 20:
-            _context12.next = 23;
+            _context13.next = 23;
             break;
 
           case 22:
@@ -1419,46 +1450,11 @@ router.post('/api/article/read', /*#__PURE__*/function () {
             };
 
           case 23:
-            return _context12.abrupt("return", res.json({
-              "data": payload
-            }));
-
-          case 24:
-          case "end":
-            return _context12.stop();
-        }
-      }
-    }, _callee12);
-  }));
-
-  return function (_x32, _x33, _x34) {
-    return _ref12.apply(this, arguments);
-  };
-}());
-router.post('/api/content', /*#__PURE__*/function () {
-  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
-    var categoryslug, contentslug, article, payload;
-    return _regenerator["default"].wrap(function _callee13$(_context13) {
-      while (1) {
-        switch (_context13.prev = _context13.next) {
-          case 0:
-            categoryslug = req.body.categoryslug;
-            contentslug = req.body.contentslug;
-            _context13.next = 4;
-            return _articles["default"].findOne({
-              slug: contentslug
-            }).populate('postedBy').populate('category');
-
-          case 4:
-            article = _context13.sent;
-            payload = {
-              article: article
-            };
             return _context13.abrupt("return", res.json({
               "data": payload
             }));
 
-          case 7:
+          case 24:
           case "end":
             return _context13.stop();
         }
@@ -1470,15 +1466,50 @@ router.post('/api/content', /*#__PURE__*/function () {
     return _ref13.apply(this, arguments);
   };
 }());
-router.post('/api/search', /*#__PURE__*/function () {
+router.post('/api/content', /*#__PURE__*/function () {
   var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
-    var searchKey, data, payload;
+    var categoryslug, contentslug, article, payload;
     return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
           case 0:
+            categoryslug = req.body.categoryslug;
+            contentslug = req.body.contentslug;
+            _context14.next = 4;
+            return _articles["default"].findOne({
+              slug: contentslug
+            }).populate('postedBy').populate('category');
+
+          case 4:
+            article = _context14.sent;
+            payload = {
+              article: article
+            };
+            return _context14.abrupt("return", res.json({
+              "data": payload
+            }));
+
+          case 7:
+          case "end":
+            return _context14.stop();
+        }
+      }
+    }, _callee14);
+  }));
+
+  return function (_x38, _x39, _x40) {
+    return _ref14.apply(this, arguments);
+  };
+}());
+router.post('/api/search', /*#__PURE__*/function () {
+  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
+    var searchKey, data, payload;
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
             searchKey = req.body.key;
-            _context14.next = 3;
+            _context15.next = 3;
             return _articles["default"].find({
               active: true,
               $or: [{
@@ -1495,56 +1526,15 @@ router.post('/api/search', /*#__PURE__*/function () {
             }).populate('postedBy').populate('category');
 
           case 3:
-            data = _context14.sent;
+            data = _context15.sent;
             payload = {
               articleList: data
-            };
-            return _context14.abrupt("return", res.json({
-              "data": payload
-            }));
-
-          case 6:
-          case "end":
-            return _context14.stop();
-        }
-      }
-    }, _callee14);
-  }));
-
-  return function (_x38, _x39, _x40) {
-    return _ref14.apply(this, arguments);
-  };
-}());
-router.post('/api/contentlist', /*#__PURE__*/function () {
-  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
-    var categoryslug, category, articles, payload;
-    return _regenerator["default"].wrap(function _callee15$(_context15) {
-      while (1) {
-        switch (_context15.prev = _context15.next) {
-          case 0:
-            categoryslug = req.body.categoryslug;
-            _context15.next = 3;
-            return _category["default"].findOne({
-              slug: categoryslug
-            });
-
-          case 3:
-            category = _context15.sent;
-            _context15.next = 6;
-            return _articles["default"].find({
-              category: category.id
-            }).populate('postedBy').populate('category');
-
-          case 6:
-            articles = _context15.sent;
-            payload = {
-              articleList: articles
             };
             return _context15.abrupt("return", res.json({
               "data": payload
             }));
 
-          case 9:
+          case 6:
           case "end":
             return _context15.stop();
         }
@@ -1556,35 +1546,30 @@ router.post('/api/contentlist', /*#__PURE__*/function () {
     return _ref15.apply(this, arguments);
   };
 }());
-router.post('/api/upfollowlist', /*#__PURE__*/function () {
+router.post('/api/contentlist', /*#__PURE__*/function () {
   var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res, next) {
-    var token, user, followers, payload;
+    var categoryslug, category, articles, payload;
     return _regenerator["default"].wrap(function _callee16$(_context16) {
       while (1) {
         switch (_context16.prev = _context16.next) {
           case 0:
-            token = req.body.token; // user token
-
+            categoryslug = req.body.categoryslug;
             _context16.next = 3;
-            return _users["default"].findOne({
-              token: token
+            return _category["default"].findOne({
+              slug: categoryslug
             });
 
           case 3:
-            user = _context16.sent;
+            category = _context16.sent;
             _context16.next = 6;
-            return _users["default"].find({
-              "following.user": {
-                $in: user.id
-              }
-            }).populate("following").sort({
-              createdAt: -1
-            });
+            return _articles["default"].find({
+              category: category.id
+            }).populate('postedBy').populate('category');
 
           case 6:
-            followers = _context16.sent;
+            articles = _context16.sent;
             payload = {
-              list: followers
+              articleList: articles
             };
             return _context16.abrupt("return", res.json({
               "data": payload
@@ -1602,9 +1587,9 @@ router.post('/api/upfollowlist', /*#__PURE__*/function () {
     return _ref16.apply(this, arguments);
   };
 }());
-router.post('/api/savecategory', /*#__PURE__*/function () {
+router.post('/api/upfollowlist', /*#__PURE__*/function () {
   var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee17(req, res, next) {
-    var token, user, categoryList, newList;
+    var token, user, followers, payload;
     return _regenerator["default"].wrap(function _callee17$(_context17) {
       while (1) {
         switch (_context17.prev = _context17.next) {
@@ -1618,9 +1603,55 @@ router.post('/api/savecategory', /*#__PURE__*/function () {
 
           case 3:
             user = _context17.sent;
+            _context17.next = 6;
+            return _users["default"].find({
+              "following.user": {
+                $in: user.id
+              }
+            }).populate("following").sort({
+              createdAt: -1
+            });
+
+          case 6:
+            followers = _context17.sent;
+            payload = {
+              list: followers
+            };
+            return _context17.abrupt("return", res.json({
+              "data": payload
+            }));
+
+          case 9:
+          case "end":
+            return _context17.stop();
+        }
+      }
+    }, _callee17);
+  }));
+
+  return function (_x47, _x48, _x49) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+router.post('/api/savecategory', /*#__PURE__*/function () {
+  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee18(req, res, next) {
+    var token, user, categoryList, newList;
+    return _regenerator["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            token = req.body.token; // user token
+
+            _context18.next = 3;
+            return _users["default"].findOne({
+              token: token
+            });
+
+          case 3:
+            user = _context18.sent;
             categoryList = req.body.categoryList;
             newList = categoryList.split(",");
-            _context17.next = 8;
+            _context18.next = 8;
             return _users["default"].updateOne({
               _id: user._id
             }, {
@@ -1638,46 +1669,6 @@ router.post('/api/savecategory', /*#__PURE__*/function () {
 
           case 8:
           case "end":
-            return _context17.stop();
-        }
-      }
-    }, _callee17);
-  }));
-
-  return function (_x47, _x48, _x49) {
-    return _ref17.apply(this, arguments);
-  };
-}());
-router.post('/api/categories', /*#__PURE__*/function () {
-  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee18(req, res, next) {
-    var token, user, categories, payload;
-    return _regenerator["default"].wrap(function _callee18$(_context18) {
-      while (1) {
-        switch (_context18.prev = _context18.next) {
-          case 0:
-            token = req.body.token; // user token
-
-            _context18.next = 3;
-            return _users["default"].findOne({
-              token: token
-            });
-
-          case 3:
-            user = _context18.sent;
-            _context18.next = 6;
-            return _category["default"].find({});
-
-          case 6:
-            categories = _context18.sent;
-            payload = {
-              categories: categories
-            };
-            return _context18.abrupt("return", res.json({
-              "data": payload
-            }));
-
-          case 9:
-          case "end":
             return _context18.stop();
         }
       }
@@ -1688,9 +1679,9 @@ router.post('/api/categories', /*#__PURE__*/function () {
     return _ref18.apply(this, arguments);
   };
 }());
-router.post('/api/home', /*#__PURE__*/function () {
+router.post('/api/categories', /*#__PURE__*/function () {
   var _ref19 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee19(req, res, next) {
-    var token, user, usercatList, recentlyArticles, authorArcieles, trendingArticles, categories, favoriteCategories, payload;
+    var token, user, categories, payload;
     return _regenerator["default"].wrap(function _callee19$(_context19) {
       while (1) {
         switch (_context19.prev = _context19.next) {
@@ -1704,27 +1695,67 @@ router.post('/api/home', /*#__PURE__*/function () {
 
           case 3:
             user = _context19.sent;
+            _context19.next = 6;
+            return _category["default"].find({});
+
+          case 6:
+            categories = _context19.sent;
+            payload = {
+              categories: categories
+            };
+            return _context19.abrupt("return", res.json({
+              "data": payload
+            }));
+
+          case 9:
+          case "end":
+            return _context19.stop();
+        }
+      }
+    }, _callee19);
+  }));
+
+  return function (_x53, _x54, _x55) {
+    return _ref19.apply(this, arguments);
+  };
+}());
+router.post('/api/home', /*#__PURE__*/function () {
+  var _ref20 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee20(req, res, next) {
+    var token, user, usercatList, recentlyArticles, authorArcieles, trendingArticles, categories, favoriteCategories, payload;
+    return _regenerator["default"].wrap(function _callee20$(_context20) {
+      while (1) {
+        switch (_context20.prev = _context20.next) {
+          case 0:
+            token = req.body.token; // user token
+
+            _context20.next = 3;
+            return _users["default"].findOne({
+              token: token
+            });
+
+          case 3:
+            user = _context20.sent;
             usercatList = user.categoryList;
-            _context19.next = 7;
+            _context20.next = 7;
             return _articles["default"].find({}).populate('category').populate('postedBy').sort('created_at').limit(3);
 
           case 7:
-            recentlyArticles = _context19.sent;
-            _context19.next = 10;
+            recentlyArticles = _context20.sent;
+            _context20.next = 10;
             return _articles["default"].find({}).populate('category').populate('postedBy').sort('created_at').limit(3);
 
           case 10:
-            authorArcieles = _context19.sent;
-            _context19.next = 13;
+            authorArcieles = _context20.sent;
+            _context20.next = 13;
             return _articles["default"].find({}).populate('category').populate('postedBy').sort('created_at').sort('views').limit(3);
 
           case 13:
-            trendingArticles = _context19.sent;
-            _context19.next = 16;
+            trendingArticles = _context20.sent;
+            _context20.next = 16;
             return _category["default"].find({});
 
           case 16:
-            categories = _context19.sent;
+            categories = _context20.sent;
             favoriteCategories = [];
             usercatList.forEach(function (element) {
               categories.forEach(function (item) {
@@ -1739,39 +1770,39 @@ router.post('/api/home', /*#__PURE__*/function () {
               trendings: trendingArticles,
               favoriteCategories: favoriteCategories
             };
-            return _context19.abrupt("return", res.json({
+            return _context20.abrupt("return", res.json({
               "data": payload
             }));
 
           case 21:
           case "end":
-            return _context19.stop();
+            return _context20.stop();
         }
       }
-    }, _callee19);
+    }, _callee20);
   }));
 
-  return function (_x53, _x54, _x55) {
-    return _ref19.apply(this, arguments);
+  return function (_x56, _x57, _x58) {
+    return _ref20.apply(this, arguments);
   };
 }());
 router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref20 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee20(req, res, next) {
+  var _ref21 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee21(req, res, next) {
     var perPage, page, count, data, datacategory, datauser, random, popular, result_count, search_payload, searchkey, new_count;
-    return _regenerator["default"].wrap(function _callee20$(_context20) {
+    return _regenerator["default"].wrap(function _callee21$(_context21) {
       while (1) {
-        switch (_context20.prev = _context20.next) {
+        switch (_context21.prev = _context21.next) {
           case 0:
-            _context20.prev = 0;
+            _context21.prev = 0;
 
             if (!req.query.q) {
-              _context20.next = 39;
+              _context21.next = 39;
               break;
             }
 
             perPage = 3;
             page = req.query.page || 1;
-            _context20.next = 6;
+            _context21.next = 6;
             return _articles["default"].countDocuments({
               active: true,
               $or: [{
@@ -1788,8 +1819,8 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             });
 
           case 6:
-            count = _context20.sent;
-            _context20.next = 9;
+            count = _context21.sent;
+            _context21.next = 9;
             return _articles["default"].find({
               active: true,
               $or: [{
@@ -1808,8 +1839,8 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             });
 
           case 9:
-            data = _context20.sent;
-            _context20.next = 12;
+            data = _context21.sent;
+            _context21.next = 12;
             return _category["default"].find({
               name: {
                 $regex: req.query.q,
@@ -1820,8 +1851,8 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             });
 
           case 12:
-            datacategory = _context20.sent;
-            _context20.next = 15;
+            datacategory = _context21.sent;
+            _context21.next = 15;
             return _users["default"].find({
               active: true,
               username: {
@@ -1833,8 +1864,8 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             });
 
           case 15:
-            datauser = _context20.sent;
-            _context20.next = 18;
+            datauser = _context21.sent;
+            _context21.next = 18;
             return _articles["default"].aggregate([{
               $match: {
                 active: true
@@ -1864,14 +1895,14 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             }]);
 
           case 18:
-            random = _context20.sent;
-            _context20.next = 21;
+            random = _context21.sent;
+            _context21.next = 21;
             return _articles["default"].find({}).populate("category").populate("postedBy").sort({
               views: -1
             }).limit(3);
 
           case 21:
-            popular = _context20.sent;
+            popular = _context21.sent;
             result_count = false;
 
             if (data.length == 0 && datacategory.length == 0 && datauser.length == 0) {
@@ -1884,22 +1915,22 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
               date: new Date(),
               noresult: result_count
             };
-            _context20.next = 27;
+            _context21.next = 27;
             return _searchkey["default"].findOne({
               keystring: req.query.q
             });
 
           case 27:
-            searchkey = _context20.sent;
+            searchkey = _context21.sent;
 
             if (!searchkey) {
-              _context20.next = 36;
+              _context21.next = 36;
               break;
             }
 
             new_count = parseInt(searchkey.count) + 1;
             console.log(new_count);
-            _context20.next = 33;
+            _context21.next = 33;
             return _searchkey["default"].updateOne({
               _id: searchkey.id
             }, {
@@ -1917,7 +1948,7 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
               random: random,
               popular: popular
             });
-            _context20.next = 37;
+            _context21.next = 37;
             break;
 
           case 36:
@@ -1935,48 +1966,48 @@ router.get('/search', _install["default"].redirectToLogin, /*#__PURE__*/function
             });
 
           case 37:
-            _context20.next = 40;
+            _context21.next = 40;
             break;
 
           case 39:
             res.render('404');
 
           case 40:
-            _context20.next = 45;
+            _context21.next = 45;
             break;
 
           case 42:
-            _context20.prev = 42;
-            _context20.t0 = _context20["catch"](0);
-            next(_context20.t0);
+            _context21.prev = 42;
+            _context21.t0 = _context21["catch"](0);
+            next(_context21.t0);
 
           case 45:
           case "end":
-            return _context20.stop();
+            return _context21.stop();
         }
       }
-    }, _callee20, null, [[0, 42]]);
+    }, _callee21, null, [[0, 42]]);
   }));
 
-  return function (_x56, _x57, _x58) {
-    return _ref20.apply(this, arguments);
+  return function (_x59, _x60, _x61) {
+    return _ref21.apply(this, arguments);
   };
 }());
 router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref21 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee21(req, res, next) {
+  var _ref22 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee22(req, res, next) {
     var user, featured, ip, payload, perPage, page, article, count;
-    return _regenerator["default"].wrap(function _callee21$(_context21) {
+    return _regenerator["default"].wrap(function _callee22$(_context22) {
       while (1) {
-        switch (_context21.prev = _context21.next) {
+        switch (_context22.prev = _context22.next) {
           case 0:
-            _context21.next = 2;
+            _context22.next = 2;
             return _users["default"].findOne({
               usernameslug: req.params.usernameslug
             });
 
           case 2:
-            user = _context21.sent;
-            _context21.next = 5;
+            user = _context22.sent;
+            _context22.next = 5;
             return _articles["default"].aggregate([{
               $match: {
                 addToFeatured: true,
@@ -2022,15 +2053,15 @@ router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PU
             }]);
 
           case 5:
-            featured = _context21.sent;
+            featured = _context22.sent;
 
             if (user) {
-              _context21.next = 10;
+              _context22.next = 10;
               break;
             }
 
             res.render('404');
-            _context21.next = 23;
+            _context22.next = 23;
             break;
 
           case 10:
@@ -2039,7 +2070,7 @@ router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PU
               ip: ip,
               date: new Date()
             };
-            _context21.next = 14;
+            _context22.next = 14;
             return _users["default"].updateOne({
               _id: user.id
             }, {
@@ -2051,7 +2082,7 @@ router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PU
           case 14:
             perPage = 9;
             page = req.query.page || 1;
-            _context21.next = 18;
+            _context22.next = 18;
             return _articles["default"].find({
               active: true,
               postedBy: user._id
@@ -2060,15 +2091,15 @@ router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PU
             });
 
           case 18:
-            article = _context21.sent;
-            _context21.next = 21;
+            article = _context22.sent;
+            _context22.next = 21;
             return _articles["default"].countDocuments({
               active: true,
               postedBy: user._id
             });
 
           case 21:
-            count = _context21.sent;
+            count = _context22.sent;
             res.render('author', {
               author: user,
               article: article,
@@ -2078,26 +2109,6 @@ router.get('/author/:usernameslug', _install["default"].redirectToLogin, /*#__PU
             });
 
           case 23:
-          case "end":
-            return _context21.stop();
-        }
-      }
-    }, _callee21);
-  }));
-
-  return function (_x59, _x60, _x61) {
-    return _ref21.apply(this, arguments);
-  };
-}());
-router.get('/vision', _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref22 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee22(req, res, next) {
-    return _regenerator["default"].wrap(function _callee22$(_context22) {
-      while (1) {
-        switch (_context22.prev = _context22.next) {
-          case 0:
-            res.render('vision');
-
-          case 1:
           case "end":
             return _context22.stop();
         }
@@ -2109,13 +2120,13 @@ router.get('/vision', _install["default"].redirectToLogin, /*#__PURE__*/function
     return _ref22.apply(this, arguments);
   };
 }());
-router.get('/membership', /*#__PURE__*/function () {
+router.get('/vision', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref23 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee23(req, res, next) {
     return _regenerator["default"].wrap(function _callee23$(_context23) {
       while (1) {
         switch (_context23.prev = _context23.next) {
           case 0:
-            res.render('membership');
+            res.render('vision');
 
           case 1:
           case "end":
@@ -2129,56 +2140,15 @@ router.get('/membership', /*#__PURE__*/function () {
     return _ref23.apply(this, arguments);
   };
 }());
-router.post('/reset-password', /*#__PURE__*/function () {
+router.get('/membership', /*#__PURE__*/function () {
   var _ref24 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee24(req, res, next) {
-    var user, payload;
     return _regenerator["default"].wrap(function _callee24$(_context24) {
       while (1) {
         switch (_context24.prev = _context24.next) {
           case 0:
-            _context24.next = 2;
-            return _users["default"].findOne({
-              email: req.body.email
-            });
+            res.render('membership');
 
-          case 2:
-            user = _context24.sent;
-
-            if (req.body.email) {
-              _context24.next = 7;
-              break;
-            }
-
-            req.flash("error_msg", "Please enter your email!");
-            _context24.next = 15;
-            break;
-
-          case 7:
-            if (!(user == null)) {
-              _context24.next = 11;
-              break;
-            }
-
-            req.flash("error_msg", "I am sorry. User Doesn't exist!");
-            _context24.next = 15;
-            break;
-
-          case 11:
-            req.flash("success_msg", "Please check your email.");
-            payload = {
-              username: user.firstName,
-              siteLink: res.locals.siteLink,
-              token: user.token
-            };
-            _context24.next = 15;
-            return (0, _mail2["default"])("Passwort-Änderung erfolgreich", user.email, "reset-password-email", payload, req.headers.host, function (err, info) {
-              if (err) console.log(err);
-            });
-
-          case 15:
-            res.redirect("back");
-
-          case 16:
+          case 1:
           case "end":
             return _context24.stop();
         }
@@ -2189,23 +2159,57 @@ router.post('/reset-password', /*#__PURE__*/function () {
   return function (_x68, _x69, _x70) {
     return _ref24.apply(this, arguments);
   };
-}()); // This is the password - reset part.
-// Currently password encryption is not working.
-
-router.get('/password-reset', /*#__PURE__*/function () {
+}());
+router.post('/reset-password', /*#__PURE__*/function () {
   var _ref25 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee25(req, res, next) {
-    var token;
+    var user, payload;
     return _regenerator["default"].wrap(function _callee25$(_context25) {
       while (1) {
         switch (_context25.prev = _context25.next) {
           case 0:
-            // user token
-            token = req.query.token;
-            res.render('password-reset', {
-              token: token
+            _context25.next = 2;
+            return _users["default"].findOne({
+              email: req.body.email
             });
 
           case 2:
+            user = _context25.sent;
+
+            if (req.body.email) {
+              _context25.next = 7;
+              break;
+            }
+
+            req.flash("error_msg", "Please enter your email!");
+            _context25.next = 15;
+            break;
+
+          case 7:
+            if (!(user == null)) {
+              _context25.next = 11;
+              break;
+            }
+
+            req.flash("error_msg", "I am sorry. User Doesn't exist!");
+            _context25.next = 15;
+            break;
+
+          case 11:
+            req.flash("success_msg", "Please check your email.");
+            payload = {
+              username: user.firstName,
+              siteLink: res.locals.siteLink,
+              token: user.token
+            };
+            _context25.next = 15;
+            return (0, _mail2["default"])("Passwort-Änderung erfolgreich", user.email, "reset-password-email", payload, req.headers.host, function (err, info) {
+              if (err) console.log(err);
+            });
+
+          case 15:
+            res.redirect("back");
+
+          case 16:
           case "end":
             return _context25.stop();
         }
@@ -2216,29 +2220,56 @@ router.get('/password-reset', /*#__PURE__*/function () {
   return function (_x71, _x72, _x73) {
     return _ref25.apply(this, arguments);
   };
-}());
-router.post('/password-save', /*#__PURE__*/function () {
+}()); // This is the password - reset part.
+// Currently password encryption is not working.
+
+router.get('/password-reset', /*#__PURE__*/function () {
   var _ref26 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee26(req, res, next) {
-    var user, newpassword;
+    var token;
     return _regenerator["default"].wrap(function _callee26$(_context26) {
       while (1) {
         switch (_context26.prev = _context26.next) {
           case 0:
-            _context26.next = 2;
+            // user token
+            token = req.query.token;
+            res.render('password-reset', {
+              token: token
+            });
+
+          case 2:
+          case "end":
+            return _context26.stop();
+        }
+      }
+    }, _callee26);
+  }));
+
+  return function (_x74, _x75, _x76) {
+    return _ref26.apply(this, arguments);
+  };
+}());
+router.post('/password-save', /*#__PURE__*/function () {
+  var _ref27 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee27(req, res, next) {
+    var user, newpassword;
+    return _regenerator["default"].wrap(function _callee27$(_context27) {
+      while (1) {
+        switch (_context27.prev = _context27.next) {
+          case 0:
+            _context27.next = 2;
             return _users["default"].findOne({
               token: req.body.token
             });
 
           case 2:
-            user = _context26.sent;
+            user = _context27.sent;
 
             if (!(req.body.password !== req.body.conform)) {
-              _context26.next = 8;
+              _context27.next = 8;
               break;
             }
 
             req.flash("success_msg", "Password Does'nt match");
-            return _context26.abrupt("return", res.redirect('back'));
+            return _context27.abrupt("return", res.redirect('back'));
 
           case 8:
             newpassword = "";
@@ -2263,14 +2294,14 @@ router.post('/password-save', /*#__PURE__*/function () {
 
           case 10:
           case "end":
-            return _context26.stop();
+            return _context27.stop();
         }
       }
-    }, _callee26);
+    }, _callee27);
   }));
 
-  return function (_x74, _x75, _x76) {
-    return _ref26.apply(this, arguments);
+  return function (_x77, _x78, _x79) {
+    return _ref27.apply(this, arguments);
   };
 }());
 module.exports = router;

@@ -76,19 +76,27 @@ router.get("/user/dashboard", _auth["default"], (0, _role["default"])("admin", "
 }());
 router.get("/user/posts/add-new", _auth["default"], (0, _role["default"])("admin", "user"), /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
+    var categories;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            _context2.next = 2;
+            return _category["default"].find({});
+
+          case 2:
+            categories = _context2.sent;
+
             try {
               res.render("./user/add-new-post", {
-                title: "Article - Add new post"
+                title: "Article - Add new post",
+                categories: categories
               });
             } catch (error) {
               next(error);
             }
 
-          case 1:
+          case 4:
           case "end":
             return _context2.stop();
         }

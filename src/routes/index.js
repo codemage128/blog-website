@@ -18,6 +18,7 @@ import Bookmark from "../models/bookmark";
 import SearchKey from "../models/searchkey";
 import _mail from "../helpers/_mail";
 import Media from "../models/media";
+var suggest = require('suggestion');
 
 var fs = require('fs');
 
@@ -663,11 +664,20 @@ router.get('/ourwork', async (req, res, next) => {
 		});
 	}
 });
+router.post('/suggestion', async(req, res, next) =>{
+	let term = req.body.term;
+	console.log(req.body);
+	suggest(term, function(err, suggestions){
+		if (err) throw err;
+		console.log(term);
+		return res.json({'data': suggestions});
+	})
+});
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
+	
 	/** This is the token of the user  */
 	// let users = await User.find({});
-
 	// users.forEach(async user => {
 	// 	console.log(user.token);
 	// 	let token = crypto.randomBytes(16).toString("hex");

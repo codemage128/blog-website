@@ -55,7 +55,8 @@
     "request": "^2.88.0",
     "sitemap": "^6.1.5",
     "sitemap-generator": "^8.4.2",
-    "stripe": "^8.43.0"
+    "stripe": "^8.43.0",
+    "suggestion": "^2.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
