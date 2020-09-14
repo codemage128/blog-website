@@ -10,8 +10,6 @@ import install from "../helpers/install";
 import Flag from "../models/flag";
 import Bookmark from "../models/bookmark";
 import { json } from "body-parser";
-const edjsHTML = require("editorjs-html");
-const edjsParser = edjsHTML();
 const router = express.Router();
 // Create a new article
 router.post(
@@ -19,50 +17,10 @@ router.post(
   install.redirectToLogin,
   auth,
   async (req, res, next) => {
-    let receive = JSON.parse(req.body.data);
-    let data = receive.blocks;
-    let article_title;
-    data.forEach(block => {
-      switch (block.type) {
-        case "header":
-          if (block.data.level == 1) {
-            article_title = block.data.text;
-          }
-          break;
-      }
-    });
-    let search = await Article.find({ title: article_title });
-    let real = search !== ""
-      ? article_title
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-") +
-      "-" +
-      search.length
-      : article_title
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-");
-    let array = real.split('');
-    array.forEach((element, index) => {
-      if (element == "ß") {
-        array[index] = "ss";
-      }
-      if (element == "ö") { array[index] = "oe"; }
-      if (element == "ä") { array[index] = "ae"; }
-      if (element == "ü") { array[index] = "ue"; }
-    });
-    let articleslug = array.join("");
-
-    let slug = await Article.findOne({ slug: articleslug });
+    
+    let search = await Article.find({ title: req.body.title });
+    let slug = await Article.findOne({ slug: req.body.slug });
+    
     // let content = req.body.body;
     // let textLength = content.split(/\s/g).length;
     let set = await Settings.findOne();
@@ -87,39 +45,360 @@ router.post(
       "Dec"
     ];
     try {
-      console.log(receive);
-      let parse = edjsParser.parse(receive);
-      let html = "";
-      parse.forEach(element => {
-        html = html + element;
-      })
-      console.log(html);
-      let payload1 = {
-        week: `${newDate.getWeek()}`,
-        month: `${months[newDate.getMonth()]}`,
-        year: `${newDate.getFullYear()}`,
-        title: article_title,
-        body: html,
-        summary: req.body.summary.trim(),
-        short: htmlToText.fromString(html, {
-          wordwrap: false
-        }),
-        slug: articleslug,
-        category: req.body.category,
-        // file: req.body.file,
-        postedBy: req.user.id,
-        postType: "post",
-      };
-      payload1.active = true;
-      Article.create(payload1)
-        .then(created => {
-          // req.flash(
-          //   "success_msg",
-          //   "New article has been posted successfully"
-          // );
-          return res.redirect("back");
-        })
-        .catch(e => next(e));
+      switch (req.body.postType) {
+        case "post":
+          req.assert("title", "Title Field cannot be left blank").notEmpty();
+          req.assert("category", "Please select a category").notEmpty();
+          const errors = req.validationErrors();
+
+          let summary = req.body.summary.trim();
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (re.test(summary)) {
+            req.flash("success_msg", `Summary can't include the email address`);
+            return res.redirect(`back`);
+          }
+          var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+          if (expression.test(summary)) {
+            req.flash("success_msg", `Summary can't include the Link`);
+            return res.redirect(`back`);
+          }
+          if (errors) {
+            req.flash("success_msg", `${errors[0].msg}`);
+            return res.redirect(`back`);
+          }
+          if (slug) {
+            req.flash(
+              "success_msg",
+              "That slug has been used, pls used another slug or just leave the field empty"
+            );
+            return res.redirect("back");
+          }
+          if (textLength < 200) {
+            req.flash(
+              "success_msg",
+              "Das sieht doch garnicht mal so schlecht aus! Dennoch solltest du mindestens 200 Wörter schreiben, um deinen Lesern einen Mehrwert zu bieten"
+            );
+            return res.redirect("back");
+          }
+
+          let real = req.body.slug
+            ? req.body.slug
+              .trim()
+              .toLowerCase()
+              .split("?")
+              .join("")
+              .split(" ")
+              .join("-")
+              .replace(new RegExp("/", "g"), "-")
+            : search !== ""
+              ? req.body.title
+                .trim()
+                .toLowerCase()
+                .split("?")
+                .join("")
+                .split(" ")
+                .join("-")
+                .replace(new RegExp("/", "g"), "-") +
+              "-" +
+              search.length
+              : req.body.title
+                .trim()
+                .toLowerCase()
+                .split("?")
+                .join("")
+                .split(" ")
+                .join("-")
+                .replace(new RegExp("/", "g"), "-");
+
+          let array = real.split('');
+          array.forEach((element, index) => {
+            if (element == "ß") {
+              array[index] = "ss";
+            }
+            if (element == "ö") { array[index] = "oe"; }
+            if (element == "ä") { array[index] = "ae"; }
+            if (element == "ü") { array[index] = "ue"; }
+          });
+          let articleslug = array.join("");
+          let payload1 = {
+            week: `${newDate.getWeek()}`,
+            month: `${months[newDate.getMonth()]}`,
+            year: `${newDate.getFullYear()}`,
+            title: req.body.title.trim(),
+            metatitle: req.body.metatitle,
+            metadescription: req.body.metadescription,
+            body: req.body.body.trim(),
+            summary: req.body.summary.trim(),
+            keywords: "",
+            short: htmlToText.fromString(req.body.body, {
+              wordwrap: false
+            }),
+            slug: articleslug,
+            tags: !req.body.tags ? undefined : req.body.tags.split(","),
+            category: req.body.category,
+            subCategory: req.body.subCategory,
+            file: req.body.file,
+            postedBy: req.user.id,
+            postType: req.body.postType,
+            showPostOnSlider: !req.body.showPostOnSlider
+              ? false
+              : req.body.showPostOnSlider
+                ? true
+                : false,
+            addToNoIndex: !req.body.addToNoIndex
+              ? false
+              : req.body.addToNoIndex
+                ? true
+                : false,
+            addToFeatured: !req.body.addToFeatured
+              ? false
+              : req.body.addToFeatured
+                ? true
+                : false,
+            addToBreaking: !req.body.addToBreaking
+              ? true
+              : req.body.addToBreaking
+                ? true
+                : false,
+            addToRecommended: !req.body.addToRecommended ? false : true,
+            showOnlyToRegisteredUsers: !req.body.showOnlyToRegisteredUsers
+              ? false
+              : true
+          };
+          payload1.active = !req.body.status
+            ? true
+            : req.body.status == "activate"
+              ? true
+              : false;
+          // if (req.user.roleId == "admin") {
+          // } else {
+          //   payload1.active = set.approveAddedUserPost == false ? false : true;
+          // }
+          Article.create(payload1)
+            .then(created => {
+              req.flash(
+                "success_msg",
+                "New article has been posted successfully"
+              );
+              return res.redirect("back");
+            })
+            .catch(e => next(e));
+          break;
+        case "audio":
+          req.assert("title", "Title Field cannot be left blank").notEmpty();
+          req.assert("category", "Please select a category").notEmpty();
+          const errors2 = req.validationErrors();
+          if (errors2) {
+            req.flash("success_msg", `${errors2[0].msg}`);
+            return res.redirect(`back`);
+          }
+          if (slug) {
+            req.flash(
+              "success_msg",
+              "That slug has been used, pls used another slug or just leave the field empty"
+            );
+            return res.redirect("back");
+          }
+          let payload = {
+            week: `${newDate.getWeek()}`,
+            month: `${months[newDate.getMonth()]}`,
+            year: `${newDate.getFullYear()}`,
+            title: req.body.title.trim(),
+            body: req.body.body.trim(),
+            summary: req.body.summary.trim(),
+            keywords: req.body.keywords.trim(),
+            short: htmlToText.fromString(req.body.body, {
+              wordwrap: false
+            }),
+            slug: req.body.slug
+              ? req.body.slug
+                .trim()
+                .toLowerCase()
+                .split("?")
+                .join("")
+                .split(" ")
+                .join("-")
+                .replace(new RegExp("/", "g"), "-")
+              : search !== ""
+                ? req.body.title
+                  .trim()
+                  .toLowerCase()
+                  .split("?")
+                  .join("")
+                  .split(" ")
+                  .join("-")
+                  .replace(new RegExp("/", "g"), "-") +
+                "-" +
+                search.length
+                : req.body.title
+                  .trim()
+                  .toLowerCase()
+                  .split("?")
+                  .join("")
+                  .split(" ")
+                  .join("-")
+                  .replace(new RegExp("/", "g"), "-"),
+            tags: !req.body.tags ? undefined : req.body.tags.split(","),
+            category: req.body.category,
+            subCategory: req.body.subCategory,
+            file: req.body.file,
+            postedBy: req.user.id,
+            postType: req.body.postType,
+            active: !req.body.status
+              ? true
+              : req.body.status == "activate"
+                ? true
+                : false,
+            showPostOnSlider: !req.body.showPostOnSlider
+              ? true
+              : req.body.showPostOnSlider
+                ? true
+                : false,
+            addToFeatured: !req.body.addToFeatured
+              ? false
+              : req.body.addToFeatured
+                ? true
+                : false,
+            addToBreaking: !req.body.addToBreaking
+              ? true
+              : req.body.addToBreaking
+                ? true
+                : false,
+            addToRecommended: !req.body.addToRecommended ? false : true,
+            showOnlyToRegisteredUsers: !req.body.showOnlyToRegisteredUsers
+              ? false
+              : true,
+            audioFile: req.body.audioFile,
+            download: req.body.download ? true : false
+          };
+          if (req.user.roleId == "admin") {
+            payload.active = !req.body.status
+              ? true
+              : req.body.status == "activate"
+                ? true
+                : false;
+          } else {
+            payload.active = set.approveAddedUserPost == false ? false : true;
+          }
+          Article.create(payload)
+            .then(created => {
+              req.flash(
+                "success_msg",
+                "New Audio has been posted successfully"
+              );
+              return res.redirect("back");
+            })
+            .catch(e => next(e));
+          break;
+        case "video":
+          req.assert("title", "Title Field cannot be left blank").notEmpty();
+          req.assert("category", "Please select a category").notEmpty();
+          const errors3 = req.validationErrors();
+          if (errors3) {
+            req.flash("success_msg", `${errors3[0].msg}`);
+            return res.redirect(`back`);
+          }
+          if (slug) {
+            req.flash(
+              "success_msg",
+              "That slug has been used, pls used another slug or just leave the field empty"
+            );
+            return res.redirect("back");
+          }
+          let payload2 = {
+            week: `${newDate.getWeek()}`,
+            month: `${months[newDate.getMonth()]}`,
+            year: `${newDate.getFullYear()}`,
+            title: req.body.title.trim(),
+            body: req.body.body.trim(),
+            summary: req.body.summary.trim(),
+            keywords: req.body.keywords.trim(),
+            short: htmlToText.fromString(req.body.body, {
+              wordwrap: false
+            }),
+            slug: req.body.slug
+              ? req.body.slug
+                .trim()
+                .toLowerCase()
+                .split("?")
+                .join("")
+                .split(" ")
+                .join("-")
+                .replace(new RegExp("/", "g"), "-")
+              : search !== ""
+                ? req.body.title
+                  .trim()
+                  .toLowerCase()
+                  .split("?")
+                  .join("")
+                  .split(" ")
+                  .join("-")
+                  .replace(new RegExp("/", "g"), "-") +
+                "-" +
+                search.length
+                : req.body.title
+                  .trim()
+                  .toLowerCase()
+                  .split("?")
+                  .join("")
+                  .split(" ")
+                  .join("-")
+                  .replace(new RegExp("/", "g"), "-"),
+            tags: !req.body.tags ? undefined : req.body.tags.split(","),
+            category: req.body.category,
+            subCategory: req.body.subCategory,
+            file: req.body.file,
+            postedBy: req.user.id,
+            postType: req.body.postType,
+            active: !req.body.status
+              ? true
+              : req.body.status == "activate"
+                ? true
+                : false,
+            showPostOnSlider: !req.body.showPostOnSlider
+              ? true
+              : req.body.showPostOnSlider
+                ? true
+                : false,
+            addToFeatured: !req.body.addToFeatured
+              ? false
+              : req.body.addToFeatured
+                ? true
+                : false,
+            addToBreaking: !req.body.addToBreaking
+              ? true
+              : req.body.addToBreaking
+                ? true
+                : false,
+            addToRecommended: !req.body.addToRecommended ? false : true,
+            showOnlyToRegisteredUsers: !req.body.showOnlyToRegisteredUsers
+              ? false
+              : true,
+            videoFile: req.body.videoFile,
+            videoType: req.body.videoType
+          };
+          if (req.user.roleId == "admin") {
+            payload2.active = !req.body.status
+              ? true
+              : req.body.status == "activate"
+                ? true
+                : false;
+          } else {
+            payload2.active = set.approveAddedUserPost == false ? false : true;
+          }
+          Article.create(payload2)
+            .then(created => {
+              req.flash(
+                "success_msg",
+                "New Video has been posted successfully"
+              );
+              return res.redirect("back");
+            })
+            .catch(e => next(e));
+          break;
+        default:
+          break;
+      }
     } catch (error) {
       next(error);
     }
@@ -310,7 +589,7 @@ router.post(
   }
 );
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
-
+  
   try {
     let settings = await Settings.findOne();
     let user = req.params.user;
@@ -461,7 +740,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         .sort({ createdAt: -1 })
         .limit(12);
       var _length = await Article.find({
-        active: true,
+        active:true,
         slug: { $ne: article[0].slug }
       });
       var r = Math.floor(Math.random() * _length.length);
@@ -488,7 +767,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         }
       })
       if (indexof !== -1) {
-        let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+        let view_article = await Article.findOne({slug: req.params.slug.trim()}).populate("postedBy").populate('category');
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -522,7 +801,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           { $push: { viewers: payload } }
         );
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
-        let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+        let view_article = await Article.findOne({slug: req.params.slug.trim()}).populate("postedBy").populate('category');
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,

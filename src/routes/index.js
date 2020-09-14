@@ -20,6 +20,12 @@ import _mail from "../helpers/_mail";
 import Media from "../models/media";
 var suggest = require('suggestion');
 
+import fetch from 'node-fetch';
+global.fetch = fetch;
+import Unsplash, { toJson } from 'unsplash-js';
+
+const unsplash = new Unsplash({ accessKey: 'JXcFFxGc15kxH4uwDzWo9pwEsmQximrt0AHF1ee-0RM' });
+
 var fs = require('fs');
 
 const { SitemapStream, streamToPromise } = require('sitemap')
@@ -664,18 +670,34 @@ router.get('/ourwork', async (req, res, next) => {
 		});
 	}
 });
-router.post('/suggestion', async(req, res, next) =>{
+router.post('/unsplash-search', async (req, res, next) => {
+	let searchKey = req.body.searchKey;
+	let page = req.body.page;
+	page = parseInt(page) + 1;
+	unsplash.search.photos(searchKey, page, 30, {orderBy:"relevant", lang: 'en' })
+		.then(toJson)
+		.then(json => {
+			// Your code
+			var data = {
+				page: page,
+				data: json
+			}
+			return res.json(data);
+		});
+});
+
+router.post('/suggestion', async (req, res, next) => {
 	let term = req.body.term;
 	console.log(req.body);
-	suggest(term, function(err, suggestions){
+	suggest(term, function (err, suggestions) {
 		if (err) throw err;
 		console.log(term);
-		return res.json({'data': suggestions});
+		return res.json({ 'data': suggestions });
 	})
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
-	
+
 	/** This is the token of the user  */
 	// let users = await User.find({});
 	// users.forEach(async user => {
