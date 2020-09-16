@@ -1,3 +1,12 @@
+var article_content = JSON.parse($('#article_content').val());
+var article_summary = $('#article_summary').val();
+$('#article_content').hide();
+$('#article_summary').hide();
+$('#article_category_id').hide();
+
+$('#summary_modal').val(article_summary);
+$('#category').val($('#article_category_id').val());
+
 var editor = new EditorJS({
    holder: 'editor',
    tools: {
@@ -68,27 +77,7 @@ var editor = new EditorJS({
    },
    //data
    data: {
-      blocks: [
-         {
-            type: "header",
-            data: {
-               level: 1
-            }
-         }
-         // {
-         //    type: "header",
-         //    data: {
-         //       text: "🖐Erzähle eine Geschichte!",
-         //       level: 1,
-         //    }
-         // },
-         // {
-         //    type: 'paragraph',
-         //    data: {
-         //       text: 'Strukturiere deinen Beitrag so, damit er für den Leser leicht verständlich ist. Verwende Fotos 🤑, Emojis 😍 und Gifs um den Lesern ein emotionsgeladenes und abwechslungsreiches Leseerlebnis zu bescheren. Im Menü findest du zahlreiche Features um die Größe der Schrift anzupassen und sie kursiv, fett oder unterstrichen zu gestalten. Darüber hinaus kannst du an geeigneten Stellen ausgehende Verlinkungen 🍽 hinzufügen. Ausgehende Links verbessern das Leseerlebnis und somit auch die Reichweite deines Beitrags. Lege gleich los! 😗',
-         //    }
-         // },
-      ]
+      blocks: article_content
    },
    onReady: function () {
    },
@@ -96,6 +85,7 @@ var editor = new EditorJS({
 
    }
 });
+
 $('#publish').click(function () {
    editor.save().then((savedData) => {
       var data = JSON.stringify(savedData);
@@ -107,14 +97,12 @@ $('#publish').click(function () {
          $('#post-err').modal({});
       } else {
          $('#data').val(data);
-
          $('#post-summary').modal({});
       }
    });
 })
 $('#publish-submit').click(function () {
    var words = $('#summary_modal').val().match(/\S+/g).length;
-
    // if (words < 30) {
    //    $('.summary-error').show();
    // } else {
@@ -229,12 +217,12 @@ $('#searchImage').click(function () {
 // $('#emojionearea').emojioneArea({
 //    pickerPosition: "bottom"
 // });
-var postenable = "<%= user.postenable%>";
-if (!postenable) {
-   $('#post-enable').modal({ backdrop: 'static', keyboard: false });
-} else {
-   $('#post-policy').modal({});
-}
+// var postenable = "<%= user.postenable%>";
+// if (!postenable) {
+//    $('#post-enable').modal({ backdrop: 'static', keyboard: false });
+// } else {
+//    $('#post-policy').modal({});
+// }
 $('#darkmode').click(function () {
    if ($(this).prop('checked') == true) {
       //dark node

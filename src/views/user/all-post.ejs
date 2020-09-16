@@ -199,6 +199,7 @@
                                 <th>Datum</th>
                                 <th>Status</th>
                                 <th>Qualifizierungsstatus</th>
+                                <th>View</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -220,7 +221,7 @@
                                     <% if(article[key].active== true){ %>
                                     <span class="badge badge-success">Veröffentlicht</span>
                                     <%} else { %>
-                                    <span class="badge badge-danger">Inactive</span>
+                                    <span class="badge badge-danger">Draft</span>
                                     <% } %>
                                 </td>
                                 <td>
@@ -239,6 +240,9 @@
                                     <% if(article[key].qualify == "declined"){ %>
                                     <span class="badge badge-danger">Declined</span>
                                     <% } %>
+                                </td>
+                                <td>
+                                    <a href="/p/<%= article[key].category.slug%>/<%= article[key].slug%>" target="_blank" class="btn btn-primary btn-sm" >View ArtiKel</a>
                                 </td>
                             </tr>
                             <% } %>

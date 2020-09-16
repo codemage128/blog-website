@@ -21,16 +21,29 @@ router.post(
   async (req, res, next) => {
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
-    let article_title;
+    let user = await User.findById({ _id: req.user.id });
+    let article_title = "";
     data.forEach(block => {
       switch (block.type) {
         case "header":
+          console.log(block.data.level);
           if (block.data.level == 1) {
             article_title = block.data.text;
           }
           break;
       }
     });
+    if(article_title == ""){
+      req.flash(
+        "success_msg",
+        "You have to create the title!"
+      );
+      if (user.roleId == "user") {
+        return res.redirect("/user/all-posts");
+      } else {
+        return res.redirect("/admin/all-posts");
+      }
+    }
     let search = await Article.find({ title: article_title });
     let real = search !== ""
       ? article_title
@@ -62,7 +75,6 @@ router.post(
     });
     let articleslug = array.join("");
 
-    let slug = await Article.findOne({ slug: articleslug });
     // let content = req.body.body;
     // let textLength = content.split(/\s/g).length;
     let set = await Settings.findOne();
@@ -87,19 +99,17 @@ router.post(
       "Dec"
     ];
     try {
-      console.log(receive);
       let parse = edjsParser.parse(receive);
       let html = "";
       parse.forEach(element => {
         html = html + element;
       })
-      console.log(html);
       let payload1 = {
         week: `${newDate.getWeek()}`,
         month: `${months[newDate.getMonth()]}`,
         year: `${newDate.getFullYear()}`,
         title: article_title,
-        body: html,
+        body: JSON.stringify(data),
         summary: req.body.summary.trim(),
         short: htmlToText.fromString(html, {
           wordwrap: false
@@ -113,11 +123,16 @@ router.post(
       payload1.active = true;
       Article.create(payload1)
         .then(created => {
-          // req.flash(
-          //   "success_msg",
-          //   "New article has been posted successfully"
-          // );
-          return res.redirect("back");
+          console.log(user.roleId);
+          req.flash(
+            "success_msg",
+            "New article has been posted successfully"
+          );
+          if (user.roleId == "user") {
+            return res.redirect("/user/all-posts");
+          } else {
+            return res.redirect("/admin/all-posts");
+          }
         })
         .catch(e => next(e));
     } catch (error) {
@@ -130,86 +145,93 @@ router.post(
 router.post(
   "/article/edit",
   install.redirectToLogin,
-  auth,
-  (req, res, next) => {
+  auth, async (req, res, next) => {
     try {
-      let content = req.body.body;
-      let textLength = content.split(/\s/g).length;
-      if (textLength < 200) {
-        req.flash(
-          "success_msg",
-          "Das sieht doch garnicht mal so schlecht aus! Dennoch solltest du mindestens 200 Wörter schreiben, um deinen Lesern einen Mehrwert zu bieten"
-        );
-        return res.redirect("back");
-      }
-      req.body.tags ? (req.body.tags = req.body.tags.split(",")) : undefined;
-      req.body.showPostOnSlider = req.body.showPostOnSlider ? true : false;
-      req.body.addToNoIndex = req.body.addToNoIndex ? true : false;
-      req.body.addToFeatured = req.body.addToFeatured ? true : false;
-      req.body.addToBreaking = req.body.addToBreaking ? true : false;
-      req.body.addToRecommended = !req.body.addToRecommended ? false : true;
-      req.body.short = htmlToText.fromString(req.body.body, {
+      let receive = JSON.parse(req.body.data);
+      let data = receive.blocks;
+      let user = await User.findById({ _id: req.user.id });
+      let article_title;
+      data.forEach(block => {
+        switch (block.type) {
+          case "header":
+            console.log(block.data.level);
+            if (block.data.level == 1) {
+              article_title = block.data.text;
+            }
+            break;
+        }
+      });
+      let search = await Article.find({ title: article_title });
+      let real = search !== ""
+        ? article_title
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-") +
+        "-" +
+        search.length
+        : article_title
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-");
+      let array = real.split('');
+      array.forEach((element, index) => {
+        if (element == "ß") {
+          array[index] = "ss";
+        }
+        if (element == "ö") { array[index] = "oe"; }
+        if (element == "ä") { array[index] = "ae"; }
+        if (element == "ü") { array[index] = "ue"; }
+      });
+      let articleslug = array.join("");
+      console.log(req.body)
+      // let content = req.body.body;
+      // let textLength = content.split(/\s/g).length;
+      // if (textLength < 200) {
+      //   req.flash(
+      //     "success_msg",
+      //     "Das sieht doch garnicht mal so schlecht aus! Dennoch solltest du mindestens 200 Wörter schreiben, um deinen Lesern einen Mehrwert zu bieten"
+      //   );
+      //   return res.redirect("back");
+      // }
+      let parse = edjsParser.parse(receive);
+      let html = "";
+      parse.forEach(element => {
+        html = html + element;
+      })
+      let body = JSON.stringify(data);
+      let short = htmlToText.fromString(html, {
         wordwrap: false
       });
-      req.body.showOnlyToRegisteredUsers = !req.body.showOnlyToRegisteredUsers
-        ? false
-        : true;
-      req.body.postType == "audio"
-        ? (req.body.download = req.body.download ? true : false)
-        : undefined;
-      req.body.postType == "audio"
-        ? (req.body.audioFile = req.body.audioFile)
-        : undefined;
-      req.body.slug = req.body.slug
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-");
-      if (req.user.roleId == "admin") {
-        req.body.active = !req.body.status
-          ? true
-          : req.body.status == "activate"
-            ? true
-            : false;
-      } else {
-        // req.body.active = set.approveUpdatedUserPost == false ? false : true;
-        req.body.active = true;
-      }
-      switch (req.body.postType) {
-        case "post":
-          let date = new Date();
-          Article.updateOne({ _id: req.body.articleId.trim() }, req.body, { updatedAt: date })
-            .then(updated => {
-              req.flash("success_msg", "Article has been updated successfully");
-              if (req.user.roleId == "admin") {
-                return res.redirect(`/dashboard/all-posts/edit/${req.body.slug}`);
-              } else {
-                return res.redirect(`/user/all-posts/edit/${req.body.slug}`);
-              }
-            })
-            .catch(e => next(e));
-          break;
-        case "audio":
-          Article.updateOne({ _id: req.body.articleId.trim() }, req.body)
-            .then(updated => {
-              req.flash("success_msg", "Audio has been updated successfully");
-              return res.redirect(`/dashboard/all-posts/edit/${req.body.slug}`);
-            })
-            .catch(e => next(e));
-          break;
-        case "video":
-          Article.updateOne({ _id: req.body.articleId.trim() }, req.body)
-            .then(updated => {
-              req.flash("success_msg", "Video has been updated successfully");
-              return res.redirect(`/dashboard/all-posts/edit/${req.body.slug}`);
-            })
-            .catch(e => next(e));
-        default:
-          false;
-      }
+
+      // if (req.user.roleId == "admin") {
+      //   req.body.active = !req.body.status
+      //     ? true
+      //     : req.body.status == "activate"
+      //       ? true
+      //       : false;
+      // } else {
+      //   // req.body.active = set.approveUpdatedUserPost == false ? false : true;
+      //   req.body.active = true;
+      // }
+      let date = new Date();
+      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: {title: article_title,slug: articleslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary}})
+        .then(updated => {
+          req.flash("success_msg", "Article has been updated successfully");
+          if (req.user.roleId == "admin") {
+            return res.redirect(`/dashboard/all-posts/`);
+          } else {
+            return res.redirect(`/user/all-posts/`);
+          }
+        })
+        .catch(e => next(e));
     } catch (error) {
       next(error);
     }

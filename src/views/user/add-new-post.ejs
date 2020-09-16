@@ -176,6 +176,8 @@
             </div>
         </li>
         <li class="nav-item">
+            <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche Tipps zur Gestaltung</a>
+            <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
             <button type="button" id="save" class="btn btn-white btn-md">Save</button>
             <button type="button" id="publish" class="btn btn-outline-dark btn-md">Publish</button>
         </li>
@@ -240,7 +242,7 @@
                 </div>
                 <div class="modal-body" style="padding: 20px !important;">
                     <div style="display: none;" class="summary-error alert alert-danger">
-                        Beachte, dass dein Beitrag mindestens 200 Wörter lang sein sollte.
+                        Beachte, dass dein Beitrag mindestens 30 Wörter lang sein sollte.
                     </div>
                     <label>Summary :</label>
                     <textarea id="summary_modal" rows="5" class="form-control"></textarea>
@@ -274,6 +276,7 @@
             </div>
         </div>
     </div>
+    
     <div class="modal fade" id="post-policy" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -325,23 +328,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script><!-- Warning -->
     <script src="https://cdn.jsdelivr.net/npm/editorjs-paragraph-with-alignment@1.0.1"></script><!-- Warning -->
 
-
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script><!-- Inline Code -->
 
     <script src="/js/emojionearea.min.js"></script>
     <script src="/js/editor.js"></script>
     <!-- // infinite scroll -->
-
     <script type="text/javascript">
+        var submitted = false;
 
-        // var submitted = false;
-
-        // window.onbeforeunload = function () {
-        //     if (!submitted) {
-        //         return "Please save article, If you don't save the article, you can lost the article";
-        //     }
-        // }
+        window.onbeforeunload = function () {
+            if (!submitted) {
+                return "Please save article, If you don't save the article, you can lost the article";
+            }
+        }
     </script>
 </body>
 

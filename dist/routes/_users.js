@@ -852,58 +852,64 @@ router.get("/user/useful", _auth["default"], (0, _role["default"])('admin', 'use
 }());
 router.get("/user/all-posts/edit/:slug", _auth["default"], (0, _role["default"])("admin", "user"), /*#__PURE__*/function () {
   var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(req, res, next) {
-    var article, articles;
+    var categories, article, articles;
     return _regenerator["default"].wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
             _context8.prev = 0;
             _context8.next = 3;
+            return _category["default"].find({});
+
+          case 3:
+            categories = _context8.sent;
+            _context8.next = 6;
             return _articles["default"].findOne({
               postedBy: req.user.id,
               slug: req.params.slug
-            }).populate("category");
+            }).populate("category").populate('postedBy');
 
-          case 3:
+          case 6:
             article = _context8.sent;
             if (!article) res.render("404");
-            _context8.next = 7;
+            _context8.next = 10;
             return _articles["default"].find({
               postedBy: req.user._id
             });
 
-          case 7:
+          case 10:
             articles = _context8.sent;
             _context8.t0 = article.postType;
-            _context8.next = _context8.t0 === "post" ? 11 : 13;
+            _context8.next = _context8.t0 === "post" ? 14 : 16;
             break;
 
-          case 11:
+          case 14:
             res.render("./user/edit-post", {
+              categories: categories,
               title: "Edit Post - ".concat(article.title),
               article: article,
               articleCount: articles.length
             });
-            return _context8.abrupt("break", 14);
-
-          case 13:
-            return _context8.abrupt("break", 14);
-
-          case 14:
-            _context8.next = 19;
-            break;
+            return _context8.abrupt("break", 17);
 
           case 16:
-            _context8.prev = 16;
+            return _context8.abrupt("break", 17);
+
+          case 17:
+            _context8.next = 22;
+            break;
+
+          case 19:
+            _context8.prev = 19;
             _context8.t1 = _context8["catch"](0);
             next(_context8.t1);
 
-          case 19:
+          case 22:
           case "end":
             return _context8.stop();
         }
       }
-    }, _callee8, null, [[0, 16]]);
+    }, _callee8, null, [[0, 19]]);
   }));
 
   return function (_x22, _x23, _x24) {

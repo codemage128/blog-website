@@ -72,16 +72,22 @@ var editor = new EditorJS({
          {
             type: "header",
             data: {
-               text: "🖐Erzähle eine Geschichte!",
-               level: 1,
+               level: 1
             }
-         },
-         {
-            type: 'paragraph',
-            data: {
-               text: 'Strukturiere deinen Beitrag so, damit er für den Leser leicht verständlich ist. Verwende Fotos 🤑, Emojis 😍 und Gifs um den Lesern ein emotionsgeladenes und abwechslungsreiches Leseerlebnis zu bescheren. Im Menü findest du zahlreiche Features um die Größe der Schrift anzupassen und sie kursiv, fett oder unterstrichen zu gestalten. Darüber hinaus kannst du an geeigneten Stellen ausgehende Verlinkungen 🍽 hinzufügen. Ausgehende Links verbessern das Leseerlebnis und somit auch die Reichweite deines Beitrags. Lege gleich los! 😗',
-            }
-         },
+         }
+         // {
+         //    type: "header",
+         //    data: {
+         //       text: "🖐Erzähle eine Geschichte!",
+         //       level: 1,
+         //    }
+         // },
+         // {
+         //    type: 'paragraph',
+         //    data: {
+         //       text: 'Strukturiere deinen Beitrag so, damit er für den Leser leicht verständlich ist. Verwende Fotos 🤑, Emojis 😍 und Gifs um den Lesern ein emotionsgeladenes und abwechslungsreiches Leseerlebnis zu bescheren. Im Menü findest du zahlreiche Features um die Größe der Schrift anzupassen und sie kursiv, fett oder unterstrichen zu gestalten. Darüber hinaus kannst du an geeigneten Stellen ausgehende Verlinkungen 🍽 hinzufügen. Ausgehende Links verbessern das Leseerlebnis und somit auch die Reichweite deines Beitrags. Lege gleich los! 😗',
+         //    }
+         // },
       ]
    },
    onReady: function () {
@@ -109,12 +115,14 @@ $('#publish').click(function () {
 $('#publish-submit').click(function () {
    var words = $('#summary_modal').val().match(/\S+/g).length;
 
-   if (words < 30) {
-      $('.summary-error').show();
-   } else {
-      $('#summary').val($('#summary_modal').val());
-      $('#article').submit();
-   }
+   // if (words < 30) {
+   //    $('.summary-error').show();
+   // } else {
+   //    $('#summary').val($('#summary_modal').val());
+   //    $('#article').submit();
+   // }
+   $('#summary').val($('#summary_modal').val());
+   $('#article').submit();
 })
 
 $("#summary_modal").on('keyup', function () {

@@ -18,11 +18,32 @@
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/mdb/css/style.css">
     <link rel="stylesheet" href="/css/upload.css">
+    <link rel="stylesheet" href="/css/emojionearea.min.css">
 
     <link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.2.6/quill.min.js"></script>
 
     <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
         .black-body {
             height: 100%;
             background: black !important;
@@ -32,14 +53,16 @@
         #editor {
             margin-top: 150px;
             line-height: 10px;
+            overflow-y: scroll;
+            height: 80vh;
         }
 
         .ce-toolbar__content {
-            max-width: 70vw;
+            max-width: 60vw;
         }
 
         .ce-block__content {
-            max-width: 70vw;
+            max-width: 60vw;
         }
 
         .codex-editor svg {
@@ -52,35 +75,99 @@
             border-radius: 5px;
         }
 
+        .cdx-simple-image__picture--with-background {
+            background: transparent !important;
+        }
+
+        .cdx-simple-image .cdx-input {
+            text-align: center;
+        }
+
         .ce-paragraph {
             font-size: 1.75em;
         }
+
         h1 {
             font-size: 3em;
         }
+
         h2 {
             font-size: 2.5em;
         }
+
         h3 {
             font-size: 2.25em;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .grid:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        .grid-sizer,
+        .grid-item {
+            /* width: 50%; */
+            /* width: 33.333%; */
+            width: 100%;
+        }
+
+        @media (max-width: 575px) {
+
+            .grid-sizer,
+            .grid-item {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 767px) {
+
+            .grid-sizer,
+            .grid-item {
+                width: 100%;
+            }
+        }
+
+        .grid-item {
+            float: left;
+            padding: 1px;
+        }
+
+        .grid-item img {
+            display: block;
+            max-width: 100%;
+        }
+
+        #image-section {
+            height: 70vh !important;
+            overflow-y: scroll;
         }
     </style>
 </head>
 
 <body>
-    <ul id="header" class="nav justify-content-end white py-3 fixed-top">
+    <ul id="header" class="nav justify-content-end bg-transparent py-3 fixed-top">
         <li class="nav-item">
             <a href="/" class="mx-4">
                 <img id="header-logo-image" src="/images/GOLDEN-PNG.png" style="width: 150px;">
             </a>
         </li>
         <li class="nav-item m-auto" style="width: 15vw;">
-            <select id="category" class="browser-default custom-select">
-                <option></option>
-                <% for(var i = 0; i < categories.length; i ++){%>
-                <option><%= categories[i].name%></option>
-                <% }%>
-            </select>
+            <form action="/article/create" method="post" id="article">
+                <select id="category" name="category" class="browser-default custom-select">
+                    <option value="none"></option>
+                    <% for(var i = 0; i < categories.length; i ++){%>
+                    <option value="<%= categories[i]._id%>"><%= categories[i].name%></option>
+                    <% }%>
+                </select>
+                <input type="hidden" name="data" id="data" />
+                <input type="hidden" name="summary" id="summary" />
+            </form>
         </li>
         <li class="nav-item my-auto">
             <div class="custom-switch mr-3">
@@ -89,12 +176,126 @@
             </div>
         </li>
         <li class="nav-item">
+            <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche Tipps zur Gestaltung</a>
+            <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
             <button type="button" id="save" class="btn btn-white btn-md">Save</button>
             <button type="button" id="publish" class="btn btn-outline-dark btn-md">Publish</button>
         </li>
     </ul>
-    <div class="container" style="height: 100vh;">
-        <div id="editor">
+    <div class="container-fluid" style="height: 100vh;overflow: visible;">
+        <div class="row">
+            <div class="col-lg-9">
+                <div id="editor">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card mr-5" style="margin-top: 150px; background: transparent;">
+                    <div class="card-body">
+                        <!-- Title -->
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter the keyword"
+                                aria-label="Username" id="searchImageKey">
+                            <div class="input-group-prepend">
+                                <button class="input-group-text" type="button" id="searchImage"><i
+                                        class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <!-- Text -->
+                        <input type="hidden" name="page" id="page" />
+                        <!-- <div class="grid" id="image-section">
+                            <div class="grid-sizer"></div>
+                        </div> -->
+                        <div class="row m-1" id="image-section">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="post-enable" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-exclamation-triangle" style="color: chocolate;"></i>&nbsp;&nbsp;Warning
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div class="alert alert-warning">
+                        Du musst dein Profil vervollständigen, um Beiträge zu veröffentlichen.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="/user/profile" class="btn btn-outline-black">Jetzt verifizieren.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="post-summary" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-exclamation-triangle" style="color: green"></i>&nbsp;&nbsp;Info
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div style="display: none;" class="summary-error alert alert-danger">
+                        Beachte, dass dein Beitrag mindestens 30 Wörter lang sein sollte.
+                    </div>
+                    <label>Summary :</label>
+                    <textarea id="summary_modal" rows="5" class="form-control"></textarea>
+                    <span  class="badge badge-pill badge-danger" id="word_left" style="position: absolute;
+                    right: 2vw;
+                    bottom: 14vh;"></span>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-black" id="publish-submit">Publish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="post-err" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-exclamation-triangle" style="color: red;"></i>&nbsp;&nbsp;Error
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div class="alert alert-danger">
+                        You must choose the category.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-black" data-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="post-policy" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 10px !important">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        &nbsp;<i class="fa fa-question-circle" style="color: olivedrab;"></i>&nbsp;&nbsp;Information
+                    </h5>
+                </div>
+                <div class="modal-body" style="padding: 20px !important;">
+                    <div class="alert alert-warning">
+                        Beachte, dass dein Beitrag mindestens 200 Wörter lang sein sollte.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-black" data-dismiss="modal"
+                        aria-label="Close">Continue</button>
+                </div>
+            </div>
         </div>
     </div>
     </script>
@@ -102,6 +303,9 @@
     <script type="text/javascript" src="/mdb/js/popper.min.js"></script>
     <script type="text/javascript" src="/mdb/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
+    <script type="text/javascript" src="/mdb/js/addons/masonry.pkgd.min.js"></script>
+
+    <script type="text/javascript" src="/mdb/js/addons/imagesloaded.pkgd.min.js"></script>
     <script src="/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="/js/vue.min.js"></script>
     <script src="/js/upload.js"></script>
@@ -124,19 +328,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script><!-- Warning -->
     <script src="https://cdn.jsdelivr.net/npm/editorjs-paragraph-with-alignment@1.0.1"></script><!-- Warning -->
 
-
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script><!-- Inline Code -->
+
+    <script src="/js/emojionearea.min.js"></script>
     <script src="/js/editor.js"></script>
+    <!-- // infinite scroll -->
     <script type="text/javascript">
+        var submitted = false;
 
-        // var submitted = false;
-
-        // window.onbeforeunload = function () {
-        //     if (!submitted) {
-        //         return "Please save article, If you don't save the article, you can lost the article";
-        //     }
-        // }
+        window.onbeforeunload = function () {
+            if (!submitted) {
+                return "Please save article, If you don't save the article, you can lost the article";
+            }
+        }
     </script>
 </body>
 

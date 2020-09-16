@@ -35,42 +35,14 @@ var articleSchema = new Schema({
     type: Boolean,
     "default": false
   },
-  showPostOnSlider: {
-    type: Boolean,
-    "default": true
-  },
-  addToNoIndex: {
-    type: Boolean,
-    "default": false
-  },
-  addToFeatured: {
-    type: Boolean,
-    "default": false
-  },
-  addToBreaking: {
-    type: Boolean,
-    "default": true
-  },
-  addToRecommended: {
-    type: Boolean,
-    "default": false
-  },
-  showOnlyToRegisteredUsers: {
-    type: Boolean,
-    "default": false
-  },
   postType: {
     type: String,
     "enum": ["video", "audio", "post"]
   },
   summary: String,
-  keywords: String,
   download: {
     type: Boolean
   },
-  audioFile: String,
-  videoFile: String,
-  videoType: String,
   week: String,
   month: String,
   year: String,
