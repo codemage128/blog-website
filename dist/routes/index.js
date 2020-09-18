@@ -481,7 +481,7 @@ router.use( /*#__PURE__*/function () {
 
 router.get('/blogger-werden', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
-    var categories, official, articlelength, r, random;
+    var categories, official, articlelength, r, random, topCategories;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -518,12 +518,18 @@ router.get('/blogger-werden', _install["default"].redirectToLogin, /*#__PURE__*/
 
           case 13:
             random = _context2.sent;
+            _context2.next = 16;
+            return _category["default"].find({}).limit(6);
+
+          case 16:
+            topCategories = _context2.sent;
             res.render('index', {
               categories: categories,
-              random: random
+              random: random,
+              topCategories: topCategories
             });
 
-          case 15:
+          case 18:
           case "end":
             return _context2.stop();
         }
@@ -1288,7 +1294,7 @@ router.post('/suggestion', /*#__PURE__*/function () {
 
 router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
-    var users, categories, official, articlelength, r, random, articles, result;
+    var users, categories, official, articlelength, r, random, articles, result, article, posted;
     return _regenerator["default"].wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
@@ -1399,24 +1405,48 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
                 result.push(object);
               }
             });
+            article = [];
+
+            if (!req.uer) {
+              _context13.next = 29;
+              break;
+            }
+
+            _context13.next = 28;
+            return _articles["default"].find({
+              postedBy: req.user.id
+            });
+
+          case 28:
+            article = _context13.sent;
+
+          case 29:
+            posted = false;
+
+            if (article.length > 0) {
+              posted = true;
+            }
+
+            console.log(posted);
             res.render('publisher', {
               categories: result,
-              random: random
+              random: random,
+              posted: posted
             });
-            _context13.next = 30;
+            _context13.next = 38;
             break;
 
-          case 27:
-            _context13.prev = 27;
+          case 35:
+            _context13.prev = 35;
             _context13.t0 = _context13["catch"](0);
             next(_context13.t0);
 
-          case 30:
+          case 38:
           case "end":
             return _context13.stop();
         }
       }
-    }, _callee13, null, [[0, 27]]);
+    }, _callee13, null, [[0, 35]]);
   }));
 
   return function (_x34, _x35, _x36) {

@@ -391,9 +391,11 @@ router.get('/blogger-werden', install.redirectToLogin, async (req, res, next) =>
 	articlelength = articlelength.length;
 	var r = Math.floor(Math.random() * articlelength);
 	let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
+	var topCategories = await Category.find({}).limit(6);
 	res.render('index', {
 		categories: categories,
-		random: random
+		random: random,
+		topCategories: topCategories
 	});
 });
 
@@ -674,7 +676,7 @@ router.post('/unsplash-search', async (req, res, next) => {
 	let searchKey = req.body.searchKey;
 	let page = req.body.page;
 	page = parseInt(page) + 1;
-	unsplash.search.photos(searchKey, page, 30, {orderBy:"relevant", lang: 'en' })
+	unsplash.search.photos(searchKey, page, 30, { orderBy: "relevant", lang: 'en' })
 		.then(toJson)
 		.then(json => {
 			// Your code
@@ -742,7 +744,6 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 		let articles = await Article.find({}).populate('postedBy').populate('category');
 		let result = [];
 
-
 		categories.forEach(category => {
 			let category_articles = [];
 			articles.forEach(article => {
@@ -758,9 +759,19 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 				result.push(object);
 			}
 		});
+		let article = [];
+		if (req.uer) {
+			article = await Article.find({ postedBy: req.user.id });
+		}
+		let posted = false;
+		if (article.length > 0) {
+			posted = true;
+		}
+		console.log(posted);
 		res.render('publisher', {
 			categories: result,
-			random: random
+			random: random,
+			posted: posted
 		});
 
 	} catch (error) {

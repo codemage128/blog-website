@@ -1378,8 +1378,8 @@ router.get("/follow-user", auth, async (req, res, next) => {
     date: date,
     user: req.user.id
   }
-  let user = await User.findById({id: req.user.id});
-  let follower = await User.findById({id: req.query.followerId});
+  let user = await User.findById({ _id: req.user.id });
+  let follower = await User.findById({ _id: req.query.followerId });
   await User.updateOne(
     { _id: req.query.followerId },
     { $push: { following: payload } }
@@ -1402,9 +1402,6 @@ router.get("/follow-user", auth, async (req, res, next) => {
       if (err) console.log(err);
     }
   )
-
-
-
   return res.redirect("back");
 });
 

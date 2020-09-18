@@ -19,6 +19,7 @@ router.post(
   install.redirectToLogin,
   auth,
   async (req, res, next) => {
+    let article_header = req.body.article_header;
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
     let user = await User.findById({ _id: req.user.id });
@@ -33,7 +34,7 @@ router.post(
           break;
       }
     });
-    if(article_title == ""){
+    if (article_title == "") {
       req.flash(
         "success_msg",
         "You have to create the title!"
@@ -74,7 +75,13 @@ router.post(
       if (element == "ü") { array[index] = "ue"; }
     });
     let articleslug = array.join("");
-
+    let meta_title = "";
+    let meta_description = "";
+    if (req.user.roleId == "admin") {
+      articleslug = req.body.slug ? req.body.slug : articleslug;
+      meta_description = req.body.meta_description;
+      meta_title = req.body.meta_title;
+    }
     // let content = req.body.body;
     // let textLength = content.split(/\s/g).length;
     let set = await Settings.findOne();
@@ -116,9 +123,11 @@ router.post(
         }),
         slug: articleslug,
         category: req.body.category,
-        // file: req.body.file,
+        file: article_header,
         postedBy: req.user.id,
         postType: "post",
+        metatitle: meta_title,
+        metadescription: meta_description
       };
       payload1.active = true;
       Article.create(payload1)
@@ -131,7 +140,7 @@ router.post(
           if (user.roleId == "user") {
             return res.redirect("/user/all-posts");
           } else {
-            return res.redirect("/admin/all-posts");
+            return res.redirect("/dashboard/all-posts");
           }
         })
         .catch(e => next(e));
@@ -147,6 +156,7 @@ router.post(
   install.redirectToLogin,
   auth, async (req, res, next) => {
     try {
+      
       let receive = JSON.parse(req.body.data);
       let data = receive.blocks;
       let user = await User.findById({ _id: req.user.id });
@@ -154,7 +164,6 @@ router.post(
       data.forEach(block => {
         switch (block.type) {
           case "header":
-            console.log(block.data.level);
             if (block.data.level == 1) {
               article_title = block.data.text;
             }
@@ -162,6 +171,17 @@ router.post(
         }
       });
       let search = await Article.find({ title: article_title });
+      console.log(slug);
+      let slug = await Article.findOne({slug: req.body.slug});
+      
+      if (slug) {
+        req.flash(
+          "success_msg",
+          "That slug has been used, pls used another slug or just leave the field empty"
+        );
+        console.log('asdfsfd');
+        return res.redirect("back");
+      }
       let real = search !== ""
         ? article_title
           .trim()
@@ -191,7 +211,6 @@ router.post(
         if (element == "ü") { array[index] = "ue"; }
       });
       let articleslug = array.join("");
-      console.log(req.body)
       // let content = req.body.body;
       // let textLength = content.split(/\s/g).length;
       // if (textLength < 200) {
@@ -201,6 +220,13 @@ router.post(
       //   );
       //   return res.redirect("back");
       // }
+      let meta_title = "";
+      let meta_description = "";
+      if (req.user.roleId == "admin") {
+        articleslug = req.body.slug ? req.body.slug : articleslug;
+        meta_description = req.body.meta_description;
+        meta_title = req.body.meta_title;
+      }
       let parse = edjsParser.parse(receive);
       let html = "";
       parse.forEach(element => {
@@ -210,7 +236,6 @@ router.post(
       let short = htmlToText.fromString(html, {
         wordwrap: false
       });
-
       // if (req.user.roleId == "admin") {
       //   req.body.active = !req.body.status
       //     ? true
@@ -222,7 +247,9 @@ router.post(
       //   req.body.active = true;
       // }
       let date = new Date();
-      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: {title: article_title,slug: articleslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary}})
+      let article = await Article.findOne({_id:req.body.articleId});
+      let article_header = req.body.article_header? req.body.article_header: article.file;
+      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articleslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {
@@ -839,6 +866,18 @@ router.post('/api/kategorie', async (req, res, next) => {
 });
 
 // Get all the posts in a category
+router.post('/kategory-ajax', async (req, res, next) => {
+  let page = req.body.page;
+  let slug = req.body.slug;
+  let cat = await Category.findOne({ slug: slug });
+
+  let articles = await Article.find({ active: true, category: cat._id }).populate("category").populate("postedBy").sort({ createdAt: -1 });
+  let length = articles.length;
+  let totalsize = Math.floor(length / 6) + 1;
+  let r = 6 * page;
+  let return_article = await Article.find({ active: true, category: cat._id }).populate("category").populate("postedBy").sort({ createdAt: -1 }).limit(6).skip(r);
+  return res.json({ 'data': return_article, 'page': page, 'total': totalsize });
+});
 router.get(
   "/kategorie/:slug",
   install.redirectToLogin,
@@ -860,29 +899,11 @@ router.get(
           active: true,
           category: cat._id
         });
-        let recent = [];
-        let recentdata = await Article.find({
-          active: true,
-          category: { $ne: cat._id }
-        })
-          .sort({ createdAt: -1 })
-          .populate("category")
-          .populate("postedBy")
-          .limit(5);
-        recentdata.forEach(item => {
-          if (item.category.slug != "official") {
-            recent.push(item);
-          }
-        })
         let featured = await Article.find({ active: true, addToFeatured: true })
           .populate("category")
           .sort({ createdAt: -1 })
           .limit(5);
-        let popular = await Article.find({ active: true, category: cat._id })
-          .populate("category")
-          .populate("postedBy")
-          .sort({ views: -1 })
-          .limit(3);
+
         res.render("category", {
           title: cat.name,
           cat: cat.name,
@@ -891,9 +912,7 @@ router.get(
           post: post,
           current: page,
           pages: Math.ceil(count / perPage),
-          recent: recent,
           featured: featured,
-          popular: popular
         });
       }
     } catch (error) {

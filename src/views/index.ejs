@@ -38,6 +38,45 @@
     .categoryblock {
       display: none;
     }
+   
+    .category_container{
+      height: 350px;
+      background-size: cover;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 3px 3px 10px 0 #828282;
+      cursor: pointer;
+    }
+    .category_container:hover .overlay {
+      opacity: 1;
+    }
+
+    .overlay {
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: .5s ease;
+      background-color: #000000c2;
+      border-radius: 10px;
+    }
+
+    .overlay_text {
+      color: white;
+      font-size: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -125,8 +164,7 @@
           <a class="searchbar" href="/blogrecent">
             <span class="menu-title">Inhalte
               entdecken</span></a>
-          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-              werden</span></a>
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
           <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
               Inhalte</span></a>
           <% } else if(user.paid == 'paid') { %>
@@ -134,8 +172,7 @@
               Inhalte</span></a>
           <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
           </a>
-          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-              werden</span></a>
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
           <% } %>
           <a class="searchbar" href="javascript:void(0);"><span
               style="font-size:20px; padding-left: 10px;cursor:pointer" onclick="openNav()"><i class="fa fa-search"
@@ -164,8 +201,7 @@
             </ul>
           </div>
           <% } else {%>
-          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-              werden</span></a>
+          <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
           <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
               entdecken</span></a>
           <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
@@ -192,7 +228,26 @@
   <div class="container">
     <div class="inner-section-1">
       <div class="row align-items-center">
-        <div class="col-md-4 col-sm-12 col-md-offset-8">
+        <div class="col-md-8" id="favorite_category">
+          <div class="row">
+            <% for(var i = 0; i < topCategories.length; i ++) {%>
+            <div class="col-md-4">
+              <%
+              var style = '';
+               if(i == 1 || i == 4) {
+                style = "margin-top: -40px;";
+              }
+              %>
+              <div class="category_container" style="<%= style %> background-image: url('<%= topCategories[i].background %>');">
+                <div class="overlay" id="<%= topCategories[i].slug%>">
+                  <div class="overlay_text"><%= topCategories[i].name%></div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-offset-1">
           <div class="section-1-right">
             <div class="section-1-right-heading1">
               <h1>Einzigartige Inhalte.</h1>
@@ -224,7 +279,7 @@
           <div class="container-fluid">
             <div class="inner-section-2">
               <div class="row" style="background: #f4f4f4; height: 600px;">
-                <div style="padding: 0px;" class="col-md-12">
+                <div style="padding: 0px; margin-top: 100px;" class="col-md-12">
                   <div class="section-2-right" style="text-align: center; justify-content: center; display: flex;">
                     <ul>
                       <li>
@@ -510,31 +565,61 @@
             src="https://www.facebook.com/tr?id=1016627382132864&ev=PageView&noscript=1" />
         </noscript>
         <script type="text/javascript">
-          setTimeout(function () {
-            $('.popup').css('display', 'block');
-            $('.popup-back').css('display', 'block');
-          }, 10000);
-          $('.popup-back').click(function () {
-            $(".popup").css('display', 'none');
-            $(".popup-back").css('display', 'none');
-          });
-          $('.closepopup').click(function () {
-            $(".popup").css('display', 'none');
-            $(".popup-back").css('display', 'none');
-          });
-
-          //navber
-          
-          $(document).on('click', '.kategorien', function (event) {
-            if($('.categoryblock').css('display') == 'block'){
-              $('.categoryblock').css('display', 'none');
-            }else{
-              $('.categoryblock').css('left', $('.kategorien').position().left - 100);
-              $('.categoryblock').css('display', 'block');
+          $(function () {
+            let user = "<%if(user){%>true<%}%>";
+            if (!user) {
+              setTimeout(function () {
+                $('.popup').css('display', 'block');
+                $('.popup-back').css('display', 'block');
+              }, 10000);
             }
-          })
-          $(document).on('mouseenter', '.categoryblock', function (event) {
-            $('.categoryblock').css('display', 'block');
+            $('.popup-back').click(function () {
+              $(".popup").css('display', 'none');
+              $(".popup-back").css('display', 'none');
+            });
+            $('.closepopup').click(function () {
+              $(".popup").css('display', 'none');
+              $(".popup-back").css('display', 'none');
+            });
+            //navber
+            $(document).on('click', '.kategorien', function (event) {
+              if ($('.categoryblock').css('display') == 'block') {
+                $('.categoryblock').css('display', 'none');
+              } else {
+                $('.categoryblock').css('left', $('.kategorien').position().left - 100);
+                $('.categoryblock').css('display', 'block');
+              }
+            })
+            $(document).on('mouseenter', '.categoryblock', function (event) {
+              $('.categoryblock').css('display', 'block');
+            })
+            $('.overlay').click(function(){
+              var url = "/kategorie/" + $(this).attr('id');
+              // location.replace(url);
+              window.open(url);
+            })
+            // $('#q').on('input', function () {
+            //   var value = $(this).val();
+            //   $.ajax({
+            //     url: "/suggestion",
+            //     type: 'post',
+            //     data: { term: value },
+            //     success: function (data) {
+            //       var template = "";
+            //       for (i = 0; i < data.data.length; i++) {
+            //         var _template = '<li class="list-group-item">' + data.data[i] + '</li>';
+            //         template = template + _template;
+            //       }
+            //       $('#suggestion').empty();
+            //       $('#suggestion').append(template);
+            //       $('#suggestion').show();
+            //       $('.list-group-item').click(function () {
+            //         $('#q').val($(this).text());
+            //         $('#suggestion').hide();
+            //       })
+            //     }
+            //   })
+            // });
           })
         </script>
 

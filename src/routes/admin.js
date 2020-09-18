@@ -676,8 +676,10 @@ router.get(
   install.redirectToLogin,
   role("admin"),
   async (req, res, next) => {
+    let categories = await Category.find({});
     res.render("./admin/add-new-post", {
-      title: "Dashboard - Posts - Add New Post"
+      title: "Dashboard - Posts - Add New Post",
+      categories: categories
     });
   }
 );
@@ -718,24 +720,14 @@ router.get(
       );
       if (!article) res.render("404");
       let author = await User.findOne({ _id: article.postedBy });
+      let categories = await Category.find({});
       switch (article.postType) {
         case "post":
           res.render("./admin/edit-post", {
             title: `Edit Post - ${article.title}`,
+            categories: categories,
             article: article,
             author: author
-          });
-          break;
-        case "audio":
-          res.render("./admin/edit-audio", {
-            title: `Edit Audio - ${article.title}`,
-            article: article
-          });
-          break;
-        case "video":
-          res.render("./admin/edit-video", {
-            title: `Edit Video - ${article.title}`,
-            article: article
           });
           break;
         default:

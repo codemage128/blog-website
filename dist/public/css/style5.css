@@ -220,13 +220,14 @@
     color: #fff;
 }
 #owl-carousel .read_article {
-    background: #000000 !important;
+    background: #f7f7f7 !important;
     opacity: 1;
     margin: 20px 0px 0px 3px;
     padding: 14px 35px;
     font-weight: 600;
     font-size: 14px;
-    color: #98e0f2 !important;
+    color: #000000 !important;
+    border: 1px solid;
 }
 
 #owl-carousel {

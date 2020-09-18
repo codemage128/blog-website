@@ -10,8 +10,8 @@ import AWS from "aws-sdk";
 const router = express.Router();
 
 const cloudinary = require("cloudinary").v2;
-
 // Create a new file
+
 router.post("/media/create", async (req, res, next) => {
   try {
     let set = await Settings.findOne();

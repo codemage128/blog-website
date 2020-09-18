@@ -52,10 +52,10 @@ var editor = new EditorJS({
       //    shortcut: 'CMD+SHIFT+M'
       // },
 
-      // code: {
-      //    class: CodeTool,
-      //    shortcut: 'CMD+SHIFT+C'
-      // },
+      code: {
+         class: CodeTool,
+         shortcut: 'CMD+SHIFT+C'
+      },
 
       delimiter: Delimiter,
 
@@ -230,11 +230,46 @@ $('#darkmode').click(function () {
       $('.custom-control-label').addClass('text-white');
       $('#publish').removeClass('btn-outline-dark').addClass('grey lighten-1');
       $('body').addClass('black-body');
+      $('.sidenav').css('background-color', '#232323');
    } else {
       //white mode
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');
       $('.custom-control-label').removeClass('text-white');
       $('#publish').removeClass('grey lighten-1').addClass('btn-outline-dark');
       $('body').removeClass('black-body');
+      $('.sidenav').css('background-color', '#fff');
    }
 });
+
+$('[data-toggle="tooltip"]').tooltip()
+$('#slider').click(function () {
+   $('.sidenav').toggle();
+   if ($('.sidenav').css('display') == "none") {
+      $('.editor-container').removeClass('col-lg-10').addClass('col-lg-12');
+      $(this).css('right', '-2vw');
+   } else {
+      $('.editor-container').removeClass('col-lg-12').addClass('col-lg-10');
+      $(this).css('right', '17.5vw');
+   }
+});
+
+function uploadImages() {
+   $('.upload-file').click();
+}
+$('.upload-file').on('change', function (event) {
+   var file = $(this).prop('files');
+   console.log(file);
+   var reader = new FileReader();
+   reader.readAsBinaryString(file[0]);
+   var base64 = "";
+
+   reader.onload = function () {
+      base64 = btoa(reader.result);
+      base64 = 'data:application/octet-stream;base64,' + base64;
+      $('#imgBox').attr("src", base64);
+      $('#article_header').val(base64);
+   }
+   reader.onerror = function () {
+      console.log("there are some problems.")
+   }
+})

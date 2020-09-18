@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
    <title><%= siteTitle %></title>
@@ -7,6 +7,7 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="description" content="Dype" />
+   <meta name="robots" content="noindex">
    <!-- css -->
    <link rel="shortcut icon" href="<%= favicon %>" type="image/x-icon">
    <link rel="stylesheet" href="/css/bootstrap.min.css" async>
@@ -27,6 +28,37 @@
    <link href="/css/aos.css" rel="stylesheet" async />
    <link href="/css/header.css" rel="stylesheet" async />
    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+   <style>
+      .list-group-item:hover {
+         background: rgb(226, 226, 226);
+      }
+
+      @media only screen and (max-width: 600px) {
+         #suggestion {
+            position: fixed;
+            top: 16vh;
+            left: 2vh;
+            z-index: 999999;
+            display: block;
+            width: 93vw;
+         }
+
+         .confirm {
+            right: 25% !important;
+         }
+      }
+
+      @media screen and (min-width: 1000px) {
+         #suggestion {
+            position: fixed;
+            top: 16vh;
+            left: 20vh;
+            z-index: 999999;
+            display: block;
+            width: 76vw;
+         }
+      }
+   </style>
 </head>
 
 <body>
@@ -37,7 +69,7 @@
       <% if(user) { %>
       <% if (user.paid == "free") { %>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte entdecken</span></a>
-      <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
       <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
             Inhalte</span></a>
       <hr>
@@ -46,7 +78,7 @@
             Inhalte</span></a>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
       </a>
-      <a class="searchbar" href="/publisher"><span class="menu-title">Publisher
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Publisher
             werden</span></a>
       <% } %>
       <% if(user.roleId == 'admin') { %>
@@ -60,14 +92,14 @@
       <% } else {%>
       <span class="username_span"><%= user.username%></span>
       <hr>
-      <a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+      <a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
 
       <a href="/author/<%= user.usernameslug%>" class="searchbar"><i class="fa fa-user-circle profileicon"></i>Mein
          Profil</a>
       <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
       <% } %>
       <% } else {%>
-      <a class="searchbar" href="/publisher"><span class="menu-title">Publisher
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Publisher
             werden</span></a>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Artikel
             entdecken</span></a>
@@ -75,7 +107,10 @@
       <a class="searchbar" href="/sign-up"><i class="fa fa-user"></i><span class="menu-title">Registrieren</span></a>
       <% } %>
    </div>
-   
+
+   <ul class="list-group list-group-flush" id="suggestion" style="">
+
+   </ul>
    <header class="sticky" id="header">
       <section class="container">
          <section class="row header" id="logo_menu">
@@ -90,11 +125,11 @@
                      <div id="myTopnav" class="topnav">
                         <form action="/search" method="get" class="search-form d-lg-flex float-right" id="searchForm">
                            <div class="container">
-                              <a type="button" href="javascript:void(0)" class="closebtn"
+                              <a type="button" href="javascript:void(0)" class="closebtn confirm"
                                  style="right: 15%; padding-left: 10px; padding-right: 10px;" onclick="searchForm()"
                                  id="closebtn"><i class="fa fa-search"></i></a>
                               <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                              <input id="q" type="text" placeholder="Suche" name="q" value=""
+                              <input id="q" type="text" placeholder="Suche12" name="q" value=""
                                  onfocus="displaySearchbtn()" />
                               <label>Suche Inhalte, die dich begeistern</label>
                            </div>
@@ -114,7 +149,7 @@
                <% if(user) { %>
                <% if (user.paid == "free") { %>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte entdecken</span></a>
-               <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
                <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
                      Inhalte</span></a>
                <% } else if(user.paid == 'paid') { %>
@@ -122,7 +157,7 @@
                      Inhalte</span></a>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
                </a>
-               <a class="searchbar" href="/publisher"><span class="menu-title">Publisher
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Publisher
                      werden</span></a>
                <% } %>
                <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
@@ -142,7 +177,7 @@
                   </ul>
                   <% } else {%>
                   <li><span class="username_span"><%= user.username%></span></li>
-                  <li><a href="/user/dashboard" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
+                  <li><a href="/user/authorstatus" class="searchbar"><i class="fa fa-cog profileicon"></i>Dashboard</a>
                   </li>
                   <li><a href="/author/<%= user.usernameslug%>" class="searchbar"><i
                            class="fa fa-user-circle profileicon"></i>Mein Profil</a></li>
@@ -151,7 +186,7 @@
                   </ul>
                </div>
                <% } else {%>
-               <a class="searchbar" href="/publisher"><span class="menu-title">Blogger werden</span></a>
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte entdecken</span></a>
                <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
                      onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>

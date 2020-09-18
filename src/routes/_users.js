@@ -1079,6 +1079,9 @@ router.get(
     const user = await User.findById(req.user.id);
     let user_following = user.following;
     let following = [];
+    if(user_following.length == 0){
+      res.render("./user/followers", { title: "Followers", following: following });
+    }
     user_following.forEach(element => {
       User.findById(element.user, (error, user)=>{
         following.push(user);

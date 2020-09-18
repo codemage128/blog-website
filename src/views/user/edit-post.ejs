@@ -144,8 +144,74 @@
         }
 
         #image-section {
-            height: 70vh !important;
+            height: 90vh;
             overflow-y: scroll;
+        }
+
+
+
+
+        .sidenav {
+            height: 100%;
+            /* Full-height: remove this if you want "auto" height */
+            width: 20vw;
+            /* Set the width of the sidebar */
+            position: fixed;
+            /* Fixed Sidebar (stay in place on scroll) */
+            z-index: 2000;
+            /* Stay on top */
+            top: 0;
+            /* Stay at the top */
+            right: 0;
+            background-color: white;
+            /* Black */
+            overflow-x: hidden;
+            /* Disable horizontal scroll */
+            padding-top: 20px;
+            box-shadow: 4px 0px 24px -10px black;
+        }
+
+        #slider {
+            position: fixed;
+            z-index: 2000;
+            top: 50%;
+            right: 17.5vw;
+            border-radius: 50%;
+            width: 69px;
+            height: 65px;
+
+        }
+
+        /* The navigation menu links */
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Style page content */
+        .main {
+            margin-left: 160px;
+            /* Same as the width of the sidebar */
+            padding: 0px 10px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -168,6 +234,7 @@
                 <input type="hidden" name="data" id="data" />
                 <input type="hidden" name="summary" id="summary" />
                 <input type="hidden" name="articleId" value="<%= article._id%>" />
+                <input type="hidden" id="article_header" name="article_header" />
             </form>
         </li>
         <li class="nav-item my-auto">
@@ -177,38 +244,44 @@
             </div>
         </li>
         <li class="nav-item">
-            <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche Tipps zur Gestaltung</a>
+            <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche
+                Tipps zur Gestaltung</a>
             <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
             <button type="button" id="save" class="btn btn-white btn-md">Save</button>
             <button type="button" id="publish" class="btn btn-outline-dark btn-md">Update</button>
         </li>
     </ul>
-    <div class="container-fluid" style="height: 100vh;overflow: visible;">
-        <div class="row">
-            <div class="col-lg-9">
-                <div id="editor">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card mr-5" style="margin-top: 150px; background: transparent;">
-                    <div class="card-body">
-                        <!-- Title -->
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Enter the keyword"
-                                aria-label="Username" id="searchImageKey">
-                            <div class="input-group-prepend">
-                                <button class="input-group-text" type="button" id="searchImage"><i
-                                        class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                        <!-- Text -->
-                        <input type="hidden" name="page" id="page" />
-                        <!-- <div class="grid" id="image-section">
-                            <div class="grid-sizer"></div>
-                        </div> -->
-                        <div class="row m-1" id="image-section">
+    <a class="btn btn-light" id="slider" data-toggle="tooltip" data-placement="left"
+        title="You can drag, drop the image to the editor."><i class="fa fa-angle-left"
+            style="font-size: 1.2rem;line-height: 40px;display: inline-block;width: auto;color: #fff;text-align: center;margin-left: -2vw;color: black;"></i></a>
+    <div class="sidenav">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 mt-1">
+                    <!-- Title -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Enter the keyword" aria-label="Username"
+                            id="searchImageKey">
+                        <div class="input-group-prepend">
+                            <button class="input-group-text" type="button" id="searchImage"><i
+                                    class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    <!-- Text -->
+                    <input type="hidden" name="page" id="page" />
+                    <!-- <div class="grid" id="image-section">
+                            <div class="grid-sizer"></div>
+                        </div> -->
+                    <div class="row m-1" id="image-section">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="height: 100vh;overflow: visible;">
+        <div class="row">
+            <div class="col-lg-10 editor-container">
+                <div id="editor">
                 </div>
             </div>
         </div>
@@ -245,6 +318,11 @@
                     <div style="display: none;" class="summary-error alert alert-danger">
                         Beachte, dass dein Beitrag mindestens 30 Wörter lang sein sollte.
                     </div>
+                    <img src="<%= article.file%>" alt="" class="img-fluid"
+                        style="border: 1px solid rgba(195, 207, 216, 0.3);" id="imgBox">
+                    <input type="file" class="form-control upload-file" style="display: none;" />
+                    <a class="btn btn-light btn-sm text-dark" style="margin-top: -25px;float: right;"
+                        onclick="uploadImages()">Bild hochladen</a>
                     <label>Summary :</label>
                     <textarea id="summary_modal" rows="5" class="form-control"></textarea>
                     <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;

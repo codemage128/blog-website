@@ -6,6 +6,7 @@ $(function () {
 });
 function openNav() {
    document.getElementById("myTopnav").style.height = "220px";
+
 }
 function closeNav() {
    document.getElementById("myTopnav").style.height = "0";

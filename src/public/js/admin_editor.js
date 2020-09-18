@@ -1,12 +1,3 @@
-var article_content = JSON.parse($('#article_content').val());
-var article_summary = $('#article_summary').val();
-$('#article_content').hide();
-$('#article_summary').hide();
-$('#article_category_id').hide();
-
-$('#summary_modal').val(article_summary);
-$('#category').val($('#article_category_id').val());
-
 var editor = new EditorJS({
    holder: 'editor',
    tools: {
@@ -77,15 +68,38 @@ var editor = new EditorJS({
    },
    //data
    data: {
-      blocks: article_content
+      blocks: [
+         // {
+         //    type: "header",
+         //    data: {
+         //       level: 1
+         //    }
+         // }
+         {
+            type: "header",
+            data: {
+               text: "🖐Erzähle eine Geschichte!",
+               level: 1,
+            }
+         },
+         {
+            type: 'paragraph',
+            data: {
+               text: 'Strukturiere deinen Beitrag so, damit er für den Leser leicht verständlich ist. Verwende Fotos 🤑, Emojis 😍 und Gifs um den Lesern ein emotionsgeladenes und abwechslungsreiches Leseerlebnis zu bescheren. Im Menü findest du zahlreiche Features um die Größe der Schrift anzupassen und sie kursiv, fett oder unterstrichen zu gestalten. Darüber hinaus kannst du an geeigneten Stellen ausgehende Verlinkungen 🍽 hinzufügen. Ausgehende Links verbessern das Leseerlebnis und somit auch die Reichweite deines Beitrags. Lege gleich los! 😗',
+            }
+         },
+      ]
    },
    onReady: function () {
+      console.log("perfect");
+      var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
+      $('#wordCount').text(wordCount);
    },
    onChange: function () {
-
+      var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
+      $('#wordCount').text(wordCount);
    }
 });
-
 $('#publish').click(function () {
    editor.save().then((savedData) => {
       var data = JSON.stringify(savedData);
@@ -97,12 +111,14 @@ $('#publish').click(function () {
          $('#post-err').modal({});
       } else {
          $('#data').val(data);
+
          $('#post-summary').modal({});
       }
    });
 })
 $('#publish-submit').click(function () {
    var words = $('#summary_modal').val().match(/\S+/g).length;
+
    // if (words < 30) {
    //    $('.summary-error').show();
    // } else {
@@ -110,6 +126,9 @@ $('#publish-submit').click(function () {
    //    $('#article').submit();
    // }
    $('#summary').val($('#summary_modal').val());
+   $('#meta_title').val($('#meta_title_modal').val());
+   $('#meta_description').val($('#meta_description_modal').val());
+   $('#slug').val($('#slug_modal').val());
    $('#article').submit();
 })
 
@@ -137,8 +156,8 @@ $('#image-section').scroll(function (event) {
    var scrollTop = $('#image-section').scrollTop();
    var TotalHeight = $('#image-section').prop("scrollHeight");
    var scrollPercentage = ((scrollTop + $('#image-section').height()) / TotalHeight);
-
-   if (scrollPercentage > 0.99) {
+   console.log(scrollPercentage);
+   if (scrollPercentage > 0.9) {
       // Load content
       var searchKey = $('#searchImageKey').val();
       var page = $('#page').val();
@@ -217,12 +236,12 @@ $('#searchImage').click(function () {
 // $('#emojionearea').emojioneArea({
 //    pickerPosition: "bottom"
 // });
-// var postenable = "<%= user.postenable%>";
-// if (!postenable) {
-//    $('#post-enable').modal({ backdrop: 'static', keyboard: false });
-// } else {
-//    $('#post-policy').modal({});
-// }
+var postenable = "<%= user.postenable%>";
+if (!postenable) {
+   $('#post-enable').modal({ backdrop: 'static', keyboard: false });
+} else {
+   $('#post-policy').modal({});
+}
 $('#darkmode').click(function () {
    if ($(this).prop('checked') == true) {
       //dark node
@@ -240,7 +259,6 @@ $('#darkmode').click(function () {
       $('.sidenav').css('background-color', '#fff');
    }
 });
-
 $('[data-toggle="tooltip"]').tooltip()
 $('#slider').click(function () {
    $('.sidenav').toggle();
@@ -252,7 +270,6 @@ $('#slider').click(function () {
       $(this).css('right', '17.5vw');
    }
 });
-
 function uploadImages() {
    $('.upload-file').click();
 }

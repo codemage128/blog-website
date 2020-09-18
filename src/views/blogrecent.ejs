@@ -41,8 +41,7 @@
       <% if (user.paid == "free") { %>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
             entdecken</span></a>
-      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-            werden</span></a>
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
       <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
             Inhalte</span></a>
       <hr>
@@ -51,8 +50,7 @@
             Inhalte</span></a>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
       </a>
-      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-            werden</span></a>
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
       <% } %>
       <% if(user.roleId == 'admin') { %>
       <span class="username_span"><%= user.username%></span>
@@ -72,8 +70,7 @@
       <a href="/log-out" class="searchbar"><i class="fa fa-sign-out profileicon"></i>Ausloggen</a>
       <% } %>
       <% } else {%>
-      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-            werden</span></a>
+      <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
       <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
             entdecken</span></a>
 
@@ -115,8 +112,7 @@
                <% if (user.paid == "free") { %>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
                      entdecken</span></a>
-               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-                     werden</span></a>
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
                <a class="searchbar" href="/ourwork"><span class="menu-title">Exklusive
                      Inhalte</span></a>
                <% } else if(user.paid == 'paid') { %>
@@ -124,8 +120,7 @@
                      Inhalte</span></a>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Feed</span>
                </a>
-               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-                     werden</span></a>
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
                <% } %>
                <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
                      onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
@@ -153,8 +148,7 @@
                   </ul>
                </div>
                <% } else {%>
-               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Blogger
-                     werden</span></a>
+               <a class="searchbar" href="/blogger-werden"><span class="menu-title">Über Dype</span></a>
                <a class="searchbar" href="/blogrecent"><span class="menu-title">Inhalte
                      entdecken</span></a>
                <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
@@ -376,7 +370,7 @@
                      <% }%>
                   </div>
                   <div class="row">
-                     <div class="col-2 offset-10 mt-5">
+                     <div class="col-2 offset-5 mt-5">
                         <input type="hidden" id="length">
                         <button class="form-control" id="loadmore">Load more...</button>
                      </div>
@@ -424,7 +418,7 @@
                </div>
                <div class="row">
                   <div class="col-md-12 text-left">
-                     <h4><a style="color:black" class="footercategory">AGB</a></h4>
+                     <h4><a href="/d/official/agb" style="color:black" class="footercategory">AGB</a></h4>
                   </div>
                </div>
                <div class="row">

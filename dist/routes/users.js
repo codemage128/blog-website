@@ -2176,14 +2176,14 @@ router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
             };
             _context25.next = 4;
             return _users["default"].findById({
-              id: req.user.id
+              _id: req.user.id
             });
 
           case 4:
             user = _context25.sent;
             _context25.next = 7;
             return _users["default"].findById({
-              id: req.query.followerId
+              _id: req.query.followerId
             });
 
           case 7:

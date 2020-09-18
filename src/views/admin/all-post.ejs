@@ -130,14 +130,7 @@
 
         <div class="col-md-4 text-right">
             <div class="dropdown">
-                <a href="javascript:void(0);" class="btn text-white button button-info dropdown-toggle btn-sm"
-                    data-toggle="dropdown" aria-expanded="false">Add New</a>
-                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-start"
-                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
-                    <a class="dropdown-item" href="/dashboard/posts/add-new">Add New Article</a>
-                    <a class="dropdown-item" href="/dashboard/posts/add-new-audio">Add new Audio</a>
-                    <a class="dropdown-item" href="/dashboard/posts/add-new-video">Add new Video</a>
-                </div>
+                <a href="/dashboard/posts/add-new" class="btn text-white button button-info dropdown-toggle btn-sm">Add New</a>
             </div>
         </div>
 
@@ -152,11 +145,6 @@
                 <select id="bulkSelect" class="form-control form-control-sm bulk">
                     <option selected="selected" disabled="disabled">Bulk Actions</option>
                     <option value="publish">Publish</option>
-                    <option value="addToSlider">Add To Editor's Pick</option>
-                    <option value="addToRecommended">Add To Recommended</option>
-                    <option value="addToBreaking">Add To Breaking</option>
-                    <option value="addToFeatured">Add To Featured</option>
-                    <option value="draft">Move To Draft</option>
                     <option value="delete">Delete</option>
                 </select>
                 <button class="btn btn-info ml-3 btn-sm"
@@ -215,11 +203,11 @@
                                 <th>Category</th>
                                 <th>Article Type</th>
                                 <th>Post Type</th>
-                                <th>Editor's Picker?</th>
                                 <th>Author</th>
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Qualify Status</th>
+                                <th>Visit Article</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -244,11 +232,6 @@
                                 </td>
                                 <td class="text-center">
                                     <span class="badge badge-primary"><%= article[key].postType %></span>
-                                </td>
-                                <td class="text-center">
-                                    <% if(article[key].showPostOnSlider == true){%>
-                                    <span class="badge badge-default">Yes</span>
-                                    <% }%>
                                 </td>
                                 <td><%= article[key].postedBy.email %></td>
                                 <!-- <td class="text-center"> -->
@@ -280,6 +263,13 @@
                                     <% } %>
                                     <% if(article[key].qualify == "declined"){ %>
                                         <span class="badge badge-danger">Declined</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if(article[key].postedBy.roleId == "admin") {%>
+                                    <a target="_blank" href="/d/<%= article[key].category.slug%>/<%= article[key].slug%>" class="btn btn-outline-secondary">View</a>
+                                    <% } else { %>
+                                    <a target="_blank" href="/p/<%= article[key].category.slug%>/<%= article[key].slug%>" class="btn btn-outline-secondary">View</a>
                                     <% } %>
                                 </td>
                             </tr>

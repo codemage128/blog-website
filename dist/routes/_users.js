@@ -1272,6 +1272,14 @@ router.get("/user/followers", _auth["default"], (0, _role["default"])("admin", "
             user = _context10.sent;
             user_following = user.following;
             following = [];
+
+            if (user_following.length == 0) {
+              res.render("./user/followers", {
+                title: "Followers",
+                following: following
+              });
+            }
+
             user_following.forEach(function (element) {
               _users["default"].findById(element.user, function (error, user) {
                 following.push(user);
@@ -1285,7 +1293,7 @@ router.get("/user/followers", _auth["default"], (0, _role["default"])("admin", "
               });
             });
 
-          case 6:
+          case 7:
           case "end":
             return _context10.stop();
         }

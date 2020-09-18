@@ -20,6 +20,14 @@ $(function () {
          case "image":
             _template = '<img src=' + element.data.url + ' alt=' + element.data.caption + '/>';
             break;
+         case "code":
+            console.log(element);
+            var code = element.data.code;
+            console.log(code.length);
+            code = code.replace(/</g, "&lt;");
+            code = code.replace(/>/g, "&gt;");
+            console.log(code)
+            _template = '<pre>' + code + '</pre>';
       }
       body_content_element = body_content_element + _template;
    });

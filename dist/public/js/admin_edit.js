@@ -110,6 +110,9 @@ $('#publish-submit').click(function () {
    //    $('#article').submit();
    // }
    $('#summary').val($('#summary_modal').val());
+   $('#meta_title').val($('#meta_title_modal').val());
+   $('#meta_description').val($('#meta_description_modal').val());
+   $('#slug').val($('#slug_modal').val());
    $('#article').submit();
 })
 

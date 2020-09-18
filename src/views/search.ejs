@@ -14,7 +14,7 @@
             <div class="col-md-2 text-right">
                <label class="control-label">Filter: </label>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                <select class="form-control" name="searchType" id="searchType">
                   <option value="total"></option>
                   <option value="article">Artikel</option>
@@ -24,8 +24,8 @@
             </div>
          </div>
          <hr>
-         <div class="row">
-            <div class="col-md-8 total">
+         <div class="row" style="height: 30vh;">
+            <div class="col-md-12 total">
                <div class="results">
                   <div class="row">
                      <% for(var i = 0; i < data.length ; i ++) { %>
@@ -114,9 +114,7 @@
                   </div>
                </div>
             </div>
-
-
-            <div class="col-md-8 article">
+            <div class="col-md-12 article">
                <div class="results">
                   <div class="row">
                      <% for(var i = 0; i < data.length ; i ++) { %>
@@ -154,8 +152,7 @@
                   </div>
                </div>
             </div>
-
-            <div class="col-md-8 category">
+            <div class="col-md-12 category">
                <div class="results">
                   <div class="row">
                      <% for(var i = 0; i < datacategory.length ; i ++) { %>
@@ -178,8 +175,7 @@
                   </div>
                </div>
             </div>
-
-            <div class="col-md-8 author">
+            <div class="col-md-12 author">
                <div class="results">
                   <div class="row">
                      <% for(var i = 0; i < datauser.length ; i ++) { %>
@@ -196,33 +192,9 @@
                   </div>
                </div>
             </div>
-
-            <div class="col-md-4">
-               <div class="popular-search">
-                  <div class="popular-search-heading">
-                     <h4>Beliebt</h4>
-                  </div>
-                  <% popular.forEach(element => {%>
-                  <%
-                     var url = "#";
-                     if(element.postedBy.roleId == 'admin'){
-                        url = '/d/' + element.category.slug + '/' + element.slug;
-                     }else if(element.postedBy.roleId == 'user'){
-                        url = '/p/' + element.category.slug + '/' + element.slug;
-                     }
-                     %>
-                  <div class="popular-search-bg1" url="<%= url%>"
-                     style="background-image:linear-gradient(#00000070, #00000096) , url('<%= element.file%>')">
-                     <div class="popular-search-bg1-contant">
-                        <h3><%= element.title%></h3>
-                     </div>
-                  </div>
-                  <%})%>
-               </div>
-            </div>
          </div>
          <div class="row">
-            <div class="col-md-4 text-right">
+            <div class="col-md-6 text-right">
                <%
                var prevpage = parseInt(current) - 1;
                if(current == 1){

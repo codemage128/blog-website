@@ -1108,15 +1108,22 @@ router.get("/dashboard/all-posts", _install["default"].redirectToLogin, _auth["d
 }());
 router.get("/dashboard/posts/add-new", _auth["default"], _install["default"].redirectToLogin, (0, _role["default"])("admin"), /*#__PURE__*/function () {
   var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res, next) {
+    var categories;
     return _regenerator["default"].wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
+            _context11.next = 2;
+            return _category["default"].find({});
+
+          case 2:
+            categories = _context11.sent;
             res.render("./admin/add-new-post", {
-              title: "Dashboard - Posts - Add New Post"
+              title: "Dashboard - Posts - Add New Post",
+              categories: categories
             });
 
-          case 1:
+          case 4:
           case "end":
             return _context11.stop();
         }
@@ -1174,7 +1181,7 @@ router.get("/dashboard/posts/add-new-video", _auth["default"], _install["default
 }());
 router.get("/dashboard/all-posts/edit/:slug", _auth["default"], _install["default"].redirectToLogin, (0, _role["default"])("admin"), /*#__PURE__*/function () {
   var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
-    var article, author;
+    var article, author, categories;
     return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
@@ -1195,50 +1202,42 @@ router.get("/dashboard/all-posts/edit/:slug", _auth["default"], _install["defaul
 
           case 7:
             author = _context14.sent;
+            _context14.next = 10;
+            return _category["default"].find({});
+
+          case 10:
+            categories = _context14.sent;
             _context14.t0 = article.postType;
-            _context14.next = _context14.t0 === "post" ? 11 : _context14.t0 === "audio" ? 13 : _context14.t0 === "video" ? 15 : 17;
+            _context14.next = _context14.t0 === "post" ? 14 : 16;
             break;
 
-          case 11:
+          case 14:
             res.render("./admin/edit-post", {
               title: "Edit Post - ".concat(article.title),
+              categories: categories,
               article: article,
               author: author
             });
-            return _context14.abrupt("break", 18);
+            return _context14.abrupt("break", 17);
 
-          case 13:
-            res.render("./admin/edit-audio", {
-              title: "Edit Audio - ".concat(article.title),
-              article: article
-            });
-            return _context14.abrupt("break", 18);
-
-          case 15:
-            res.render("./admin/edit-video", {
-              title: "Edit Video - ".concat(article.title),
-              article: article
-            });
-            return _context14.abrupt("break", 18);
+          case 16:
+            return _context14.abrupt("break", 17);
 
           case 17:
-            return _context14.abrupt("break", 18);
-
-          case 18:
-            _context14.next = 23;
+            _context14.next = 22;
             break;
 
-          case 20:
-            _context14.prev = 20;
+          case 19:
+            _context14.prev = 19;
             _context14.t1 = _context14["catch"](0);
             next(_context14.t1);
 
-          case 23:
+          case 22:
           case "end":
             return _context14.stop();
         }
       }
-    }, _callee14, null, [[0, 20]]);
+    }, _callee14, null, [[0, 19]]);
   }));
 
   return function (_x40, _x41, _x42) {

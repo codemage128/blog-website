@@ -258,6 +258,7 @@ ul {
    .text {
       font-size: 7vw;
    }
+   
    .slide-part {
       display: none;
    }
@@ -298,12 +299,16 @@ ul {
       border-radius: 4px;
       color: white;
    }
+   #favorite_category {
+      display: none;
+   }
 }
 @media screen and (min-width: 1000px) {
    .text {
       margin-top: 12vw;
       font-size: 3vw;
    }
+   
    .slide-part-mobile {
       display: none;
    }

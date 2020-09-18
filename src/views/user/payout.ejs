@@ -111,7 +111,7 @@
       </div><!-- Page Heading End -->
       <div class="col-md-2">
          <div class="page-heading">
-            <h4 style="color: red;">Kontostand : <%= total%> €</h4>
+            <h4 style="color: black;">Kontostand : <%= total%> €</h4>
          </div>
       </div>
    </div><!-- Page Headings End -->
@@ -181,7 +181,7 @@
                      <th>Payout</th>
                      <th>Status
                         <form action="/payout/download" method="POST">
-                           <button style="position: absolute;top: 0.8vh;right: 4vh;" class="btn btn-success"
+                           <button style="position: absolute;top: 0.8vh;right: 4vh;" class="btn btn-primary"
                               type="submit"><i class="fa fa-download"></i></button>
                         </form>
                      </th>
@@ -196,12 +196,12 @@
          <div class="card" style="border-radius: 10px !important; border: 1px solid #e0e0e0 !important;">
             <div class="card-header">
                <div class="card-title">
-                  <h5>Payout</h5>
+                  <h5>Auszahlung</h5>
                </div>
             </div>
             <div class="card-body">
                <div class="alert alert-info">
-                  You can get the money using paypal.
+                  Gerne sende wir dir deinen Verdienst per Paypal
                </div>
                <hr>
                <div class="form-group row">
@@ -209,19 +209,17 @@
                   <input type="email" class="form-control col-8" />
                </div>
                <div class="form-group row mt-15">
-                  <label class="control-label col-4 mt-15">Amount :</label>
+                  <label class="control-label col-4 mt-15">Betrag :</label>
                   <input type="number" class="form-control col-8" />
                </div>
                <div class="row form-group mt-50">
                   <div class="col-12 text-center">
                      <% if(total < 5){ %>
-                     <button class="button button-secondary text-left" data-toggle="modal" data-target="#exampleModal"
-                        type="button">Geld
-                        abheben</button>
+                     <button class="button button-primary text-left" data-toggle="modal" data-target="#exampleModal"
+                        type="button">Geld abheben</button>
                      <% } else { %>
-                     <button class="button button-secondary text-left" data-toggle="modal" data-target="#withdrawmodal"
-                        type="button">Geld
-                        abheben</button>
+                     <button class="button button-primary text-left" data-toggle="modal" data-target="#withdrawmodal"
+                        type="button">Geld abheben</button>
                      <% } %>
                   </div>
                </div>
