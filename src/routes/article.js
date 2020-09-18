@@ -78,7 +78,36 @@ router.post(
     let meta_title = "";
     let meta_description = "";
     if (req.user.roleId == "admin") {
-      articleslug = req.body.slug ? req.body.slug : articleslug;
+      let _real = search !== ""
+        ? req.body.slug
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-") +
+        "-" +
+        search.length
+        : req.body.slug
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-");
+      let _array = _real.split('');
+      _array.forEach((element, index) => {
+        if (element == "ß") {
+          _array[index] = "ss";
+        }
+        if (element == "ö") { _array[index] = "oe"; }
+        if (element == "ä") { _array[index] = "ae"; }
+        if (element == "ü") { _array[index] = "ue"; }
+      });
+      let _articleslug = _array.join("");
+      articleslug = req.body.slug ? _articleslug : articleslug;
       meta_description = req.body.meta_description;
       meta_title = req.body.meta_title;
     }
@@ -156,7 +185,7 @@ router.post(
   install.redirectToLogin,
   auth, async (req, res, next) => {
     try {
-      
+
       let receive = JSON.parse(req.body.data);
       let data = receive.blocks;
       let user = await User.findById({ _id: req.user.id });
@@ -172,8 +201,8 @@ router.post(
       });
       let search = await Article.find({ title: article_title });
       console.log(slug);
-      let slug = await Article.findOne({slug: req.body.slug});
-      
+      let slug = await Article.findOne({ slug: req.body.slug });
+
       if (slug) {
         req.flash(
           "success_msg",
@@ -223,7 +252,36 @@ router.post(
       let meta_title = "";
       let meta_description = "";
       if (req.user.roleId == "admin") {
-        articleslug = req.body.slug ? req.body.slug : articleslug;
+        let _real = search !== ""
+        ? req.body.slug
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-") +
+        "-" +
+        search.length
+        : req.body.slug
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-");
+      let _array = _real.split('');
+      _array.forEach((element, index) => {
+        if (element == "ß") {
+          _array[index] = "ss";
+        }
+        if (element == "ö") { _array[index] = "oe"; }
+        if (element == "ä") { _array[index] = "ae"; }
+        if (element == "ü") { _array[index] = "ue"; }
+      });
+      let _articleslug = _array.join("");
+        articleslug = req.body.slug ? _articleslug : articleslug;
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
       }
@@ -247,8 +305,8 @@ router.post(
       //   req.body.active = true;
       // }
       let date = new Date();
-      let article = await Article.findOne({_id:req.body.articleId});
-      let article_header = req.body.article_header? req.body.article_header: article.file;
+      let article = await Article.findOne({ _id: req.body.articleId });
+      let article_header = req.body.article_header ? req.body.article_header : article.file;
       Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articleslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");

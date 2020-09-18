@@ -39,7 +39,8 @@ var router = _express["default"].Router(); // Create a new article
 
 router.post("/article/create", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
-    var article_header, receive, data, user, article_title, search, real, array, articleslug, meta_title, meta_description, set, newDate, months, parse, html, payload1;
+    var article_header, receive, data, user, article_title, search, real, array, articleslug, meta_title, meta_description, _real, _array, _articleslug, set, newDate, months, parse, html, payload1;
+
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -117,7 +118,29 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             meta_description = "";
 
             if (req.user.roleId == "admin") {
-              articleslug = req.body.slug ? req.body.slug : articleslug;
+              _real = search !== "" ? req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
+              _array = _real.split('');
+
+              _array.forEach(function (element, index) {
+                if (element == "ß") {
+                  _array[index] = "ss";
+                }
+
+                if (element == "ö") {
+                  _array[index] = "oe";
+                }
+
+                if (element == "ä") {
+                  _array[index] = "ae";
+                }
+
+                if (element == "ü") {
+                  _array[index] = "ue";
+                }
+              });
+
+              _articleslug = _array.join("");
+              articleslug = req.body.slug ? _articleslug : articleslug;
               meta_description = req.body.meta_description;
               meta_title = req.body.meta_title;
             } // let content = req.body.body;
@@ -196,7 +219,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
 
 router.post("/article/edit", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
-    var receive, data, user, article_title, search, slug, real, array, articleslug, meta_title, meta_description, parse, html, body, _short, date, article, article_header;
+    var receive, data, user, article_title, search, slug, real, array, articleslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -281,7 +304,29 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             meta_description = "";
 
             if (req.user.roleId == "admin") {
-              articleslug = req.body.slug ? req.body.slug : articleslug;
+              _real = search !== "" ? req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
+              _array = _real.split('');
+
+              _array.forEach(function (element, index) {
+                if (element == "ß") {
+                  _array[index] = "ss";
+                }
+
+                if (element == "ö") {
+                  _array[index] = "oe";
+                }
+
+                if (element == "ä") {
+                  _array[index] = "ae";
+                }
+
+                if (element == "ü") {
+                  _array[index] = "ue";
+                }
+              });
+
+              _articleslug = _array.join("");
+              articleslug = req.body.slug ? _articleslug : articleslug;
               meta_description = req.body.meta_description;
               meta_title = req.body.meta_title;
             }
