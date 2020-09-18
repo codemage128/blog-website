@@ -103,14 +103,12 @@ $('#publish').click(function () {
 })
 $('#publish-submit').click(function () {
    var words = $('#summary_modal').val().match(/\S+/g).length;
-   // if (words < 30) {
-   //    $('.summary-error').show();
-   // } else {
-   //    $('#summary').val($('#summary_modal').val());
-   //    $('#article').submit();
-   // }
-   $('#summary').val($('#summary_modal').val());
-   $('#article').submit();
+   if (words < 30) {
+      $('.summary-error').show();
+   } else {
+      $('#summary').val($('#summary_modal').val());
+      $('#article').submit();
+   }
 })
 
 $("#summary_modal").on('keyup', function () {
