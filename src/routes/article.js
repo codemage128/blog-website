@@ -135,6 +135,7 @@ router.post(
       "Dec"
     ];
     try {
+      console.log('Error point 1-------');
       let parse = edjsParser.parse(receive);
       let html = "";
       parse.forEach(element => {

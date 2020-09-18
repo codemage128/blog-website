@@ -163,6 +163,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
             try {
+              console.log('Error point 1-------');
               parse = edjsParser.parse(receive);
               html = "";
               parse.forEach(function (element) {
