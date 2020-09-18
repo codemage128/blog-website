@@ -161,51 +161,48 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             newDate = new Date(); //List months cos js months starts from zero to 11
 
             months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            console.log('Error point 1-------');
+            parse = edjsParser.parse(receive);
+            html = "";
+            parse.forEach(function (element) {
+              html = html + element;
+            });
+            console.log('Error point 2-------');
+            console.log(html);
+            payload1 = {
+              week: "".concat(newDate.getWeek()),
+              month: "".concat(months[newDate.getMonth()]),
+              year: "".concat(newDate.getFullYear()),
+              title: article_title,
+              body: JSON.stringify(data),
+              summary: req.body.summary.trim(),
+              "short": _htmlToText["default"].fromString(html, {
+                wordwrap: false
+              }),
+              slug: articleslug,
+              category: req.body.category,
+              file: article_header,
+              postedBy: req.user.id,
+              postType: "post",
+              metatitle: meta_title,
+              metadescription: meta_description
+            };
+            payload1.active = true;
 
-            try {
-              console.log('Error point 1-------');
-              parse = edjsParser.parse(receive);
-              html = "";
-              parse.forEach(function (element) {
-                html = html + element;
-              });
-              payload1 = {
-                week: "".concat(newDate.getWeek()),
-                month: "".concat(months[newDate.getMonth()]),
-                year: "".concat(newDate.getFullYear()),
-                title: article_title,
-                body: JSON.stringify(data),
-                summary: req.body.summary.trim(),
-                "short": _htmlToText["default"].fromString(html, {
-                  wordwrap: false
-                }),
-                slug: articleslug,
-                category: req.body.category,
-                file: article_header,
-                postedBy: req.user.id,
-                postType: "post",
-                metatitle: meta_title,
-                metadescription: meta_description
-              };
-              payload1.active = true;
+            _articles["default"].create(payload1).then(function (created) {
+              console.log(user.roleId);
+              req.flash("success_msg", "New article has been posted successfully");
 
-              _articles["default"].create(payload1).then(function (created) {
-                console.log(user.roleId);
-                req.flash("success_msg", "New article has been posted successfully");
+              if (user.roleId == "user") {
+                return res.redirect("/user/all-posts");
+              } else {
+                return res.redirect("/dashboard/all-posts");
+              }
+            })["catch"](function (e) {
+              return next(e);
+            });
 
-                if (user.roleId == "user") {
-                  return res.redirect("/user/all-posts");
-                } else {
-                  return res.redirect("/dashboard/all-posts");
-                }
-              })["catch"](function (e) {
-                return next(e);
-              });
-            } catch (error) {
-              next(error);
-            }
-
-          case 32:
+          case 40:
           case "end":
             return _context.stop();
         }

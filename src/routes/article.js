@@ -134,49 +134,47 @@ router.post(
       "Nov",
       "Dec"
     ];
-    try {
-      console.log('Error point 1-------');
-      let parse = edjsParser.parse(receive);
-      let html = "";
-      parse.forEach(element => {
-        html = html + element;
+    console.log('Error point 1-------');
+    let parse = edjsParser.parse(receive);
+    let html = "";
+    parse.forEach(element => {
+      html = html + element;
+    })
+    console.log('Error point 2-------');
+    console.log(html);
+    let payload1 = {
+      week: `${newDate.getWeek()}`,
+      month: `${months[newDate.getMonth()]}`,
+      year: `${newDate.getFullYear()}`,
+      title: article_title,
+      body: JSON.stringify(data),
+      summary: req.body.summary.trim(),
+      short: htmlToText.fromString(html, {
+        wordwrap: false
+      }),
+      slug: articleslug,
+      category: req.body.category,
+      file: article_header,
+      postedBy: req.user.id,
+      postType: "post",
+      metatitle: meta_title,
+      metadescription: meta_description
+    };
+    payload1.active = true;
+    Article.create(payload1)
+      .then(created => {
+        console.log(user.roleId);
+        req.flash(
+          "success_msg",
+          "New article has been posted successfully"
+        );
+        if (user.roleId == "user") {
+          return res.redirect("/user/all-posts");
+        } else {
+          return res.redirect("/dashboard/all-posts");
+        }
       })
-      let payload1 = {
-        week: `${newDate.getWeek()}`,
-        month: `${months[newDate.getMonth()]}`,
-        year: `${newDate.getFullYear()}`,
-        title: article_title,
-        body: JSON.stringify(data),
-        summary: req.body.summary.trim(),
-        short: htmlToText.fromString(html, {
-          wordwrap: false
-        }),
-        slug: articleslug,
-        category: req.body.category,
-        file: article_header,
-        postedBy: req.user.id,
-        postType: "post",
-        metatitle: meta_title,
-        metadescription: meta_description
-      };
-      payload1.active = true;
-      Article.create(payload1)
-        .then(created => {
-          console.log(user.roleId);
-          req.flash(
-            "success_msg",
-            "New article has been posted successfully"
-          );
-          if (user.roleId == "user") {
-            return res.redirect("/user/all-posts");
-          } else {
-            return res.redirect("/dashboard/all-posts");
-          }
-        })
-        .catch(e => next(e));
-    } catch (error) {
-      next(error);
-    }
+      .catch(e => next(e));
   }
 );
 
@@ -254,34 +252,34 @@ router.post(
       let meta_description = "";
       if (req.user.roleId == "admin") {
         let _real = search !== ""
-        ? req.body.slug
-          .trim()
-          .toLowerCase()
-          .split("?")
-          .join("")
-          .split(" ")
-          .join("-")
-          .replace(new RegExp("/", "g"), "-") +
-        "-" +
-        search.length
-        : req.body.slug
-          .trim()
-          .toLowerCase()
-          .split("?")
-          .join("")
-          .split(" ")
-          .join("-")
-          .replace(new RegExp("/", "g"), "-");
-      let _array = _real.split('');
-      _array.forEach((element, index) => {
-        if (element == "ß") {
-          _array[index] = "ss";
-        }
-        if (element == "ö") { _array[index] = "oe"; }
-        if (element == "ä") { _array[index] = "ae"; }
-        if (element == "ü") { _array[index] = "ue"; }
-      });
-      let _articleslug = _array.join("");
+          ? req.body.slug
+            .trim()
+            .toLowerCase()
+            .split("?")
+            .join("")
+            .split(" ")
+            .join("-")
+            .replace(new RegExp("/", "g"), "-") +
+          "-" +
+          search.length
+          : req.body.slug
+            .trim()
+            .toLowerCase()
+            .split("?")
+            .join("")
+            .split(" ")
+            .join("-")
+            .replace(new RegExp("/", "g"), "-");
+        let _array = _real.split('');
+        _array.forEach((element, index) => {
+          if (element == "ß") {
+            _array[index] = "ss";
+          }
+          if (element == "ö") { _array[index] = "oe"; }
+          if (element == "ä") { _array[index] = "ae"; }
+          if (element == "ü") { _array[index] = "ue"; }
+        });
+        let _articleslug = _array.join("");
         articleslug = req.body.slug ? _articleslug : articleslug;
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
