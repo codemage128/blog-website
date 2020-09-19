@@ -139,7 +139,9 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
                 }
               });
 
+              console.log(articleslug);
               _articleslug = _array.join("");
+              console.log(_articleslug);
               articleslug = req.body.slug ? _articleslug : articleslug;
               meta_description = req.body.meta_description;
               meta_title = req.body.meta_title;
@@ -161,14 +163,11 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             newDate = new Date(); //List months cos js months starts from zero to 11
 
             months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            console.log('Error point 1-------');
             parse = edjsParser.parse(receive);
             html = "";
             parse.forEach(function (element) {
               html = html + element;
             });
-            console.log('Error point 2-------');
-            console.log(html);
             payload1 = {
               week: "".concat(newDate.getWeek()),
               month: "".concat(months[newDate.getMonth()]),
@@ -202,7 +201,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               return next(e);
             });
 
-          case 40:
+          case 37:
           case "end":
             return _context.stop();
         }
@@ -217,7 +216,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
 
 router.post("/article/edit", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
-    var receive, data, user, article_title, search, slug, real, array, articleslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
+    var receive, data, user, article_title, search, real, array, articleslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -250,25 +249,15 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
 
           case 9:
             search = _context2.sent;
-            console.log(slug);
-            _context2.next = 13;
-            return _articles["default"].findOne({
-              slug: req.body.slug
-            });
-
-          case 13:
-            slug = _context2.sent;
-
-            if (!slug) {
-              _context2.next = 18;
-              break;
-            }
-
-            req.flash("success_msg", "That slug has been used, pls used another slug or just leave the field empty");
-            console.log('asdfsfd');
-            return _context2.abrupt("return", res.redirect("back"));
-
-          case 18:
+            // let slug = await Article.findOne({ slug: req.body.slug });
+            // if (slug) {
+            //   req.flash(
+            //     "success_msg",
+            //     "That slug has been used, pls used another slug or just leave the field empty"
+            //   );
+            //   console.log('asdfsfd');
+            //   return res.redirect("back");
+            // }
             real = search !== "" ? article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
             array = real.split('');
             array.forEach(function (element, index) {
@@ -349,12 +338,12 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             // }
 
             date = new Date();
-            _context2.next = 33;
+            _context2.next = 25;
             return _articles["default"].findOne({
               _id: req.body.articleId
             });
 
-          case 33:
+          case 25:
             article = _context2.sent;
             article_header = req.body.article_header ? req.body.article_header : article.file;
 
@@ -363,7 +352,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             }, {
               $set: {
                 title: article_title,
-                slug: articleslug,
+                slug: req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-"),
                 "short": _short,
                 body: body,
                 updatedAt: date,
@@ -385,20 +374,20 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               return next(e);
             });
 
-            _context2.next = 41;
+            _context2.next = 33;
             break;
 
-          case 38:
-            _context2.prev = 38;
+          case 30:
+            _context2.prev = 30;
             _context2.t0 = _context2["catch"](0);
             next(_context2.t0);
 
-          case 41:
+          case 33:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 38]]);
+    }, _callee2, null, [[0, 30]]);
   }));
 
   return function (_x4, _x5, _x6) {

@@ -18,7 +18,6 @@ var editor = new EditorJS({
             levels: [1, 2, 3],
             defaultLevel: 2
          },
-         shortcut: 'CMD+SHIFT+H'
       },
       image: SimpleImage,
       embed: {
@@ -28,61 +27,57 @@ var editor = new EditorJS({
       list: {
          class: List,
          inlineToolbar: true,
-         shortcut: 'CMD+SHIFT+L'
       },
       // checklist: {
       //    class: Checklist,
       //    inlineToolbar: true,
       // },
 
-      // quote: {
-      //    class: Quote,
-      //    inlineToolbar: true,
-      //    config: {
-      //       quotePlaceholder: 'Enter a quote',
-      //       captionPlaceholder: 'Quote\'s author',
-      //    },
-      //    shortcut: 'CMD+SHIFT+O'
-      // },
+      quote: {
+         class: Quote,
+         inlineToolbar: true,
+         config: {
+            quotePlaceholder: 'Enter a quote',
+            captionPlaceholder: 'Quote\'s author',
+         },
+      },
 
       // warning: Warning,
 
-      // marker: {
-      //    class: Marker,
-      //    shortcut: 'CMD+SHIFT+M'
-      // },
+      marker: {
+         class: Marker,
+      },
 
       code: {
          class: CodeTool,
-         shortcut: 'CMD+SHIFT+C'
       },
 
       delimiter: Delimiter,
 
-      // inlineCode: {
-      //    class: InlineCode,
-      //    // shortcut: 'CMD+SHIFT+C'
-      // },
-
+      inlineCode: {
+         class: InlineCode,
+      },
       // linkTool: LinkTool,
       paragraph: {
          class: Paragraph,
          inlineToolbar: true,
       },
-      // table: {
-      //    class: Table,
-      //    inlineToolbar: true,
-      //    shortcut: 'CMD+ALT+T'
-      // },
+      table: {
+         class: Table,
+         inlineToolbar: true,
+      },
    },
    //data
    data: {
       blocks: article_content
    },
    onReady: function () {
+      var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
+      $('#wordCount').text(wordCount);
    },
    onChange: function () {
-
+      var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
+      $('#wordCount').text(wordCount);
    }
 });
 

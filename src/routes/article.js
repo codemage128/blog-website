@@ -46,8 +46,7 @@ router.post(
       }
     }
     let search = await Article.find({ title: article_title });
-    let real = search !== ""
-      ? article_title
+    let real = search !== "" ? article_title
         .trim()
         .toLowerCase()
         .split("?")
@@ -106,7 +105,9 @@ router.post(
         if (element == "ä") { _array[index] = "ae"; }
         if (element == "ü") { _array[index] = "ue"; }
       });
+      console.log(articleslug);
       let _articleslug = _array.join("");
+      console.log(_articleslug);
       articleslug = req.body.slug ? _articleslug : articleslug;
       meta_description = req.body.meta_description;
       meta_title = req.body.meta_title;
@@ -134,14 +135,11 @@ router.post(
       "Nov",
       "Dec"
     ];
-    console.log('Error point 1-------');
     let parse = edjsParser.parse(receive);
     let html = "";
     parse.forEach(element => {
       html = html + element;
     })
-    console.log('Error point 2-------');
-    console.log(html);
     let payload1 = {
       week: `${newDate.getWeek()}`,
       month: `${months[newDate.getMonth()]}`,
@@ -199,17 +197,16 @@ router.post(
         }
       });
       let search = await Article.find({ title: article_title });
-      console.log(slug);
-      let slug = await Article.findOne({ slug: req.body.slug });
+      // let slug = await Article.findOne({ slug: req.body.slug });
 
-      if (slug) {
-        req.flash(
-          "success_msg",
-          "That slug has been used, pls used another slug or just leave the field empty"
-        );
-        console.log('asdfsfd');
-        return res.redirect("back");
-      }
+      // if (slug) {
+      //   req.flash(
+      //     "success_msg",
+      //     "That slug has been used, pls used another slug or just leave the field empty"
+      //   );
+      //   console.log('asdfsfd');
+      //   return res.redirect("back");
+      // }
       let real = search !== ""
         ? article_title
           .trim()
@@ -284,6 +281,7 @@ router.post(
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
       }
+      
       let parse = edjsParser.parse(receive);
       let html = "";
       parse.forEach(element => {
@@ -306,7 +304,14 @@ router.post(
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
       let article_header = req.body.article_header ? req.body.article_header : article.file;
-      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articleslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
+      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: req.body.slug
+        .trim()
+        .toLowerCase()
+        .split("?")
+        .join("")
+        .split(" ")
+        .join("-")
+        .replace(new RegExp("/", "g"), "-"), short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {
