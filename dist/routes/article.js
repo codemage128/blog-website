@@ -218,7 +218,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
 
 router.post("/article/edit", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
-    var receive, data, user, article_title, search, articelslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
+    var receive, data, user, article_title, search, articelslug, meta_title, meta_description, _articleslug, parse, html, body, _short, date, article, article_header;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -274,28 +274,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             meta_description = "";
 
             if (req.user.roleId == "admin") {
-              _real = search !== "" ? req.body.article_slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : req.body.article_slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
-              _array = _real.split('');
-
-              _array.forEach(function (element, index) {
-                if (element == "ß") {
-                  _array[index] = "ss";
-                }
-
-                if (element == "ö") {
-                  _array[index] = "oe";
-                }
-
-                if (element == "ä") {
-                  _array[index] = "ae";
-                }
-
-                if (element == "ü") {
-                  _array[index] = "ue";
-                }
-              });
-
-              _articleslug = _array.join("");
+              _articleslug = req.body.article_slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
               articelslug = req.body.slug ? articelslug : _articleslug;
               meta_description = req.body.meta_description;
               meta_title = req.body.meta_title;

@@ -222,40 +222,18 @@ router.post(
       let meta_title = "";
       let meta_description = "";
       if (req.user.roleId == "admin") {
-        let _real = search !== ""
-          ? req.body.article_slug
-            .trim()
-            .toLowerCase()
-            .split("?")
-            .join("")
-            .split(" ")
-            .join("-")
-            .replace(new RegExp("/", "g"), "-") +
-          "-" +
-          search.length
-          : req.body.article_slug
-            .trim()
-            .toLowerCase()
-            .split("?")
-            .join("")
-            .split(" ")
-            .join("-")
-            .replace(new RegExp("/", "g"), "-");
-        let _array = _real.split('');
-        _array.forEach((element, index) => {
-          if (element == "ß") {
-            _array[index] = "ss";
-          }
-          if (element == "ö") { _array[index] = "oe"; }
-          if (element == "ä") { _array[index] = "ae"; }
-          if (element == "ü") { _array[index] = "ue"; }
-        });
-        let _articleslug = _array.join("");
+        let _articleslug = req.body.article_slug
+        .trim()
+        .toLowerCase()
+        .split("?")
+        .join("")
+        .split(" ")
+        .join("-")
+        .replace(new RegExp("/", "g"), "-");
         articelslug = req.body.slug ? articelslug : _articleslug;
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
       }
-      
       let parse = edjsParser.parse(receive);
       let html = "";
       parse.forEach(element => {
