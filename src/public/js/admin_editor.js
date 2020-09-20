@@ -111,7 +111,7 @@ $('#publish').click(function () {
 $('#publish-submit').click(function () {
    var words = $('#summary_modal').val().match(/\S+/g).length;
 
-   if (words < 30) {
+   if (words < 5) {
       $('.summary-error').show();
    } else {
       $('#summary').val($('#summary_modal').val());
@@ -126,7 +126,7 @@ $("#summary_modal").on('keyup', function () {
    $('.summary-error').hide();
    var words = this.value.match(/\S+/g).length;
 
-   if (words > 30) {
+   if (words > 5) {
       //   // Split the string on first 200 words and rejoin on spaces
       //   var trimmed = $(this).val().split(/\s+/, 200).join(" ");
       //   // Add a space at the end to make sure more typing creates new words
@@ -136,7 +136,7 @@ $("#summary_modal").on('keyup', function () {
    else {
       $('#word_left').show();
       $('#summary_modal').text(words);
-      $('#word_left').text(30 - words);
+      $('#word_left').text(5 - words);
    }
 });
 
