@@ -266,6 +266,7 @@ router.get("/dashboard/index", install.redirectToLogin, auth, role("admin"), asy
     _userPost.push(payload);
   })
   _userPost = _userPost.sort(function (a, b) { if (a.count < b.count) { return 1; } if (a.count > b.count) { return -1; } return 0 }).splice(0, 5);
+
   res.render("./admin/index", {
     title: "Dashboard",
     latestUsers: latestUsers,

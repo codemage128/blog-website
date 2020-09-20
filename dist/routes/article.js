@@ -95,6 +95,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
           case 17:
             search = _context.sent;
             real = search !== "" ? article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
+            console.log(real);
             array = real.split('');
             array.forEach(function (element, index) {
               if (element == "ß") {
@@ -114,6 +115,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               }
             });
             articleslug = array.join("");
+            console.log(articleslug);
             meta_title = "";
             meta_description = "";
 
@@ -149,10 +151,10 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             // let textLength = content.split(/\s/g).length;
 
 
-            _context.next = 27;
+            _context.next = 29;
             return _settings["default"].findOne();
 
-          case 27:
+          case 29:
             set = _context.sent;
 
             Date.prototype.getWeek = function () {
@@ -201,7 +203,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               return next(e);
             });
 
-          case 37:
+          case 39:
           case "end":
             return _context.stop();
         }
@@ -216,7 +218,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
 
 router.post("/article/edit", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
-    var receive, data, user, article_title, search, real, array, articleslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
+    var receive, data, user, article_title, search, articelslug, meta_title, meta_description, _real, _array, _articleslug, parse, html, body, _short, date, article, article_header;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -258,26 +260,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             //   console.log('asdfsfd');
             //   return res.redirect("back");
             // }
-            real = search !== "" ? article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : article_title.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
-            array = real.split('');
-            array.forEach(function (element, index) {
-              if (element == "ß") {
-                array[index] = "ss";
-              }
-
-              if (element == "ö") {
-                array[index] = "oe";
-              }
-
-              if (element == "ä") {
-                array[index] = "ae";
-              }
-
-              if (element == "ü") {
-                array[index] = "ue";
-              }
-            });
-            articleslug = array.join(""); // let content = req.body.body;
+            articelslug = req.body.article_slug; // let content = req.body.body;
             // let textLength = content.split(/\s/g).length;
             // if (textLength < 200) {
             //   req.flash(
@@ -291,7 +274,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             meta_description = "";
 
             if (req.user.roleId == "admin") {
-              _real = search !== "" ? req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
+              _real = search !== "" ? req.body.article_slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-") + "-" + search.length : req.body.article_slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-");
               _array = _real.split('');
 
               _array.forEach(function (element, index) {
@@ -313,7 +296,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               });
 
               _articleslug = _array.join("");
-              articleslug = req.body.slug ? _articleslug : articleslug;
+              articelslug = req.body.slug ? articelslug : _articleslug;
               meta_description = req.body.meta_description;
               meta_title = req.body.meta_title;
             }
@@ -338,12 +321,12 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             // }
 
             date = new Date();
-            _context2.next = 25;
+            _context2.next = 22;
             return _articles["default"].findOne({
               _id: req.body.articleId
             });
 
-          case 25:
+          case 22:
             article = _context2.sent;
             article_header = req.body.article_header ? req.body.article_header : article.file;
 
@@ -352,7 +335,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             }, {
               $set: {
                 title: article_title,
-                slug: req.body.slug.trim().toLowerCase().split("?").join("").split(" ").join("-").replace(new RegExp("/", "g"), "-"),
+                slug: articelslug,
                 "short": _short,
                 body: body,
                 updatedAt: date,
@@ -374,20 +357,20 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               return next(e);
             });
 
-            _context2.next = 33;
+            _context2.next = 30;
             break;
 
-          case 30:
-            _context2.prev = 30;
+          case 27:
+            _context2.prev = 27;
             _context2.t0 = _context2["catch"](0);
             next(_context2.t0);
 
-          case 33:
+          case 30:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 30]]);
+    }, _callee2, null, [[0, 27]]);
   }));
 
   return function (_x4, _x5, _x6) {

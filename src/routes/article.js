@@ -64,6 +64,7 @@ router.post(
         .split(" ")
         .join("-")
         .replace(new RegExp("/", "g"), "-");
+    console.log(real);
     let array = real.split('');
     array.forEach((element, index) => {
       if (element == "ß") {
@@ -74,6 +75,7 @@ router.post(
       if (element == "ü") { array[index] = "ue"; }
     });
     let articleslug = array.join("");
+    console.log(articleslug);
     let meta_title = "";
     let meta_description = "";
     if (req.user.roleId == "admin") {
@@ -207,35 +209,7 @@ router.post(
       //   console.log('asdfsfd');
       //   return res.redirect("back");
       // }
-      let real = search !== ""
-        ? article_title
-          .trim()
-          .toLowerCase()
-          .split("?")
-          .join("")
-          .split(" ")
-          .join("-")
-          .replace(new RegExp("/", "g"), "-") +
-        "-" +
-        search.length
-        : article_title
-          .trim()
-          .toLowerCase()
-          .split("?")
-          .join("")
-          .split(" ")
-          .join("-")
-          .replace(new RegExp("/", "g"), "-");
-      let array = real.split('');
-      array.forEach((element, index) => {
-        if (element == "ß") {
-          array[index] = "ss";
-        }
-        if (element == "ö") { array[index] = "oe"; }
-        if (element == "ä") { array[index] = "ae"; }
-        if (element == "ü") { array[index] = "ue"; }
-      });
-      let articleslug = array.join("");
+      let articelslug = req.body.article_slug;
       // let content = req.body.body;
       // let textLength = content.split(/\s/g).length;
       // if (textLength < 200) {
@@ -249,7 +223,7 @@ router.post(
       let meta_description = "";
       if (req.user.roleId == "admin") {
         let _real = search !== ""
-          ? req.body.slug
+          ? req.body.article_slug
             .trim()
             .toLowerCase()
             .split("?")
@@ -259,7 +233,7 @@ router.post(
             .replace(new RegExp("/", "g"), "-") +
           "-" +
           search.length
-          : req.body.slug
+          : req.body.article_slug
             .trim()
             .toLowerCase()
             .split("?")
@@ -277,7 +251,7 @@ router.post(
           if (element == "ü") { _array[index] = "ue"; }
         });
         let _articleslug = _array.join("");
-        articleslug = req.body.slug ? _articleslug : articleslug;
+        articelslug = req.body.slug ? articelslug : _articleslug;
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
       }
@@ -304,14 +278,7 @@ router.post(
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
       let article_header = req.body.article_header ? req.body.article_header : article.file;
-      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: req.body.slug
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-"), short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
+      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {

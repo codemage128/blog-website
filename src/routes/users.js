@@ -526,6 +526,7 @@ router.post("/user/create", install.redirectToLogin, async (req, res, next) => {
         .toString() +
       "?s=200" +
       "&d=retro";
+    req.body.signupProcess = "/enterinformation";
     let check = await User.findOne({ email: req.body.email });
     let username = await User.findOne({ username: req.body.username });
     if (check || username) {
@@ -540,16 +541,16 @@ router.post("/user/create", install.redirectToLogin, async (req, res, next) => {
       let payload = req.body;
       await User.create(req.body);
       await _mail(
-        "Registration Successfull",
+        "Verifizierung deiner E-Mail",
         req.body.email,
-        "reg-email2",
+        "reg-email",
         payload,
         req.headers.host,
         (err, info) => {
           if (err) console.log(err);
         }
-      );
-      req.flash("success_msg", "User Created Successfully");
+      )
+      req.flash("success_msg", "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen.");
       return res.redirect("back");
     }
   } catch (e) {

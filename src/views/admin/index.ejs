@@ -658,20 +658,20 @@
                             <% for(var key in latestUsers) { %>
                             <tr>
                                 <td>
-                                    <img src="<%= userpost[key].profilePicture %>" class="img-fluid profile-image"
+                                    <img src="<%= latestUsers[key].profilePicture %>" class="img-fluid profile-image"
                                         style="width: 50px !important;
                                     height: 50px !important;" alt="">
                                 </td>
                                 <td class="text-capitalize" style="width: 160px;">
-                                    <a href="/dashboard/users/edit/<%= userpost[key].username %>"
+                                    <a href="/dashboard/users/edit/<%= latestUsers[key].username %>"
                                         data-toggle="tooltip" data-placement="bottom" title="Edit User">
                                         <%= latestUsers[key].username %>
                                     </a>
                                 </td>
                                 <td>
-                                    <%= userpost[key].email %>
+                                    <%= latestUsers[key].email %>
                                 </td>
-                                <td><%= userpost[key].count %></td>
+                                <td><%= latestUsers[key].count %></td>
                             </tr>
                             <% } %>
                         </tbody>

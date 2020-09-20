@@ -943,64 +943,65 @@ router.post("/user/create", _install["default"].redirectToLogin, /*#__PURE__*/fu
             req.body.firstName = req.body.firstName == "" ? "Not Specified" : req.body.firstName;
             req.body.lastName = req.body.lastName == "" ? "Not Specified" : req.body.lastName;
             req.body.profilePicture = "https://gravatar.com/avatar/" + _crypto["default"].createHash("md5").update(req.body.email).digest("hex").toString() + "?s=200" + "&d=retro";
-            _context11.next = 11;
+            req.body.signupProcess = "/enterinformation";
+            _context11.next = 12;
             return _users["default"].findOne({
               email: req.body.email
             });
 
-          case 11:
+          case 12:
             check = _context11.sent;
-            _context11.next = 14;
+            _context11.next = 15;
             return _users["default"].findOne({
               username: req.body.username
             });
 
-          case 14:
+          case 15:
             username = _context11.sent;
 
             if (!(check || username)) {
-              _context11.next = 20;
+              _context11.next = 21;
               break;
             }
 
             req.flash("success_msg", "".concat(check ? "Email" : "Username", " has been used"));
             return _context11.abrupt("return", res.redirect("back"));
 
-          case 20:
+          case 21:
             req.body.siteLink = res.locals.siteLink;
             req.body.logo = res.locals.siteLogo;
             req.body.instagram = res.locals.instagram;
             req.body.facebook = res.locals.facebook;
             req.body.twitter = res.locals.twitter;
             payload = req.body;
-            _context11.next = 28;
+            _context11.next = 29;
             return _users["default"].create(req.body);
 
-          case 28:
-            _context11.next = 30;
-            return (0, _mail2["default"])("Registration Successfull", req.body.email, "reg-email2", payload, req.headers.host, function (err, info) {
+          case 29:
+            _context11.next = 31;
+            return (0, _mail2["default"])("Verifizierung deiner E-Mail", req.body.email, "reg-email", payload, req.headers.host, function (err, info) {
               if (err) console.log(err);
             });
 
-          case 30:
-            req.flash("success_msg", "User Created Successfully");
+          case 31:
+            req.flash("success_msg", "Registrierung erfolgreich. Bitte prüfe deine Mails, um den Vorgang abzuschließen.");
             return _context11.abrupt("return", res.redirect("back"));
 
-          case 32:
-            _context11.next = 37;
+          case 33:
+            _context11.next = 38;
             break;
 
-          case 34:
-            _context11.prev = 34;
+          case 35:
+            _context11.prev = 35;
             _context11.t0 = _context11["catch"](0);
             next(_context11.t0);
 
-          case 37:
+          case 38:
           case "end":
             return _context11.stop();
         }
       }
-    }, _callee11, null, [[0, 34]]);
+    }, _callee11, null, [[0, 35]]);
   }));
 
   return function (_x30, _x31, _x32) {
