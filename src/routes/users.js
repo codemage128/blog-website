@@ -1391,12 +1391,14 @@ router.get("/follow-user", auth, async (req, res, next) => {
 
   let _payload = {
     user: user,
-    follower: follower
+    follower: follower,
+    siteLink: res.locals.siteLink,
   }
+  console.log( res.locals.siteLink);
   await _mail(
     "Du hast einen neuen Follower",
     followeremail,
-    "reset-password-email",
+    "new-follower",
     _payload,
     req.headers.host,
     (err, info) => {
