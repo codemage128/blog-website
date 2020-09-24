@@ -2206,16 +2206,15 @@ router.get("/follow-user", _auth["default"], /*#__PURE__*/function () {
               follower: follower,
               siteLink: res.locals.siteLink
             };
-            console.log(res.locals.siteLink);
-            _context25.next = 16;
+            _context25.next = 15;
             return (0, _mail2["default"])("Du hast einen neuen Follower", followeremail, "new-follower", _payload, req.headers.host, function (err, info) {
               if (err) console.log(err);
             });
 
-          case 16:
+          case 15:
             return _context25.abrupt("return", res.redirect("back"));
 
-          case 17:
+          case 16:
           case "end":
             return _context25.stop();
         }

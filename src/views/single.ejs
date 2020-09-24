@@ -59,6 +59,52 @@
             }
         </script>
     <style>
+        .loader {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 99999;
+        }
+
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #000000;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .inner-dark-blog-content-one p a {
             color: #000000 !important;
         }
@@ -71,15 +117,7 @@
         }
 
         .table-content {
-            float: right;
-            width: 30%;
-            background: bisque;
-            margin: 20px;
-            margin-top: 0px;
-            border-radius: 50px;
-            padding: 50px;
-            box-shadow: 6px 6px 15px -5px #000000;
-            padding-top: 10px;
+            padding-inline-start: 3vw;
         }
 
         html {
@@ -103,6 +141,11 @@
             .confirm {
                 right: 25% !important;
             }
+
+            .article_container {
+                display: inline-block;
+                width: 100vw;
+            }
         }
 
         @media screen and (min-width: 1000px) {
@@ -114,6 +157,64 @@
                 display: block;
                 width: 76vw;
             }
+
+            .article_container {
+                display: flex;
+                width: 75vw;
+            }
+        }
+
+        .table-of-contents {
+            position: relative;
+            flex-basis: 20vw;
+            background: #F5F5F5;
+        }
+
+        .table-of-contents ul,
+        ol {
+            position: fixed;
+            /* Chrome (asshole) */
+            position: sticky;
+            /* Firefox */
+            margin-top: 2em;
+            top: 10em;
+        }
+
+        .card {
+            box-shadow: 2px 2px 5px -4px black;
+            padding: 20px;
+        }
+
+        .commentImg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .commentName {
+            font-size: 1.5em;
+            margin-left: 15px;
+        }
+
+        .card-body {
+            border-left: 2px solid gray;
+            margin-top: 2vh;
+        }
+
+        .comment {
+            font-size: 1.5em;
+            margin-left: 1vw;
+        }
+
+        .replyImg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .replyName {
+            font-size: 1.25em;
+            margin-left: 15px;
         }
     </style>
     <%- mainSettings.htmlHeadCode %>
@@ -163,9 +264,10 @@
         <a class="searchbar" href="/sign-up"><i class="fa fa-user"></i><span class="menu-title">Registrieren</span></a>
         <% } %>
     </div>
-    <ul class="list-group list-group-flush" id="suggestion">
 
+    <ul class="list-group list-group-flush" id="suggestion">
     </ul>
+
     <header class="sticky" id="header">
         <section class="container">
             <section class="row header" id="logo_menu">
@@ -206,7 +308,8 @@
                     <% if (user.paid == "free") { %>
                     <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
                             entdecken</span></a>
-                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über Dype</span></a>
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über
+                            Dype</span></a>
                     <a class="searchbar" href="/ourwork"><span style="padding-left: 10px;cursor:pointer">Exklusive
                             Inhalte</span></a>
                     <% } else if(user.paid == 'paid') { %>
@@ -214,7 +317,8 @@
                             Inhalte</span></a>
                     <a class="searchbar" href="/blogrecent"><span style="padding-left: 10px;cursor:pointer">Feed</span>
                     </a>
-                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über Dype</span></a>
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über
+                            Dype</span></a>
                     <% } %>
                     <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
                             onclick="openNav()"><i class="fa fa-search" aria-hidden="true"></i></span></a>
@@ -246,7 +350,8 @@
                         </ul>
                     </div>
                     <% } else {%>
-                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über Dype</span></a>
+                    <a class="searchbar" href="/blogger-werden"><span style="padding-left: 10px;cursor:pointer">Über
+                            Dype</span></a>
                     <a class="searchbar" href="/afterlogin"><span style="padding-left: 10px;cursor:pointer">Inhalte
                             entdecken</span></a>
                     <a class="searchbar" href="#"><span style="font-size:20px; padding-left: 10px;cursor:pointer"
@@ -270,6 +375,9 @@
          </div>
        </div>
     </header>
+    <div class="loader">
+    <div id="loader"></div>
+    </div>
     <div class="dark-blog-banner" style="background-image: linear-gradient(#0000008e, #000000) , url('<%= article.file%>');">
                     <div class="container">
                         <div class="inner-dark-blog">
@@ -317,7 +425,12 @@
                 </div>
                 <!-- <div class="dark-blog-content-one"> -->
                 <textarea id="article_body" style="display: none;"><%= article.body %></textarea>
-                <div class="container">
+
+                <div class="container article_container">
+                    <aside class="table-of-contents"
+                        style="margin-top: 50px;padding-top: 50px;padding-bottom: 50px; margin-left: -13vw;">
+                        <!-- will be generated with JS -->
+                    </aside>
                     <article class="inner-dark-blog-content-one" id="inner-dark-blog-content-one"
                         style="overflow:hidden;">
                     </article>
@@ -377,6 +490,126 @@
                         </div>
                     </div>
                 </div>
+                <!-- comment section -->
+                <div class="dark-blog-makedby">
+                    <div class="container">
+                        <div class="inner-dark-blog-makeby">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h1 style="color: rgb(0, 208, 126);"><%= comments.length %>
+                                        <span style="color: #000000; font-size:large;">Comments</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row commentList">
+                                <% for(var i = 0 ; i < comments.length; i ++) {%>
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header row">
+                                            <div class="col-md-12">
+                                                <img class="commentImg" src="<%= comments[i].profilePicture%>">
+                                                <span class="commentName"><%= comments[i].name%></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="comment">
+                                                <%= comments[i].comment %>
+                                            </p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <span class="btn btn-secondary" id="count<%= comments[i]._id %>"><%= comments[i].upvoteCount%></span>
+                                            <button class="btn btn-secondary upvoteBtn" data="<%= comments[i]._id %>"><i
+                                                    class="fa fa-arrow-up">&nbsp;&nbsp;Upvote</i></button>
+                                            <% if(user){%>
+                                            <button class="btn btn-secondary reply" data="<%= comments[i]._id %>"><i
+                                                    class="fa fa-reply">&nbsp;&nbsp;Reply</i></button>
+                                            <% } %>
+
+                                            <hr>
+                                            <% for(var k = 0; k < comments[i].replies.length; k ++) {%>
+                                            <div class="row" style="margin-top: 10px;">
+                                                <div class="col-md-11 col-md-offset-1">
+                                                    <div class="card-header row">
+                                                        <div class="col-md-12">
+                                                            <img src="<%= comments[i].replies[k].profilePicture%>"
+                                                                class="replyImg">
+                                                            <span
+                                                                class="replyName"><%= comments[i].replies[k].name%></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="comment">
+                                                            <%= comments[i].replies[k].reply %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(user){%>
+                                            <div class="row" style="margin-top: 10px;display: none;"
+                                                id="<%= comments[i]._id %>">
+                                                <form action="/reply" method="POST"
+                                                    id="replyForm<%= comments[i]._id %>">
+                                                    <div class="col-md-11 col-md-offset-1">
+                                                        <hr>
+                                                        <input type="hidden" id="commentIdForreply" name="commentId"
+                                                            value="<%= comments[i]._id %>" />
+                                                        <input type="hidden" name="name" value="<%= user.username%>">
+                                                        <input type="hidden" name="email" value="<%= user.email%>">
+                                                        <input type="hidden" name="profilePicture"
+                                                            value="<%= user.profilePicture%>">
+
+                                                        <div style="margin-top: 20px;">
+                                                            <textarea class="form-control" rows="5" name="reply"
+                                                                placeholder="Type your idea in here"></textarea>
+                                                        </div>
+                                                        <div style="text-align: right;">
+                                                            <button class="btn btn-secondary replyBtn"
+                                                                data="<%= comments[i]._id %>" style="margin-top: 10px;"
+                                                                type="button">Reply</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <% if(user){%>
+                            <h2>Comment</h2>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <form action="/comment" method="POST">
+                                            <div style="margin-top: 20px;">
+                                                <input type="hidden" name="name" id="username"
+                                                    value="<%= user.username%>">
+                                                <input type="hidden" name="email" id="useremail"
+                                                    value="<%= user.email%>">
+                                                <input type="hidden" name="profilePicture" id="userpicture"
+                                                    value="<%= user.profilePicture%>">
+                                                <input type="hidden" name="articleId" id="articleId"
+                                                    value="<%= article._id%>">
+                                                <textarea class="form-control" rows="5" id="comment"
+                                                    placeholder="Type your idea in here" name="comment"></textarea>
+                                            </div>
+                                            <div class="card-footer" style="text-align: right;">
+                                                <button class="btn btn-secondary" style="margin-top: 10px;">Comment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of the comment section -->
+
                 <% if (articleCount > 2) {%>
                 <div class="dark-blog-posts">
                     <div class="container-fluid">

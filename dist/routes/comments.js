@@ -21,7 +21,7 @@ var router = _express["default"].Router(); // Create a new comment
 
 router.post('/comment', /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
-    var set, payload;
+    var set, ipAddress, payload;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -33,20 +33,27 @@ router.post('/comment', /*#__PURE__*/function () {
             set = _context.sent;
 
             try {
+              ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
               payload = {
-                slug: req.body.slug,
                 name: req.body.name,
                 email: req.body.email,
-                website: req.body.website,
                 comment: req.body.comment,
-                ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null),
                 articleId: req.body.articleId,
-                profilePicture: 'https://gravatar.com/avatar/' + _crypto["default"].createHash('md5').update(req.body.email).digest('hex').toString() + '?s=200' + '&d=retro',
-                active: set.approveComment == true ? true : false
+                upvoteCount: 0,
+                profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
+                // crypto
+                // 	.createHash('md5')
+                // 	.update(req.body.email)
+                // 	.digest('hex')
+                // 	.toString() +
+                // '?s=200' +
+                // '&d=retro',
+
               };
 
               _comment["default"].create(payload).then(function (done) {
-                if (set.approveComment == true) res.send('Comment posted Successfully');else res.send('Comment has been logged for moderation');
+                // res.send({data: done});
+                res.redirect('back');
               })["catch"](function (e) {
                 return next(e);
               });
@@ -65,143 +72,75 @@ router.post('/comment', /*#__PURE__*/function () {
   return function (_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
-}()); // Update a comment
+}()); // Upvote to a comment
 
-router.post('/comment/update', function (req, res, next) {
-  try {
-    _comment["default"].updateOne({
-      _id: req.body.commentId
-    }, req.body).then(function (activated) {
-      req.flash('success_msg', 'Comment has been updated successfully');
-      return res.redirect('back');
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Delete a comment
+router.post("/comment/upvote", /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res, next) {
+    var commentId, ipAddress, comment, indexof, payload;
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            commentId = req.body.commentId;
+            ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
+            _context2.next = 4;
+            return _comment["default"].findOne({
+              _id: commentId
+            });
 
-router.post('/comment/delete', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].deleteOne({
-      _id: req.body.commentId
-    }).then(function (deleted) {
-      req.flash('success_msg', 'Comment has been deleted');
-      return res.redirect('back');
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Delete many comment
+          case 4:
+            comment = _context2.sent;
+            indexof = -1;
+            comment.upvote.forEach(function (element) {
+              if (element.ip == ipAddress) {
+                indexof = 1;
+              }
+            });
+            payload = {
+              ip: ipAddress
+            };
 
-router.post('/comment/deleteMany', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].deleteMany({
-      _id: req.body.ids
-    }).then(function (deleted) {
-      if (!req.body.ids) {
-        req.flash('success_msg', 'Nothing was Deleted');
-        return res.redirect('back');
-      } else {
-        req.flash('success_msg', 'Comment has been Deleted');
-        return res.redirect('back');
-      }
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Activate a commet
+            if (!(indexof == -1)) {
+              _context2.next = 14;
+              break;
+            }
 
-router.post('/comment/activate', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].updateOne({
-      _id: req.body.commentId
-    }, {
-      $set: {
-        active: true
-      }
-    }).then(function (activated) {
-      req.flash('success_msg', 'Comment has been activated');
-      return res.redirect('back');
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Deactivate a comment
+            _context2.next = 11;
+            return _comment["default"].updateOne({
+              _id: commentId
+            }, {
+              $push: {
+                upvote: payload
+              },
+              $inc: {
+                upvoteCount: 1
+              }
+            });
 
-router.post('/comment/deactivate', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].updateOne({
-      _id: req.body.commentId
-    }, {
-      $set: {
-        active: false
-      }
-    }).then(function (activated) {
-      req.flash('success_msg', 'Comment has been Deactivated');
-      return res.redirect('back');
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Approve many comments
+          case 11:
+            _context2.next = 13;
+            return _comment["default"].findOne({
+              _id: commentId
+            });
 
-router.post('/comment/approveMany', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].updateMany({
-      _id: req.body.ids
-    }, {
-      $set: {
-        active: true
-      }
-    }).then(function (activated) {
-      if (!req.body.ids) {
-        req.flash('success_msg', 'No Comment was Approved');
-        return res.redirect('back');
-      } else {
-        req.flash('success_msg', 'Comments has been Approved');
-        return res.redirect('back');
-      }
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Unapprove many comments
+          case 13:
+            comment = _context2.sent;
 
-router.post('/comment/unapproveMany', _auth["default"], function (req, res, next) {
-  try {
-    _comment["default"].updateMany({
-      _id: req.body.ids
-    }, {
-      $set: {
-        active: false
+          case 14:
+            res.json(comment.upvoteCount);
+
+          case 15:
+          case "end":
+            return _context2.stop();
+        }
       }
-    }).then(function (activated) {
-      if (!req.body.ids) {
-        req.flash('success_msg', 'No Changes was Made');
-        return res.redirect('back');
-      } else {
-        req.flash('success_msg', 'Comments has been Unapproved Successfully');
-        return res.redirect('back');
-      }
-    })["catch"](function (e) {
-      return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Reply to a comment
+    }, _callee2);
+  }));
+
+  return function (_x4, _x5, _x6) {
+    return _ref2.apply(this, arguments);
+  };
+}()); // Reply to a comment
 
 router.post('/reply', function (req, res, next) {
   try {
@@ -209,7 +148,15 @@ router.post('/reply', function (req, res, next) {
       name: req.body.name,
       email: req.body.email,
       reply: req.body.reply,
-      profilePicture: 'https://gravatar.com/avatar/' + _crypto["default"].createHash('md5').update(req.body.email).digest('hex').toString() + '?s=200' + '&d=retro'
+      profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
+      // crypto
+      // 	.createHash('md5')
+      // 	.update(req.body.email)
+      // 	.digest('hex')
+      // 	.toString() +
+      // '?s=200' +
+      // '&d=retro',
+
     };
 
     _comment["default"].updateOne({
@@ -219,19 +166,11 @@ router.post('/reply', function (req, res, next) {
         replies: payload
       }
     }).then(function (replied) {
-      res.status(200).send('Replied successfully');
+      // res.status(200).send('Replied successfully');
+      // res.send('Replied successfully');
+      res.redirect('back');
     })["catch"](function (e) {
       return next(e);
-    });
-  } catch (error) {
-    next(error);
-  }
-}); // Update a reply
-
-router.post('/reply/update', function (req, res, next) {
-  try {
-    _comment["default"].updateOne({
-      'replies._id': req.body.replyId
     });
   } catch (error) {
     next(error);

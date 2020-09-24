@@ -14,7 +14,7 @@
   .dialog-container {
     margin: 10px;
   }
-  
+
   /* .paymentdialog-background {
     position: fixed;
     top: 0;
@@ -49,7 +49,7 @@
 
     .btn-stripe {
       width: 100%;
-      height: 48px;
+      height: 60px;
       margin-bottom: 14px;
     }
 
@@ -205,8 +205,31 @@
 </script>
 <script
   src="https://www.paypal.com/sdk/js?client-id=Ac__9y8nnJBHSkeoMZTbcDKS0BYpF9LwBioDHrC7Fj-7AoBVi_X8zoWIn2dQzLJ53rmicDzdZ8_7MdO-&currency=EUR"></script>
+  
+  <script src="https://www.paypal.com/sdk/js?client-id=AfhK6sKSv1Ec4L-fQR598sSmFOBhUmizGDhGdGs_Sqdk9AFhYyEb3_H12oVznod291cq4eDF5PzD1ly0&vault=true" data-sdk-integration-source="button-factory"></script>
 <script>
+-
   paypal.Buttons({
+    style: {
+      shape: 'pill',
+      color: 'silver',
+      layout: 'horizontal',
+      label: 'subscribe'
+    },
+    createSubscription: function (data, actions) {
+      return actions.subscription.create({
+        'plan_id': 'P-4ED44576B2085045VL5V2H5Y'
+      });
+    },
+    onApprove: function (data, actions) {
+      alert(data.subscriptionID);
+    }
+  }).render('.paypal-container');
+
+  paypal.Buttons({
+    style: {
+      layout: 'horizontal',
+    },
     // Set up the transaction
     createOrder: function (data, actions) {
       return actions.order.create({

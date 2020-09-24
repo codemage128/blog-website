@@ -5,18 +5,19 @@ const commentSchema = new Schema({
     slug: String,
     name: String,
     email: String,
-    website: String,
     comment: String,
-    active: {
-        type: Boolean,
-        default: false
+    articleId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Article'
     },
+    upvote: [
+        {
+            ip: String,
+        }
+    ],
+    upvoteCount: Number,
     replies: [
         {
-            commentId: {
-                type: Schema.Types.ObjectId,
-                ref: 'Comment'
-            },
             name: String,
             email: String,
             reply: String,
@@ -27,14 +28,9 @@ const commentSchema = new Schema({
             }
         }
     ],
-    ip: String,
-    articleId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Article'
-    },
     profilePicture: {
         type: String,
-    }
+    },
 }, {timestamps: true});
 
 module.exports = mongoose.model('Comment', commentSchema);

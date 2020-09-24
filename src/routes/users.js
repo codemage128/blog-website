@@ -1394,7 +1394,6 @@ router.get("/follow-user", auth, async (req, res, next) => {
     follower: follower,
     siteLink: res.locals.siteLink,
   }
-  console.log( res.locals.siteLink);
   await _mail(
     "Du hast einen neuen Follower",
     followeremail,

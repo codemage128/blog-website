@@ -17,13 +17,13 @@
    padding: 10px;
    position: fixed;
    top: 43%;
-   left: 0;
+   right: 0;
    background: #fff;
    width: 92px;
    height: 180px;
    display: none;
    text-decoration: none;
-   border-radius: 0px 25px 25px 0px;
+   border-radius: 25px 0px 0px 25px;
    -webkit-transition: all 0.3s linear;
    -moz-transition: all 0.3s ease;
    -ms-transition: all 0.3s ease;

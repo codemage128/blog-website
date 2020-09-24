@@ -1,5 +1,11 @@
 
 $(function () {
+   setTimeout(function(){
+      $('.loader').css('display', 'none');
+      $('#loader').css('display', 'none');
+   }, 1000);
+   // $('.loader').css('display', 'none');
+   // $('#loader').css('display', 'none');
 
    var article_body = JSON.parse($('#article_body').val());
    var idList = [];
@@ -33,7 +39,7 @@ $(function () {
    });
    $('#inner-dark-blog-content-one').append(body_content_element);
 
-   var table_content_element = '<ul class="table-content"><h2 class="text-center">Table content</h2>';
+   var table_content_element = '<ol class="table-content"><h2>Table content</h2>';
    var table_element = [];
    article_body.forEach(element => {
       if (element.type == "header") {
@@ -47,8 +53,9 @@ $(function () {
       var template = '<li><a href="#' + idList[index] + '">' + item.data.text + '</a></li>';
       _string = _string + template;
    });
-   table_content_element = table_content_element + _string + '</ul>';
-   $('#inner-dark-blog-content-one').prepend(table_content_element);
+   table_content_element = table_content_element + _string + '</ol>';
+   // $('#inner-dark-blog-content-one').prepend(table_content_element);
+   $('.table-of-contents').append(table_content_element);
    init();
 })
 
@@ -241,3 +248,101 @@ function displaySearchbtn() {
 function openSidebar() {
    document.getElementById("sidenav").style.display = "block";
 }
+
+var username = $('#username').val();
+var useremail = $('#useremail').val();
+var userpicture = $('#userpicture').val();
+var articleID = $('#articleId').val();
+// article commment functionality
+// $('#commentBtn').click(function () {
+//    var comment = $('#comment').val();
+   // $.ajax({
+   //    url: '/comment',
+   //    type: "post",
+   //    data: {
+   //       name: username,
+   //       email: useremail,
+   //       articleId: articleID,
+   //       profilePicture: userpicture,
+   //       comment: comment
+   //    },
+   //    success: function (data) {
+   //       var reply = "";
+   //       data = data.data;
+   //       for(var i = 0; i < data.replies.length; i ++){
+   //          var _template = '<div class="row" style="margin-top: 10px;">'+
+   //          '<div class="col-md-11 col-md-offset-1">'+
+   //          '<div class="card-header row">'+
+   //          '<div class="col-md-12">'+
+   //          '<img src="'+ data.replies[i].profilePicture +'" class="replyImg">'+
+   //          '<span class="replyName">'+ data.replies[i].name+'</span>'+
+   //          '</div>'+
+   //          '</div>'+
+   //          '<div class="card-body">'+
+   //          '<p class="comment">' + data.replies[i].reply + '</p>'+
+   //          '</div>'+
+   //          '</div>'+
+   //          '</div>';
+   //          reply = reply + _template;
+   //       }
+   //       var template = '<div class="col-md-12">' +
+   //       '<div class="card">' +
+   //           '<div class="card-header row">' +
+   //               '<div class="col-md-12">' +
+   //                   '<img class="commentImg" src="' + data.profilePicture +'">' + 
+   //                   '<span class="commentName">'+ data.name+'</span>' + 
+   //               '</div>'+
+   //           '</div>' +
+   //           '<div class="card-body">' +
+   //               '<p class="comment">'+ data.comment +'</p></div>'+
+   //           '<div class="card-footer">'+
+   //               '<button class="btn btn-secondary">'+ data.upvoteCount+'</button>'+
+   //               '<button class="btn btn-secondary"><i class="fa fa-arrow-up">&nbsp;&nbsp;Upvote</i></button>'+
+   //               '<button class="btn btn-secondary reply" data="' + data._id + '"><i class="fa fa-reply">&nbsp;&nbsp;Reply</i></button><hr>' +
+   //               reply + 
+   //               '<div class="row" style="margin-top: 10px;display: none;" id="'+ data._id+'">'+
+   //               '<form action="/reply" method="POST" id="replyForm'+ data._id+'">'+
+   //               '<div class="col-md-11 col-md-offset-1">'+
+   //               '<hr>'+
+   //               '<input type="hidden" id="commentIdForreply" name="commentId" value="'+ data._id+'" />'+
+   //               '<div style="margin-top: 20px;">'+
+   //               '<textarea class="form-control" rows="5" name="reply" placeholder="Type your idea in here"></textarea>'+
+   //               '</div>'+
+   //               '<div style="text-align: right;">'+
+   //               '<button class="btn btn-secondary replyBtn" data="'+ data._id+'" style="margin-top: 10px;" type="button">Reply</button>'+
+   //               '</div>'+
+   //               '</div>'+
+   //               '</form>'+
+   //               '</div>'+
+   //               '</div>'+
+   //               '</div>'+
+   //               '</div>';
+   //       $('.commentList').append(template);
+   //    }
+   // })
+// })
+
+$('.replyBtn').click(function () {
+   var id = $(this).attr('data');
+   var replyId = "#replyForm" + id;
+   $(replyId).submit();
+})
+
+$('.reply').click(function () {
+   var id = $(this).attr('data');
+   var replyId = "#" + id;
+   $(replyId).toggle();
+})
+
+$('.upvoteBtn').click(function(){
+   var id = $(this).attr('data');
+   var countTxt = "#count" + id;
+   $.ajax({
+      url: "/comment/upvote",
+      type: 'post',
+      data: {commentId: id},
+      success: function(data){
+         $(countTxt).text(data);
+      }
+   });
+})

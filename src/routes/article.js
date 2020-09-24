@@ -366,7 +366,6 @@ router.post(
   }
 );
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
-
   try {
     let settings = await Settings.findOne();
     let user = req.params.user;
@@ -545,6 +544,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       })
       if (indexof !== -1) {
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+        let comments = await Comment.find({articleId: view_article._id}).sort({upvotecount: -1});
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -557,7 +557,8 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           recommended: recommended,
           related: related,
           bookmark: book,
-          bookmarkId: bookmark == null ? null : bookmark._id
+          bookmarkId: bookmark == null ? null : bookmark._id,
+          comments: comments
         });
       } else {
         let ip =
@@ -579,6 +580,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         );
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+        let comments = await Comment.find({articleId: view_article._id}).sort({upvotecount: -1});
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -591,7 +593,8 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           recommended: recommended,
           related: related,
           bookmark: book,
-          bookmarkId: bookmark == null ? null : bookmark._id
+          bookmarkId: bookmark == null ? null : bookmark._id,
+          comments: comments
         });
         // Article.updateOne(
         //   { slug: req.params.slug.trim() },

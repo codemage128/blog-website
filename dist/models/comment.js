@@ -9,17 +9,16 @@ var commentSchema = new Schema({
   slug: String,
   name: String,
   email: String,
-  website: String,
   comment: String,
-  active: {
-    type: Boolean,
-    "default": false
+  articleId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Article'
   },
+  upvote: [{
+    ip: String
+  }],
+  upvoteCount: Number,
   replies: [{
-    commentId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Comment'
-    },
     name: String,
     email: String,
     reply: String,
@@ -29,11 +28,6 @@ var commentSchema = new Schema({
       "default": Date.now()
     }
   }],
-  ip: String,
-  articleId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Article'
-  },
   profilePicture: {
     type: String
   }
