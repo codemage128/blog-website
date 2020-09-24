@@ -2606,30 +2606,37 @@ router.get("/dashboard/comments", _auth["default"], _install["default"].redirect
           case 16:
             _count6 = _context30.sent;
             _context30.next = 19;
-            return _comment2["default"].aggregate([{
-              $sort: {
-                createdAt: -1
-              }
-            }, {
-              $skip: perPage * page - perPage
-            }, {
-              $limit: perPage
-            }, {
-              $lookup: {
-                from: "articles",
-                localField: "slug",
-                foreignField: "slug",
-                as: "articleInfo"
-              }
-            }, {
-              $unwind: {
-                path: "$articleInfo",
-                preserveNullAndEmptyArrays: true
-              }
-            }]);
+            return _comment2["default"].find({}).populate('articleId').skip(perPage * page - perPage).limit(perPage).sort('createdAt');
 
           case 19:
             _comment = _context30.sent;
+            // let comment = await Comment.aggregate([
+            //   {
+            //     $sort: {
+            //       createdAt: -1
+            //     }
+            //   },
+            //   {
+            //     $skip: perPage * page - perPage
+            //   },
+            //   {
+            //     $limit: perPage
+            //   },
+            //   {
+            //     $lookup: {
+            //       from: "articles",
+            //       localField: "slug",
+            //       foreignField: "slug",
+            //       as: "articleInfo"
+            //     }
+            //   },
+            //   {
+            //     $unwind: {
+            //       path: "$articleInfo",
+            //       preserveNullAndEmptyArrays: true
+            //     }
+            //   }
+            // ]);
             res.render("./admin/comments", {
               title: "Dashboard - Comments",
               comment: _comment,

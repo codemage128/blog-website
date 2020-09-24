@@ -102,8 +102,6 @@
             <div class="form-group d-flex">
                 <select id="bulkSelect" class="form-control form-control-sm bulk">
                     <option selected="selected" disabled="disabled">Bulk Actions</option>
-                    <option value="publish">Approve</option>
-                    <option value="unapprove">Unapprove</option>
                     <option value="delete">Move to Trash</option>
                 </select>
                 <button class="btn btn-info ml-3 btn-sm"
@@ -135,13 +133,11 @@
                                 <th>
                                     <input type="checkbox" name="" id="selectAll" class="">
                                 </th>
-                                <th>Author</th>
+                                <th>User</th>
                                 <th>in Response to</th>
                                 <th>Comment</th>
                                 <th>Replies</th>
-                                <th>Ip Address</th>
                                 <th>Date</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -153,8 +149,8 @@
                                 <td class="">
                                     <%= comment[key].email %>
                                 </td>
-                                <td style="max-width: 200px;" class="format">
-                                    <a href="/post/<%= comment[key].articleInfo.slug %>" target="_blank"><%= comment[key].articleInfo.title %></a>
+                                <td style="max-width: 300px;" class="format">
+                                    <a href="#" target="_blank"><%= comment[key].articleId.title %></a>
                                 </td>
                                 <td>
                                     <a href="/dashboard/comments/edit/<%= comment[key]._id %>">
@@ -168,17 +164,8 @@
                                         <%= comment[key].replies.length %>
                                     </span>
                                 </td>
-                                <td>
-                                    <%= comment[key].ip %>
-                                </td>
+                                
                                 <td><%= comment[key].createdAt.toLocaleDateString() %></td>
-                                <td>
-                                    <% if(comment[key].active== true){ %>
-                                    <span class="badge badge-success">Approved</span>
-                                    <%} else { %>
-                                    <span class="badge badge-danger">Unapproved</span>
-                                    <% } %>
-                                </td>
                             </tr>
                             <% } %>
                         </tbody>

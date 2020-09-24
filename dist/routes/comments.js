@@ -176,4 +176,23 @@ router.post('/reply', function (req, res, next) {
     next(error);
   }
 });
+router.post('/comment/deleteMany', _auth["default"], function (req, res, next) {
+  try {
+    _comment["default"].deleteMany({
+      _id: req.body.ids
+    }).then(function (deleted) {
+      if (!req.body.ids) {
+        req.flash('success_msg', 'Nothing was Deleted');
+        return res.redirect('back');
+      } else {
+        req.flash('success_msg', 'Comment has been Deleted');
+        return res.redirect('back');
+      }
+    })["catch"](function (e) {
+      return next(e);
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;

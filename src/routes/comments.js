@@ -90,4 +90,22 @@ router.post('/reply', (req, res, next) => {
 	}
 });
 
+router.post('/comment/deleteMany', auth, (req, res, next) => {
+	try {
+		Comment.deleteMany({ _id: req.body.ids })
+			.then(deleted => {
+				if (!req.body.ids) {
+					req.flash('success_msg', 'Nothing was Deleted');
+					return res.redirect('back');
+				} else {
+					req.flash('success_msg', 'Comment has been Deleted');
+					return res.redirect('back');
+				}
+			})
+			.catch(e => next(e));
+	} catch (error) {
+		next(error);
+	}
+});
+
 module.exports = router;
