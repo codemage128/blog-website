@@ -118,6 +118,16 @@
 
         .table-content {
             padding-inline-start: 3vw;
+            overflow-y: scroll;
+            height: 80vh;
+        }
+
+        .table-content ol,
+        ul,
+        li>a {
+            font-size: 1.2em;
+            font-family: "EB Garamond";
+            text-decoration: none;
         }
 
         html {
@@ -168,6 +178,10 @@
             position: relative;
             flex-basis: 20vw;
             background: #F5F5F5;
+            margin-top: 20px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            margin-left: -13vw;
         }
 
         .table-of-contents ul,
@@ -217,7 +231,7 @@
             margin-left: 15px;
         }
 
-        .quotation-mark{
+        .quotation-mark {
             font-size: 1.25em;
         }
     </style>
@@ -431,8 +445,7 @@
                 <textarea id="article_body" style="display: none;"><%= article.body %></textarea>
 
                 <div class="container article_container">
-                    <aside class="table-of-contents"
-                        style="margin-top: 20px;padding-top: 50px;padding-bottom: 50px; margin-left: -13vw;">
+                    <aside class="table-of-contents">
                         <%- article_table_content%>
                         <!-- will be generated with JS -->
                     </aside>
@@ -524,7 +537,8 @@
                                             </p>
                                         </div>
                                         <div class="card-footer">
-                                            <span class="btn btn-secondary" id="count<%= comments[i]._id %>"><%= comments[i].upvoteCount%></span>
+                                            <span class="btn btn-secondary"
+                                                id="count<%= comments[i]._id %>"><%= comments[i].upvoteCount%></span>
                                             <button class="btn btn-secondary upvoteBtn" data="<%= comments[i]._id %>"><i
                                                     class="fa fa-arrow-up">&nbsp;&nbsp;Upvote</i></button>
                                             <% if(user){%>
@@ -604,7 +618,8 @@
                                                     placeholder="Type your idea in here" name="comment"></textarea>
                                             </div>
                                             <div class="card-footer" style="text-align: right;">
-                                                <button class="btn btn-secondary" style="margin-top: 10px;">Comment</button>
+                                                <button class="btn btn-secondary"
+                                                    style="margin-top: 10px;">Comment</button>
                                             </div>
                                         </form>
                                     </div>
