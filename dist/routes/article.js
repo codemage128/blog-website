@@ -697,7 +697,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }
 
             res.render("404");
-            _context5.next = 98;
+            _context5.next = 99;
             break;
 
           case 14:
@@ -895,7 +895,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context5.next = 83;
+              _context5.next = 82;
               break;
             }
 
@@ -917,7 +917,6 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             comments = _context5.sent;
             article_body = view_article.body;
             _res = changeTohtml(article_body);
-            console.log(_res.table_content);
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
@@ -935,16 +934,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context5.next = 98;
+            _context5.next = 99;
             break;
 
-          case 83:
+          case 82:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context5.next = 87;
+            _context5.next = 86;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -953,8 +952,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 87:
-            _context5.next = 89;
+          case 86:
+            _context5.next = 88;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -963,8 +962,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 89:
-            _context5.next = 91;
+          case 88:
+            _context5.next = 90;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -973,27 +972,31 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 91:
-            _context5.next = 93;
+          case 90:
+            _context5.next = 92;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 93:
+          case 92:
             _view_article = _context5.sent;
-            _context5.next = 96;
+            _context5.next = 95;
             return _comment["default"].find({
               articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 96:
+          case 95:
             _comments = _context5.sent;
+            article_body = _view_article.body;
+            _res = changeTohtml(article_body);
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
               article: _view_article,
+              article_body: _res.article,
+              article_table_content: _res.table_content,
               settings: settings,
               previous: previousarticle[0],
               next: nextarticle[0],
@@ -1025,21 +1028,21 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             // })
             //   .catch(err => next(err));
 
-          case 98:
-            _context5.next = 103;
+          case 99:
+            _context5.next = 104;
             break;
 
-          case 100:
-            _context5.prev = 100;
+          case 101:
+            _context5.prev = 101;
             _context5.t1 = _context5["catch"](0);
             next(_context5.t1);
 
-          case 103:
+          case 104:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[0, 100]]);
+    }, _callee5, null, [[0, 101]]);
   }));
 
   return function (_x13, _x14, _x15) {

@@ -632,8 +632,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         var article_body = view_article.body;
         var _res = changeTohtml(article_body);
 
-        console.log(_res.table_content);
-
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -672,10 +670,15 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
+
+        var article_body = view_article.body;
+        var _res = changeTohtml(article_body);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
+          article_body: _res.article,
+          article_table_content: _res.table_content,
           settings: settings,
           previous: previousarticle[0],
           next: nextarticle[0],
