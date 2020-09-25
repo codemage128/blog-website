@@ -17,6 +17,7 @@ router.post('/comment', async (req, res, next) => {
 			email: req.body.email,
 			comment: req.body.comment,
 			articleId: req.body.articleId,
+			userId: req.body.userId,
 			upvoteCount: 0,
 			profilePicture:req.body.profilePicture,
 				// 'https://gravatar.com/avatar/' +
@@ -59,6 +60,13 @@ router.post("/comment/upvote", async (req, res, next) => {
 		comment = await Comment.findOne({ _id: commentId });
 	}
 	res.json(comment.upvoteCount);
+});
+
+router.post('/delete', (req, res, next) =>{
+	let commentId = req.body.commentId;
+	Comment.deleteOne({_id: commentId}).then(result => {
+		res.json(true);
+	})
 });
 
 // Reply to a comment

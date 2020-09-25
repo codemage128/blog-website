@@ -262,6 +262,19 @@ $('.reply').click(function () {
    $(replyId).toggle();
 })
 
+$('.delete').click(function(){
+   var id = $(this).attr('data');
+
+   $.ajax({
+      url: '/delete',
+      type: 'post',
+      data: {commentId: id},
+      success: function(data){
+         location.reload();
+      }
+   });
+})
+
 $('.upvoteBtn').click(function () {
    var id = $(this).attr('data');
    var countTxt = "#count" + id;

@@ -39,6 +39,7 @@ router.post('/comment', /*#__PURE__*/function () {
                 email: req.body.email,
                 comment: req.body.comment,
                 articleId: req.body.articleId,
+                userId: req.body.userId,
                 upvoteCount: 0,
                 profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
                 // crypto
@@ -140,7 +141,16 @@ router.post("/comment/upvote", /*#__PURE__*/function () {
   return function (_x4, _x5, _x6) {
     return _ref2.apply(this, arguments);
   };
-}()); // Reply to a comment
+}());
+router.post('/delete', function (req, res, next) {
+  var commentId = req.body.commentId;
+
+  _comment["default"].deleteOne({
+    _id: commentId
+  }).then(function (result) {
+    res.json(true);
+  });
+}); // Reply to a comment
 
 router.post('/reply', function (req, res, next) {
   try {

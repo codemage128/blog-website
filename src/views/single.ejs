@@ -72,6 +72,7 @@
         ::-webkit-scrollbar-thumb {
             background: #888;
         }
+
         @-webkit-keyframes spin {
             0% {
                 -webkit-transform: rotate(0deg);
@@ -531,8 +532,12 @@
                                             <% if(user){%>
                                             <button class="btn btn-secondary reply" data="<%= comments[i]._id %>"><i
                                                     class="fa fa-reply">&nbsp;&nbsp;Reply</i></button>
+                                            <% if(user.id == comments[i].userId){%>
+                                            <button class="btn btn-secondary delete" data="<%= comments[i]._id %>">
+                                                <i class="fa fa-trash">&nbsp;&nbsp;Delete</i>
+                                            </button>
                                             <% } %>
-
+                                            <% } %>
                                             <hr>
                                             <% for(var k = 0; k < comments[i].replies.length; k ++) {%>
                                             <div class="row" style="margin-top: 10px;">
@@ -601,6 +606,7 @@
                                                     value="<%= user.profilePicture%>">
                                                 <input type="hidden" name="articleId" id="articleId"
                                                     value="<%= article._id%>">
+                                                <input type="hidden" name="userId" id="userId" value="<%= user._id%>">
                                                 <textarea class="form-control" rows="5" id="comment"
                                                     placeholder="Type your idea in here" name="comment"></textarea>
                                             </div>

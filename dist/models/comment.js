@@ -10,6 +10,10 @@ var commentSchema = new Schema({
   name: String,
   email: String,
   comment: String,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
   articleId: {
     type: Schema.Types.ObjectId,
     ref: 'Article'
