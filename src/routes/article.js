@@ -47,13 +47,13 @@ router.post(
     }
     let search = await Article.find({ title: article_title });
     let real = search !== "" ? article_title
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-") +
+      .trim()
+      .toLowerCase()
+      .split("?")
+      .join("")
+      .split(" ")
+      .join("-")
+      .replace(new RegExp("/", "g"), "-") +
       "-" +
       search.length
       : article_title
@@ -223,13 +223,13 @@ router.post(
       let meta_description = "";
       if (req.user.roleId == "admin") {
         let _articleslug = req.body.article_slug
-        .trim()
-        .toLowerCase()
-        .split("?")
-        .join("")
-        .split(" ")
-        .join("-")
-        .replace(new RegExp("/", "g"), "-");
+          .trim()
+          .toLowerCase()
+          .split("?")
+          .join("")
+          .split(" ")
+          .join("-")
+          .replace(new RegExp("/", "g"), "-");
         articelslug = req.body.slug ? articelslug : _articleslug;
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
@@ -365,6 +365,90 @@ router.post(
     }
   }
 );
+
+function changeTohtml(data) {
+  let _data = JSON.parse(data);
+  let idList = [];
+
+  let body_content_element = "";
+
+  _data.forEach((element, index) => {
+    var _template = "";
+    switch (element.type) {
+      case "header":
+        if (element.data.level != 1) {
+          idList.push(index);
+          _template = '<h' + element.data.level + ' id="' + index + '">' + element.data.text + '</h' + element.data.level + '>';
+        }
+        break;
+      case "paragraph":
+        _template = '<p>' + element.data.text + '</p>';
+        break;
+      case "image":
+        _template = '<img src=' + element.data.url + ' alt=' + element.data.caption + '/>';
+        break;
+      case "code":
+        var code = element.data.code;
+        code = code.replace(/</g, "&lt;");
+        code = code.replace(/>/g, "&gt;");
+        console.log(code)
+        _template = '<pre>' + code + '</pre>';
+        break;
+      case "embed":
+        _template = '<div class="text-center" style="margin-top:10px;"><iframe src="' + element.data.embed + '" width="' + element.data.width + '" height="' + element.data.height + '" frameborder="0" allowfullscreen></iframe></div>';
+        break;
+      case "table":
+        var content = element.data.content;
+        _template = '<table class="table table-bordered table-hover" style="width:85%;margin: auto;margin-bottom: 10px;">';
+        content.forEach((element, index) => {
+          var length = element.length;
+          var tr_template = "<tr class='text-center'>";
+          for (var i = 0; i < length; i++) {
+            var td_template = '<td>';
+            td_template = td_template + element[i] + '</td>';
+            tr_template += td_template;
+          }
+          tr_template += '</tr>';
+          _template += tr_template;
+        });
+        _template = _template + "</table>";
+        break;
+      case "quote":
+        _template = '<blockquote><p class="quotation-mark">“' + element.data.text + '“</p><h3 class="text-right">--- ' + element.data.caption + ' ---</h3></blockquote>'
+        break;
+      case "list":
+        var type = element.data.style.charAt(0);
+        _template = '<div><' + type + 'l>';
+        element.data.items.forEach(item => {
+          _template += '<li>' + item + '</li>';
+        })
+        _template += '</' + type + 'l></div>';
+        break;
+    }
+    body_content_element = body_content_element + _template;
+  });
+  var table_content_element = '<ol class="table-content"><h2>Inhalt</h2>';
+  var table_element = [];
+  _data.forEach(element => {
+    if (element.type == "header") {
+      if (element.data.level != 1) {
+        table_element.push(element);
+      }
+    }
+  });
+  var _string = "";
+  table_element.forEach((item, index) => {
+    var template = '<li><a href="#' + idList[index] + '">' + item.data.text + '</a></li>';
+    _string = _string + template;
+  });
+  table_content_element = table_content_element + _string + '</ol>';
+  let returnData = {
+    article: body_content_element,
+    table_content: table_content_element
+  }
+  return returnData;
+}
+
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
   try {
     let settings = await Settings.findOne();
@@ -544,12 +628,18 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       })
       if (indexof !== -1) {
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
-        let comments = await Comment.find({articleId: view_article._id}).sort({upvotecount: -1});
-        console.log(JSON.parse(view_article.body));
+        let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
+        var article_body = view_article.body;
+        var _res = changeTohtml(article_body);
+
+        console.log(_res.table_content);
+
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
+          article_body: _res.article,
+          article_table_content: _res.table_content,
           settings: settings,
           previous: previousarticle[0],
           next: nextarticle[0],
@@ -581,7 +671,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         );
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
-        let comments = await Comment.find({articleId: view_article._id}).sort({upvotecount: -1});
+        let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
