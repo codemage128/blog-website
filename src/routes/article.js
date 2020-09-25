@@ -545,6 +545,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       if (indexof !== -1) {
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({articleId: view_article._id}).sort({upvotecount: -1});
+        console.log(JSON.parse(view_article.body));
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,

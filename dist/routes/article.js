@@ -598,7 +598,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }
 
             res.render("404");
-            _context5.next = 95;
+            _context5.next = 96;
             break;
 
           case 14:
@@ -796,7 +796,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context5.next = 80;
+              _context5.next = 81;
               break;
             }
 
@@ -816,6 +816,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
           case 76:
             comments = _context5.sent;
+            console.log(JSON.parse(view_article.body));
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
@@ -831,16 +832,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context5.next = 95;
+            _context5.next = 96;
             break;
 
-          case 80:
+          case 81:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context5.next = 84;
+            _context5.next = 85;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -849,8 +850,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 84:
-            _context5.next = 86;
+          case 85:
+            _context5.next = 87;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -859,8 +860,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 86:
-            _context5.next = 88;
+          case 87:
+            _context5.next = 89;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -869,22 +870,22 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 88:
-            _context5.next = 90;
+          case 89:
+            _context5.next = 91;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 90:
+          case 91:
             _view_article = _context5.sent;
-            _context5.next = 93;
+            _context5.next = 94;
             return _comment["default"].find({
               articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 93:
+          case 94:
             _comments = _context5.sent;
             res.render("single", {
               articleCount: articleCount,
@@ -921,21 +922,21 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             // })
             //   .catch(err => next(err));
 
-          case 95:
-            _context5.next = 100;
+          case 96:
+            _context5.next = 101;
             break;
 
-          case 97:
-            _context5.prev = 97;
+          case 98:
+            _context5.prev = 98;
             _context5.t1 = _context5["catch"](0);
             next(_context5.t1);
 
-          case 100:
+          case 101:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[0, 97]]);
+    }, _callee5, null, [[0, 98]]);
   }));
 
   return function (_x13, _x14, _x15) {
