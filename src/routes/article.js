@@ -871,10 +871,14 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         }
       })
       if (indexof !== -1) {
+        var article_body = article[0].body;
+        var _res = changeTohtml(article_body);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: article[0],
+          article_body: _res.article,
+          article_table_content: _res.table_content,
           settings: settings,
           previous: previous[0],
           next: next[0],
@@ -904,10 +908,14 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
           { $inc: { views: 1 } }
         )
           .then(views => {
+            var article_body = view_article.body;
+            var _res = changeTohtml(article_body);
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
               article: article[0],
+              article_body: _res.article,
+              article_table_content: _res.table_content,
               settings: settings,
               previous: previous[0],
               next: next[0],
