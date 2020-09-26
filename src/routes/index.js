@@ -811,6 +811,14 @@ router.post('/api/article/read', async (req, res, next) => {
 	return res.json({ "data": payload });
 })
 
+router.post('/upgrade/paypal', async (req, res, next) => {
+	let userId = req.body.user;
+	let detail = req.body.data;
+	console.log(userId);
+	await User.updateOne({ _id: userId }, { $set: { paid: "paid", signupProcess: "/onboarding" } });
+	res.json(true);
+})
+
 router.post('/api/content', async (req, res, next) => {
 	let categoryslug = req.body.categoryslug;
 	let contentslug = req.body.contentslug;

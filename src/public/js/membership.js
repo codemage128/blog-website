@@ -29,7 +29,7 @@ var createCheckoutSession = function (isBuyingSticker) {
       });
 };
 setupElements();
-createCheckoutSession(false);
+// createCheckoutSession(false);
 
 document.getElementById("stripe-button").addEventListener("click", function (evt) {
    evt.preventDefault();

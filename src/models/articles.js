@@ -11,6 +11,7 @@ const articleSchema = new Schema(
     metatitle: String,
     metadescription: String,
     body: String,
+    articleBody: String,
     file: String,
     slug: String,
     views: Number,
