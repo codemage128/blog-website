@@ -15,6 +15,7 @@ var articleSchema = new Schema({
   metadescription: String,
   body: String,
   articleBody: String,
+  articleTablecontent: String,
   file: String,
   slug: String,
   views: Number,

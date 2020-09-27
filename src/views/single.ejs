@@ -113,7 +113,7 @@
         .table-content ol,
         ul,
         li>a {
-            font-size: 1.2em;
+            font-size: 0.95em;
             font-family: "EB Garamond";
             text-decoration: none;
         }
@@ -434,12 +434,12 @@
 
                 <div class="container article_container">
                     <aside class="table-of-contents">
-                        <%- article_table_content%>
+                        <%- article.articleTablecontent%>
                         <!-- will be generated with JS -->
                     </aside>
                     <article class="inner-dark-blog-content-one" id="inner-dark-blog-content-one"
                         style="overflow:hidden;">
-                        <%- article_body %>
+                        <%- article.articleBody %>
                     </article>
                 </div>
                 <!-- </div> -->
@@ -504,7 +504,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <h1 style="color: rgb(0, 208, 126);"><%= comments.length %>
-                                        <span style="color: #000000; font-size:large;">Comments</span>
+                                        <span style="color: #000000; font-size:large;">Kommentare</span>
                                     </h1>
                                 </div>
                             </div>
@@ -591,7 +591,7 @@
                                 <% } %>
                             </div>
                             <% if(user){%>
-                            <h2>Comment</h2>
+                            <h2>Kommentare</h2>
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
@@ -608,11 +608,11 @@
                                                     value="<%= article._id%>">
                                                 <input type="hidden" name="userId" id="userId" value="<%= user._id%>">
                                                 <textarea class="form-control" rows="5" id="comment"
-                                                    placeholder="Type your idea in here" name="comment"></textarea>
+                                                    placeholder="Wie findest du diesen Beitrag?" name="comment"></textarea>
                                             </div>
                                             <div class="card-footer" style="text-align: right;">
                                                 <button class="btn btn-secondary"
-                                                    style="margin-top: 10px;">Comment</button>
+                                                    style="margin-top: 10px;">Kommentieren</button>
                                             </div>
                                         </form>
                                     </div>

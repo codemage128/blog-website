@@ -19,6 +19,16 @@ router.post(
   install.redirectToLogin,
   auth,
   async (req, res, next) => {
+
+    // temp
+    let articles = await Article.find({});
+    articles.forEach(async article => {
+      var data = article.body;
+      var result = changeTohtml(data);
+      await Article.updateOne({_id: article._id}, {articleTablecontent: result.table_content, articleBody: result.article});
+    });
+
+
     let article_header = req.body.article_header;
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
@@ -51,8 +61,15 @@ router.post(
       .toLowerCase()
       .split("?")
       .join("")
+      .split("(")
+      .join("")
+      .split(")")
+      .join("")
       .split(" ")
       .join("-")
+      .split("&nbsp;")
+      .join("")
+      .trim()
       .replace(new RegExp("/", "g"), "-") +
       "-" +
       search.length
@@ -61,10 +78,16 @@ router.post(
         .toLowerCase()
         .split("?")
         .join("")
+        .split("(")
+        .join("")
+        .split(")")
+        .join("")
         .split(" ")
         .join("-")
+        .split("&nbsp;")
+        .join("")
+        .trim()
         .replace(new RegExp("/", "g"), "-");
-    console.log(real);
     let array = real.split('');
     array.forEach((element, index) => {
       if (element == "ß") {
@@ -107,9 +130,7 @@ router.post(
         if (element == "ä") { _array[index] = "ae"; }
         if (element == "ü") { _array[index] = "ue"; }
       });
-      console.log(articleslug);
       let _articleslug = _array.join("");
-      console.log(_articleslug);
       articleslug = req.body.slug ? _articleslug : articleslug;
       meta_description = req.body.meta_description;
       meta_title = req.body.meta_title;
@@ -142,7 +163,11 @@ router.post(
     parse.forEach(element => {
       html = html + element;
     })
+
+    var result = changeTohtml(JSON.stringify(data));
     let payload1 = {
+      articleTablecontent: result.table_content,
+      articleBody: result.article,
       week: `${newDate.getWeek()}`,
       month: `${months[newDate.getMonth()]}`,
       year: `${newDate.getFullYear()}`,
@@ -160,7 +185,11 @@ router.post(
       metatitle: meta_title,
       metadescription: meta_description
     };
-    payload1.active = true;
+    if (req.body.saveflag == "true") {
+      payload1.active = false;
+    } else {
+      payload1.active = true;
+    }
     Article.create(payload1)
       .then(created => {
         console.log(user.roleId);
@@ -177,14 +206,12 @@ router.post(
       .catch(e => next(e));
   }
 );
-
 // Edit an Article
 router.post(
   "/article/edit",
   install.redirectToLogin,
   auth, async (req, res, next) => {
     try {
-
       let receive = JSON.parse(req.body.data);
       let data = receive.blocks;
       let user = await User.findById({ _id: req.user.id });
@@ -256,7 +283,16 @@ router.post(
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
       let article_header = req.body.article_header ? req.body.article_header : article.file;
-      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description } })
+      var active_flag = false;
+      if (req.body.saveflag == "true") {
+        active_flag = false;
+      } else {
+        active_flag = true;
+      }
+      var result = changeTohtml(JSON.stringify(data));
+
+      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
+        articleBody: result.article} })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {
@@ -438,7 +474,7 @@ function changeTohtml(data) {
   });
   var _string = "";
   table_element.forEach((item, index) => {
-    var template = '<li><a href="#' + idList[index] + '">' + item.data.text + '</a></li>';
+    var template = '<li><a style="font-size: 1.2em" href="#' + idList[index] + '">' + item.data.text + '</a></li>';
     _string = _string + template;
   });
   table_content_element = table_content_element + _string + '</ol>';
@@ -630,14 +666,13 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         var article_body = view_article.body;
-        var _res = changeTohtml(article_body);
-
+        // var _res = changeTohtml(article_body);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
-          article_body: _res.article,
-          article_table_content: _res.table_content,
+          // article_body: _res.article,
+          // article_table_content: _res.table_content,
           settings: settings,
           previous: previousarticle[0],
           next: nextarticle[0],
@@ -672,13 +707,13 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
 
         var article_body = view_article.body;
-        var _res = changeTohtml(article_body);
+        // var _res = changeTohtml(article_body);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
-          article_body: _res.article,
-          article_table_content: _res.table_content,
+          // article_body: _res.article,
+          // article_table_content: _res.table_content,
           settings: settings,
           previous: previousarticle[0],
           next: nextarticle[0],

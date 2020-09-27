@@ -29,8 +29,8 @@
                <div class="results">
                   <div class="row">
                      <% for(var i = 0; i < data.length ; i ++) { %>
-                     <div class="col-md-12 col-sm-12">
-                        <div class="startresult" style="margin-left: 30px; margin-right: 30px;">
+                     <div class="col-md-4 col-sm-6">
+                        <div class="startresult">
                            <% var url = "/d/" + data[i].category.slug.toLowerCase()+"/"+data[i].slug;
                            var qualify = false;
                            if(data[i].postedBy.roleId == "admin"){

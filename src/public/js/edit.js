@@ -81,6 +81,12 @@ var editor = new EditorJS({
    }
 });
 
+$('#searchImageKey').on("keypress", function(e){
+   if(e.which == 13){
+      $('#searchImage').click();
+   }
+})
+
 $('#publish').click(function () {
    editor.save().then((savedData) => {
       var data = JSON.stringify(savedData);
@@ -265,4 +271,22 @@ $('.upload-file').on('change', function (event) {
    reader.onerror = function () {
       console.log("there are some problems.")
    }
+})
+
+
+$('#save').click(function(){
+   editor.save().then((savedData) => {
+      var data = JSON.stringify(savedData);
+      console.log(savedData);
+      // this is the sending data to the backend part.
+      var category = $('#category').val();
+      if (category == "none") {
+         console.log(category);
+         $('#post-err').modal({});
+      } else {
+         $('#data').val(data);
+         $('#saveflag').val(true);
+         $('#article').submit();
+      }
+   });
 })

@@ -88,6 +88,10 @@
         }
         .cdx-quote__text{
             line-height: 1.5em;
+            font-size: 1.75em;
+        }
+        .cdx-quote__caption{
+            font-size: 1.25em;
         }
 
         h1 {
@@ -231,6 +235,7 @@
                     <option value="<%= categories[i]._id%>"><%= categories[i].name%></option>
                     <% }%>
                 </select>
+                <input type="hidden" name="saveflag" id="saveflag" value="false" />
                 <input type="hidden" name="data" id="data" />
                 <input type="hidden" name="summary" id="summary" />
                 <input type="hidden" id="article_header" name="article_header" />
@@ -239,19 +244,20 @@
         <li class="nav-item my-auto">
             <div class="custom-switch mr-3">
                 <input type="checkbox" class="custom-control-input" id="darkmode">
-                <label class="custom-control-label" for="darkmode">Dark Mode</label>
+                <label class="custom-control-label" for="darkmode">Dunkelmodus</label>
             </div>
         </li>
         <li class="nav-item">
             <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche
                 Tipps zur Gestaltung</a>
             <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
-            <button type="button" id="save" class="btn btn-white btn-md">Save</button>
-            <button type="button" id="publish" class="btn btn-outline-dark btn-md">Publish</button>
+            <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
+            <button type="button" id="save" class="btn btn-white btn-md">Speichern</button>
+            <button type="button" id="publish" class="btn btn-outline-dark btn-md">Veröffentlichen</button>
         </li>
     </ul>
     <a class="btn btn-light" id="slider" data-toggle="tooltip" data-placement="left"
-        title="You can drag, drop the image to the editor."><i class="fa fa-angle-left"
+        title="Ziehe die Bilder an die gewünschte Position."><i class="fa fa-angle-left"
             style="font-size: 1.2rem;line-height: 40px;display: inline-block;width: auto;color: #fff;text-align: center;margin-left: -2vw;color: black;"></i></a>
     <div class="sidenav">
         <div class="container">
@@ -259,7 +265,7 @@
                 <div class="col-lg-12 mt-1">
                     <!-- Title -->
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Enter the keyword" aria-label="Username"
+                        <input type="text" class="form-control" placeholder="Suchbegriff eingeben" aria-label="Username"
                             id="searchImageKey">
                         <div class="input-group-prepend">
                             <button class="input-group-text" type="button" id="searchImage"><i
@@ -317,21 +323,21 @@
                 </div>
                 <div class="modal-body" style="padding: 20px !important;">
                     <div style="display: none;" class="summary-error alert alert-danger">
-                        Beachte, dass dein Beitrag mindestens 5 Wörter lang sein sollte.
+                        Beachte, dass deine Summary mindestens 5 Wörter lang sein sollte
                     </div>
                     <img src="/img/upload.png" alt="" class="img-fluid"
                         style="border: 1px solid rgba(195, 207, 216, 0.3);" id="imgBox">
                     <input type="file" class="form-control upload-file" style="display: none;"/>
                     <a class="btn btn-light btn-sm text-dark" style="margin-top: -25px;float: right;"
                         onclick="uploadImages()">Bild hochladen</a>
-                    <label>Summary :</label>
+                    <label>Zusammenfassung :</label>
                     <textarea id="summary_modal" rows="5" class="form-control"></textarea>
                     <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;
                     right: 2vw;
                     bottom: 14vh;"></span>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-black" id="publish-submit">Publish</button>
+                    <button class="btn btn-outline-black" id="publish-submit">Veröffentlichen</button>
                 </div>
             </div>
         </div>
@@ -368,7 +374,7 @@
                 </div>
                 <div class="modal-body" style="padding: 20px !important;">
                     <div class="alert alert-warning">
-                        Beachte, dass dein Beitrag mindestens 200 Wörter lang sein sollte.
+                        Füge Bilder einfach per Drag & Drop hinzu. Nutze die. Tabulator Taste, um den Editor einfacher zu bedienen.
                     </div>
                 </div>
                 <div class="modal-footer">

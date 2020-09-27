@@ -220,7 +220,7 @@
                                 <td>
                                     <% if(article[key].active== true){ %>
                                     <span class="badge badge-success">Veröffentlicht</span>
-                                    <%} else { %>
+                                    <% } else { %>
                                     <span class="badge badge-danger">Draft</span>
                                     <% } %>
                                 </td>
@@ -242,7 +242,9 @@
                                     <% } %>
                                 </td>
                                 <td>
+                                    <% if(article[key].active == true) {%>
                                     <a href="/p/<%= article[key].category.slug%>/<%= article[key].slug%>" target="_blank" class="btn btn-primary btn-sm" >View ArtiKel</a>
+                                    <% } %>
                                 </td>
                             </tr>
                             <% } %>
