@@ -9,28 +9,52 @@ import htmlToText from "html-to-text";
 import install from "../helpers/install";
 import Flag from "../models/flag";
 import Bookmark from "../models/bookmark";
+import Media from '../models/media';
 import { json } from "body-parser";
+import crypto from "crypto";
+import path from "path";
 const edjsHTML = require("editorjs-html");
 const edjsParser = edjsHTML();
 const router = express.Router();
+import fs, { stat } from "fs";
 // Create a new article
+function createMedia(string) {
+  const name = `${Date.now().toString()}.png`;
+  const dest = `${path.join(
+    __dirname,
+    "..",
+    "public",
+    "media",
+    `${name}`
+  )}`;
+  var data = string.replace('data:application/octet-stream;base64', '');
+  let fileContents = new Buffer(data, 'base64')
+  let file = fs.writeFileSync(dest, fileContents);
+  let profilePicture = `/media/${name}`;
+  return profilePicture;
+}
+
 router.post(
   "/article/create",
   install.redirectToLogin,
   auth,
   async (req, res, next) => {
     // temp
-    let articles = await Article.find({});
-    articles.forEach(async article => {
-      var data = article.body;
-      var result = changeTohtml(data);
-      Article.updateOne({_id: article._id}, { $set:{articleTablecontent: result.table_content, articleBody: result.article}}).then(data =>{
-      }).catch(error => {
-        console.log(error);
-      });
-    });
+    // let articles = await Article.find({});
+    // articles.forEach(async article => {
+    //   var data = article.body;
+    //   var result = changeTohtml(data);
+    //   Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: result.table_content, articleBody: result.article } }).then(data => {
+    //   }).catch(error => {
+    //     console.log(error);
+    //   });
+    // });
 
     let article_header = req.body.article_header;
+
+    let header_url = createMedia(article_header);
+    
+
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
     let user = await User.findById({ _id: req.user.id });
@@ -180,7 +204,7 @@ router.post(
       }),
       slug: articleslug,
       category: req.body.category,
-      file: article_header,
+      file: header_url,
       postedBy: req.user.id,
       postType: "post",
       metatitle: meta_title,
@@ -191,20 +215,23 @@ router.post(
     } else {
       payload1.active = true;
     }
-    Article.create(payload1)
-      .then(created => {
-        console.log(user.roleId);
-        req.flash(
-          "success_msg",
-          "New article has been posted successfully"
-        );
-        if (user.roleId == "user") {
-          return res.redirect("/user/all-posts");
-        } else {
-          return res.redirect("/dashboard/all-posts");
-        }
-      })
-      .catch(e => next(e));
+    let createdArticle = await Article.create(payload1);
+    // .then(created => {
+    //   let articleId = created._id;
+    //   Media.create({articleId: articleId, file: article_header}).then(done =>{
+    //     let mediaId = 
+    //   })
+    req.flash(
+      "success_msg",
+      "New article has been posted successfully"
+    );
+    if (user.roleId == "user") {
+      return res.redirect("/user/all-posts");
+    } else {
+      return res.redirect("/dashboard/all-posts");
+    }
+    // })
+    // .catch(e => next(e));
   }
 );
 // Edit an Article
@@ -292,8 +319,12 @@ router.post(
       }
       var result = changeTohtml(JSON.stringify(data));
 
-      Article.updateOne({ _id: req.body.articleId.trim() }, { $set: { title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
-        articleBody: result.article} })
+      Article.updateOne({ _id: req.body.articleId.trim() }, {
+        $set: {
+          title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
+          articleBody: result.article
+        }
+      })
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {
@@ -385,7 +416,8 @@ router.post(
   install.redirectToLogin,
   auth,
   (req, res, next) => {
-    try {f
+    try {
+      f
       Article.updateMany({ _id: req.body.ids }, { $set: { active: false } })
         .then(deleted => {
           if (!req.body.ids) {
@@ -668,6 +700,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         // var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
+        console.log(view_article);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -708,6 +741,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
+        console.log(view_article);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
