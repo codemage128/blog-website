@@ -1299,43 +1299,42 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            _context12.prev = 0;
-            _context12.next = 3;
+            _context12.next = 2;
             return _category["default"].find({});
 
-          case 3:
+          case 2:
             categories = _context12.sent;
-            _context12.next = 6;
+            _context12.next = 5;
             return _category["default"].findOne({
               slug: "official"
             });
 
-          case 6:
+          case 5:
             official = _context12.sent;
-            _context12.next = 9;
+            _context12.next = 8;
             return _articles["default"].find({
               "category": {
                 $ne: official.id
               }
             }).populate('postedBy').populate('category');
 
-          case 9:
+          case 8:
             articlelength = _context12.sent;
             articlelength = articlelength.length;
             r = Math.floor(Math.random() * articlelength);
-            _context12.next = 14;
+            _context12.next = 13;
             return _articles["default"].find({
               "category": {
                 $ne: official.id
               }
             }).populate('postedBy').populate('category').limit(3).skip(r);
 
-          case 14:
+          case 13:
             random = _context12.sent;
-            _context12.next = 17;
+            _context12.next = 16;
             return _articles["default"].find({}).populate('postedBy').populate('category');
 
-          case 17:
+          case 16:
             articles = _context12.sent;
             result = [];
             categories.forEach(function (category) {
@@ -1357,19 +1356,19 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
             article = [];
 
             if (!req.uer) {
-              _context12.next = 25;
+              _context12.next = 24;
               break;
             }
 
-            _context12.next = 24;
+            _context12.next = 23;
             return _articles["default"].find({
               postedBy: req.user.id
             });
 
-          case 24:
+          case 23:
             article = _context12.sent;
 
-          case 25:
+          case 24:
             posted = false;
 
             if (article.length > 0) {
@@ -1381,20 +1380,13 @@ router.get('/', _install["default"].redirectToLogin, /*#__PURE__*/function () {
               random: random,
               posted: posted
             });
-            _context12.next = 33;
-            break;
 
-          case 30:
-            _context12.prev = 30;
-            _context12.t0 = _context12["catch"](0);
-            next(_context12.t0);
-
-          case 33:
+          case 27:
           case "end":
             return _context12.stop();
         }
       }
-    }, _callee12, null, [[0, 30]]);
+    }, _callee12);
   }));
 
   return function (_x34, _x35, _x36) {

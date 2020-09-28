@@ -33,7 +33,6 @@ function createMedia(string) {
   let profilePicture = `/media/${name}`;
   return profilePicture;
 }
-
 router.post(
   "/article/create",
   install.redirectToLogin,
@@ -123,7 +122,6 @@ router.post(
       if (element == "ü") { array[index] = "ue"; }
     });
     let articleslug = array.join("");
-    console.log(articleslug);
     let meta_title = "";
     let meta_description = "";
     if (req.user.roleId == "admin") {
@@ -216,11 +214,6 @@ router.post(
       payload1.active = true;
     }
     let createdArticle = await Article.create(payload1);
-    // .then(created => {
-    //   let articleId = created._id;
-    //   Media.create({articleId: articleId, file: article_header}).then(done =>{
-    //     let mediaId = 
-    //   })
     req.flash(
       "success_msg",
       "New article has been posted successfully"
@@ -230,8 +223,6 @@ router.post(
     } else {
       return res.redirect("/dashboard/all-posts");
     }
-    // })
-    // .catch(e => next(e));
   }
 );
 // Edit an Article
@@ -310,7 +301,8 @@ router.post(
       // }
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
-      let article_header = req.body.article_header ? req.body.article_header : article.file;
+      
+      let article_header = req.body.article_header ? createMedia(article_header) : article.file;
       var active_flag = false;
       if (req.body.saveflag == "true") {
         active_flag = false;
@@ -339,7 +331,6 @@ router.post(
     }
   }
 );
-
 // Delete an Article
 router.post(
   "/article/delete",
@@ -500,7 +491,7 @@ function changeTohtml(data) {
   var table_element = [];
   _data.forEach(element => {
     if (element.type == "header") {
-      if (element.data.level != 1) {
+      if (element.data.level == 2) {
         table_element.push(element);
       }
     }
@@ -524,150 +515,15 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
     let user = req.params.user;
     let slug = req.params.slug;
     let category = req.params.category;
-    let article = await Article.aggregate([
-      {
-        $match: {
-          active: true,
-          slug: req.params.slug
-        }
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "category"
-        }
-      },
-      {
-        $unwind: {
-          path: "$category",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "subCategory",
-          foreignField: "_id",
-          as: "subCategory"
-        }
-      },
-      {
-        $unwind: {
-          path: "$subCategory",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "postedBy",
-          foreignField: "_id",
-          as: "postedBy"
-        }
-      },
-      {
-        $unwind: {
-          path: "$postedBy",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $lookup: {
-          from: "comments",
-          let: { indicator_id: "$_id" },
-          as: "comments",
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$articleId", "$$indicator_id"] },
-                active: true
-              }
-            },
-            {
-              $sort: {
-                createdAt: -1
-              }
-            }
-          ]
-        }
-      }
-    ]);
-    if (article == "") res.render("404");
+    let article = await Article.find({slug: slug});
+    if (article == "" && article.active == false) res.render("404");
     else {
       let nextarticle = [];
       let previousarticle = [];
       let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
       let book = bookmark ? true : false;
       let art = await Article.findOne({ slug: req.params.slug, active: true });
-      let next = await Article.find({
-        active: true,
-        _id: { $gt: article[0]._id },
-        category: article[0].category._id,
-        postedBy: article[0].postedBy._id
-      }).populate("category").populate("postedBy").sort({ createdAt: 1 });
-      next.forEach(item => {
-        if (item.category.slug != "official") {
-          nextarticle.push(item);
-        }
-      });
-      if (next.length == 0) {
-        next = await Article.find({
-          active: true,
-        }).populate("category").populate("postedBy").sort({ createdAt: 1 });
-        next.forEach(item => {
-          if (item.category.slug != "official") {
-            nextarticle.push(item);
-          }
-        });
-      }
-      let previous = await Article.find({
-        active: true,
-        _id: { $lt: article[0]._id },
-        category: article[0].category._id,
-        postedBy: article[0].postedBy._id
-      }).populate(
-        "category"
-      ).populate('postedBy')
-        .sort({ createdAt: 1 });
-      previous.forEach(item => {
-        if (item.category.slug != "official") {
-          previousarticle.push(item);
-        }
-      });
-      if (previous.length == 0) {
-        previous = await Article.find({
-          active: true,
-        }).populate("category").populate("postedBy").sort({ createdAt: 1 });
-        previous.forEach(item => {
-          if (item.category.slug != "official") {
-            previousarticle.push(item);
-          }
-        });
-      }
-      let featured = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug },
-        addToFeatured: true
-      })
-        .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(5);
-      let popular = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug }
-      })
-        .sort({ views: -1 })
-        .limit(3);
-      let recommended = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug },
-        addToRecommended: true
-      })
-        .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(12);
+      
       var _length = await Article.find({
         active: true,
         slug: { $ne: article[0].slug }
@@ -681,8 +537,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         .populate("category")
         .sort({ createdAt: -1 })
         .limit(3).skip(r);
-      let d = new Date();
-      let customDate = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
       let ips =
         req.headers["x-forwarded-for"] ||
         req.connection.remoteAddress ||
@@ -700,7 +554,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         // var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
-        console.log(view_article);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
@@ -708,11 +561,8 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
           // article_body: _res.article,
           // article_table_content: _res.table_content,
           settings: settings,
-          previous: previousarticle[0],
-          next: nextarticle[0],
-          featured: featured,
-          popular: popular,
-          recommended: recommended,
+          previous: previousarticle,
+          next: nextarticle,
           related: related,
           bookmark: book,
           bookmarkId: bookmark == null ? null : bookmark._id,
@@ -741,44 +591,18 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
-        console.log(view_article);
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
-          // article_body: _res.article,
-          // article_table_content: _res.table_content,
           settings: settings,
-          previous: previousarticle[0],
-          next: nextarticle[0],
-          featured: featured,
-          popular: popular,
-          recommended: recommended,
+          previous: previousarticle,
+          next: nextarticle,
           related: related,
           bookmark: book,
           bookmarkId: bookmark == null ? null : bookmark._id,
           comments: comments
         });
-        // Article.updateOne(
-        //   { slug: req.params.slug.trim() },
-        //   { $inc: { views: 1 } }
-        // ).then(views => {
-        //   res.render("single", {
-        //     articleCount: articleCount,
-        //     title: article[0].title,
-        //     article: article[0],
-        //     settings: settings,
-        //     previous: previousarticle[0],
-        //     next: nextarticle[0],
-        //     featured: featured,
-        //     popular: popular,
-        //     recommended: recommended,
-        //     related: related,
-        //     bookmark: book,
-        //     bookmarkId: bookmark == null ? null : bookmark._id
-        //   });
-        // })
-        //   .catch(err => next(err));
       }
     }
   } catch (error) {

@@ -699,81 +699,61 @@ router.post('/suggestion', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
-
-	/** This is the token of the user  */
 	// let users = await User.find({});
-	// users.forEach(async user => {
-	// 	console.log(user.token);
-	// 	let token = crypto.randomBytes(16).toString("hex");
-	// 	await User.updateOne({_id: user._id}, {token: token});
+	// users.forEach(async element => {
+	// 	let username = element.username.toLowerCase().replace(" ", "");
+	// 	let array = username.split('');
+	// 	array.forEach((item, index) => {
+	// 		if (item == "ß") {
+	// 			array[index] = "ss";
+	// 		}
+	// 		if (item == "ö") { array[index] = "oe"; }
+	// 		if (item == "ä") { array[index] = "ae"; }
+	// 		if (item == "ü") { array[index] = "ue"; }
+	// 	});
+	// 	let usernameslug = array.join("");
+	// 	await User.updateOne(
+	// 		{ _id: element._id },
+	// 		{ usernameslug: usernameslug }
+	// 	);
 	// });
-	// let media = await Media.deleteMany({});
-	/** This is the after login process initialize part */
-	// let users = await User.find({});
-	// users.forEach(async user => {
-	// 	await User.updateOne({ _id: user._id }, { signupProcess: "/blogrecent" });
-	// });
+	var categories = await Category.find({});
+	let official = await Category.findOne({ slug: "official" });
+	var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');
+	articlelength = articlelength.length;
+	var r = Math.floor(Math.random() * articlelength);
+	let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
+	let articles = await Article.find({}).populate('postedBy').populate('category');
+	let result = [];
 
-	try {
-		// let users = await User.find({});
-		// users.forEach(async element => {
-		// 	let username = element.username.toLowerCase().replace(" ", "");
-		// 	let array = username.split('');
-		// 	array.forEach((item, index) => {
-		// 		if (item == "ß") {
-		// 			array[index] = "ss";
-		// 		}
-		// 		if (item == "ö") { array[index] = "oe"; }
-		// 		if (item == "ä") { array[index] = "ae"; }
-		// 		if (item == "ü") { array[index] = "ue"; }
-		// 	});
-		// 	let usernameslug = array.join("");
-		// 	await User.updateOne(
-		// 		{ _id: element._id },
-		// 		{ usernameslug: usernameslug }
-		// 	);
-		// });
-
-		var categories = await Category.find({});
-		let official = await Category.findOne({ slug: "official" });
-		var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');
-		articlelength = articlelength.length;
-		var r = Math.floor(Math.random() * articlelength);
-		let random = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category').limit(3).skip(r);
-		let articles = await Article.find({}).populate('postedBy').populate('category');
-		let result = [];
-
-		categories.forEach(category => {
-			let category_articles = [];
-			articles.forEach(article => {
-				if (article.category.id == category.id) {
-					category_articles.push(article);
-				}
-			});
-			let object = {
-				name: category.name,
-				articles: category_articles
-			}
-			if (object.articles.length != 0) {
-				result.push(object);
+	categories.forEach(category => {
+		let category_articles = [];
+		articles.forEach(article => {
+			if (article.category.id == category.id) {
+				category_articles.push(article);
 			}
 		});
-		let article = [];
-		if (req.uer) {
-			article = await Article.find({ postedBy: req.user.id });
+		let object = {
+			name: category.name,
+			articles: category_articles
 		}
-		let posted = false;
-		if (article.length > 0) {
-			posted = true;
+		if (object.articles.length != 0) {
+			result.push(object);
 		}
-		res.render('publisher', {
-			categories: result,
-			random: random,
-			posted: posted
-		});
-	} catch (error) {
-		next(error);
+	});
+	let article = [];
+	if (req.uer) {
+		article = await Article.find({ postedBy: req.user.id });
 	}
+	let posted = false;
+	if (article.length > 0) {
+		posted = true;
+	}
+	res.render('publisher', {
+		categories: result,
+		random: random,
+		posted: posted
+	});
 });
 
 router.post('/api/article/read', async (req, res, next) => {

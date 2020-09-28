@@ -100,7 +100,6 @@
         .inner-dark-blog-content-one ul,
         li>a {
             text-decoration: underline;
-            color: black;
             cursor: pointer;
         }
 
@@ -417,13 +416,14 @@
                                         <a style=" color: white;" class="deletearticle"
                                             href="/bookmark/delete?bookmarkId=<%= bookmarkId %>">Artikel nicht mehr
                                             speichern</a>
-                                        <%}%>
-                    </span>
-                </div>
-            <div class="dark-blog-banner-heading text-center" style="width: 80%;margin: auto;">
-                <p style="color: white; font-size:  20px; overflow-wrap: break-word; font-family: EB Garamond">
-                    <%= article.summary%></p>
-                                        <input type="hidden" id="firstlettercolor" value="<%= article.category.color%>">
+                                        <% } %>
+                                    </span>
+                                </div>
+                                <div class="dark-blog-banner-heading text-center" style="width: 80%;margin: auto;">
+                                    <p style="color: white; font-size:  20px; overflow-wrap: break-word; font-family: EB Garamond">
+                                        <%= article.summary%>
+                                    </p>
+                                    <input type="hidden" id="firstlettercolor" value="<%= article.category.color%>">
                                 </div>
                             </div>
                         </div>
@@ -608,11 +608,12 @@
                                                     value="<%= article._id%>">
                                                 <input type="hidden" name="userId" id="userId" value="<%= user._id%>">
                                                 <textarea class="form-control" rows="5" id="comment"
-                                                    placeholder="Wie findest du diesen Beitrag?" name="comment"></textarea>
+                                                    placeholder="Wie findest du diesen Beitrag?"
+                                                    name="comment"></textarea>
                                             </div>
                                             <div class="card-footer" style="text-align: right;">
                                                 <button class="btn btn-secondary"
-                                                    style="margin-top: 10px;">Kommentieren</button>
+                                                    style="margin-top: 10px;" id="commentBtn">Kommentieren</button>
                                             </div>
                                         </form>
                                     </div>

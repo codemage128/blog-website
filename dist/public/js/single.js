@@ -129,6 +129,7 @@ $('#darkmode').click(function () {
       $('.sidenav').css('background-color', '#1d1d1b');
       $('#authorname').css("color", "white");
       $('.inner-dark-blog-content-one p a').attr("style", "color: white !important");
+      $('#commentBtn').removeClass('btn-secondary').addClass('btn-primary');
    } else {
       document.body.style.background = 'white';
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');
@@ -147,6 +148,7 @@ $('#darkmode').click(function () {
       $('.dropdown-menu').css('background', 'white');
       $('.sidenav').css('background-color', 'black');
       $('#authorname').css("color", "black");
+      $('#commentBtn').removeClass('btn-primary').addClass('btn-secondary');
    }
 });
 // }

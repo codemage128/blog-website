@@ -69,8 +69,8 @@ var editor = new EditorJS({
          ui: {
             "blockTunes": {
                "toggler": {
-                  "Click to tune": "Нажмите, чтобы настроить",
-                  "or drag to move": "или перетащите"
+                  "Click to tune": "Bearbeiten",
+                  "or drag to move": "Drag to Move"
                },
             },
             "inlineToolbar": {
@@ -80,7 +80,7 @@ var editor = new EditorJS({
             },
             "toolbar": {
                "toolbox": {
-                  "Add": "Добавить"
+                  "Add": "Hinzufügen"
                }
             }
          },
@@ -88,21 +88,21 @@ var editor = new EditorJS({
           * Section for translation Tool Names: both block and inline tools
           */
          toolNames: {
-            "Text": "Параграф",
-            "Heading": "Заголовок",
-            "List": "Список",
-            "Warning": "Примечание",
-            "Checklist": "Чеклист",
-            "Quote": "Цитата",
-            "Code": "Код",
-            "Delimiter": "Разделитель",
-            "Raw HTML": "HTML-фрагмент",
-            "Table": "Таблица",
-            "Link": "Ссылка",
-            "Marker": "Маркер",
+            "Text": "Text",
+            "Heading": "Titel",
+            "List": "Liste",
+            "Warning": "Warnung",
+            "Checklist": "Checkliste",
+            "Quote": "Zitat",
+            "Code": "Code",
+            "Delimiter": "Abstand",
+            "Raw HTML": "HTML Code",
+            "Table": "Tabelle",
+            "Link": "Link",
+            "Marker": "Marker",
             "Bold": "Fett",
-            "Italic": "Kursiv",
-            "InlineCode": "Code einbetten Markiere",
+            "Italic": "Kursive",
+            "InlineCode": "Code einbetten",
          },
          /**
           * Section for passing translations to the external tools classes
@@ -113,21 +113,21 @@ var editor = new EditorJS({
              * The name of a plugin should be equal the name you specify in the 'tool' section for that plugin
              */
             "warning": { // <-- 'Warning' tool will accept this dictionary section
-               "Title": "Название",
-               "Message": "Сообщение",
+               "Title": "Titel",
+               "Message": "Message",
             },
 
             /**
              * Link is the internal Inline Tool
              */
             "link": {
-               "Add a link": "Вставьте ссылку"
+               "Add a link": "Link"
             },
             /**
              * The "stub" is an internal block tool, used to fit blocks that does not have the corresponded plugin
              */
             "stub": {
-               'The block can not be displayed correctly.': 'Блок не может быть отображен'
+               'The block can not be displayed correctly.': 'Dieser Block kann nicht angezeigt werden'
             }
          },
 
@@ -142,13 +142,13 @@ var editor = new EditorJS({
              * Also, there are few internal block tunes: "delete", "moveUp" and "moveDown"
              */
             "delete": {
-               "Delete": "Удалить"
+               "Delete": "Löschen"
             },
             "moveUp": {
-               "Move up": "Переместить вверх"
+               "Move up": "Hoch"
             },
             "moveDown": {
-               "Move down": "Переместить вниз"
+               "Move down": "Runter"
             }
          },
       },

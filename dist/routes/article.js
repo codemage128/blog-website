@@ -147,7 +147,6 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               }
             });
             articleslug = array.join("");
-            console.log(articleslug);
             meta_title = "";
             meta_description = "";
 
@@ -181,10 +180,10 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             // let textLength = content.split(/\s/g).length;
 
 
-            _context.next = 29;
+            _context.next = 28;
             return _settings["default"].findOne();
 
-          case 29:
+          case 28:
             set = _context.sent;
 
             Date.prototype.getWeek = function () {
@@ -228,29 +227,24 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               payload1.active = true;
             }
 
-            _context.next = 41;
+            _context.next = 40;
             return _articles["default"].create(payload1);
 
-          case 41:
+          case 40:
             createdArticle = _context.sent;
-            // .then(created => {
-            //   let articleId = created._id;
-            //   Media.create({articleId: articleId, file: article_header}).then(done =>{
-            //     let mediaId = 
-            //   })
             req.flash("success_msg", "New article has been posted successfully");
 
             if (!(user.roleId == "user")) {
-              _context.next = 47;
+              _context.next = 46;
               break;
             }
 
             return _context.abrupt("return", res.redirect("/user/all-posts"));
 
-          case 47:
+          case 46:
             return _context.abrupt("return", res.redirect("/dashboard/all-posts"));
 
-          case 48:
+          case 47:
           case "end":
             return _context.stop();
         }
@@ -354,7 +348,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
 
           case 22:
             article = _context2.sent;
-            article_header = req.body.article_header ? req.body.article_header : article.file;
+            article_header = req.body.article_header ? createMedia(article_header) : article.file;
             active_flag = false;
 
             if (req.body.saveflag == "true") {
@@ -649,7 +643,7 @@ function changeTohtml(data) {
 
   _data.forEach(function (element) {
     if (element.type == "header") {
-      if (element.data.level != 1) {
+      if (element.data.level == 2) {
         table_element.push(element);
       }
     }
@@ -670,7 +664,7 @@ function changeTohtml(data) {
 
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res, next) {
-    var settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _next, previous, featured, popular, recommended, _length, r, related, d, customDate, ips, articleCount, indexof, _view_article, comments, ip, payload, _view_article2, _comments, article_body;
+    var settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _length, r, related, ips, articleCount, indexof, _view_article, comments, ip, payload, _view_article2, _comments, article_body;
 
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
@@ -686,79 +680,20 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             slug = req.params.slug;
             category = req.params.category;
             _context5.next = 9;
-            return _articles["default"].aggregate([{
-              $match: {
-                active: true,
-                slug: req.params.slug
-              }
-            }, {
-              $lookup: {
-                from: "categories",
-                localField: "category",
-                foreignField: "_id",
-                as: "category"
-              }
-            }, {
-              $unwind: {
-                path: "$category",
-                preserveNullAndEmptyArrays: true
-              }
-            }, {
-              $lookup: {
-                from: "categories",
-                localField: "subCategory",
-                foreignField: "_id",
-                as: "subCategory"
-              }
-            }, {
-              $unwind: {
-                path: "$subCategory",
-                preserveNullAndEmptyArrays: true
-              }
-            }, {
-              $lookup: {
-                from: "users",
-                localField: "postedBy",
-                foreignField: "_id",
-                as: "postedBy"
-              }
-            }, {
-              $unwind: {
-                path: "$postedBy",
-                preserveNullAndEmptyArrays: true
-              }
-            }, {
-              $lookup: {
-                from: "comments",
-                "let": {
-                  indicator_id: "$_id"
-                },
-                as: "comments",
-                pipeline: [{
-                  $match: {
-                    $expr: {
-                      $eq: ["$articleId", "$$indicator_id"]
-                    },
-                    active: true
-                  }
-                }, {
-                  $sort: {
-                    createdAt: -1
-                  }
-                }]
-              }
-            }]);
+            return _articles["default"].find({
+              slug: slug
+            });
 
           case 9:
             article = _context5.sent;
 
-            if (!(article == "")) {
+            if (!(article == "" && article.active == false)) {
               _context5.next = 14;
               break;
             }
 
             res.render("404");
-            _context5.next = 98;
+            _context5.next = 67;
             break;
 
           case 14:
@@ -798,137 +733,15 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             _context5.next = 30;
             return _articles["default"].find({
               active: true,
-              _id: {
-                $gt: article[0]._id
-              },
-              category: article[0].category._id,
-              postedBy: article[0].postedBy._id
-            }).populate("category").populate("postedBy").sort({
-              createdAt: 1
+              slug: {
+                $ne: article[0].slug
+              }
             });
 
           case 30:
-            _next = _context5.sent;
-
-            _next.forEach(function (item) {
-              if (item.category.slug != "official") {
-                nextarticle.push(item);
-              }
-            });
-
-            if (!(_next.length == 0)) {
-              _context5.next = 37;
-              break;
-            }
-
-            _context5.next = 35;
-            return _articles["default"].find({
-              active: true
-            }).populate("category").populate("postedBy").sort({
-              createdAt: 1
-            });
-
-          case 35:
-            _next = _context5.sent;
-
-            _next.forEach(function (item) {
-              if (item.category.slug != "official") {
-                nextarticle.push(item);
-              }
-            });
-
-          case 37:
-            _context5.next = 39;
-            return _articles["default"].find({
-              active: true,
-              _id: {
-                $lt: article[0]._id
-              },
-              category: article[0].category._id,
-              postedBy: article[0].postedBy._id
-            }).populate("category").populate('postedBy').sort({
-              createdAt: 1
-            });
-
-          case 39:
-            previous = _context5.sent;
-            previous.forEach(function (item) {
-              if (item.category.slug != "official") {
-                previousarticle.push(item);
-              }
-            });
-
-            if (!(previous.length == 0)) {
-              _context5.next = 46;
-              break;
-            }
-
-            _context5.next = 44;
-            return _articles["default"].find({
-              active: true
-            }).populate("category").populate("postedBy").sort({
-              createdAt: 1
-            });
-
-          case 44:
-            previous = _context5.sent;
-            previous.forEach(function (item) {
-              if (item.category.slug != "official") {
-                previousarticle.push(item);
-              }
-            });
-
-          case 46:
-            _context5.next = 48;
-            return _articles["default"].find({
-              active: true,
-              slug: {
-                $ne: article[0].slug
-              },
-              addToFeatured: true
-            }).populate("category").sort({
-              createdAt: -1
-            }).limit(5);
-
-          case 48:
-            featured = _context5.sent;
-            _context5.next = 51;
-            return _articles["default"].find({
-              active: true,
-              slug: {
-                $ne: article[0].slug
-              }
-            }).sort({
-              views: -1
-            }).limit(3);
-
-          case 51:
-            popular = _context5.sent;
-            _context5.next = 54;
-            return _articles["default"].find({
-              active: true,
-              slug: {
-                $ne: article[0].slug
-              },
-              addToRecommended: true
-            }).populate("category").sort({
-              createdAt: -1
-            }).limit(12);
-
-          case 54:
-            recommended = _context5.sent;
-            _context5.next = 57;
-            return _articles["default"].find({
-              active: true,
-              slug: {
-                $ne: article[0].slug
-              }
-            });
-
-          case 57:
             _length = _context5.sent;
             r = Math.floor(Math.random() * _length.length);
-            _context5.next = 61;
+            _context5.next = 34;
             return _articles["default"].find({
               active: true,
               slug: {
@@ -938,15 +751,13 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               createdAt: -1
             }).limit(3).skip(r);
 
-          case 61:
+          case 34:
             related = _context5.sent;
-            d = new Date();
-            customDate = "".concat(d.getDate(), "/").concat(d.getMonth(), "/").concat(d.getFullYear());
             ips = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
-            _context5.next = 67;
+            _context5.next = 38;
             return _articles["default"].countDocuments();
 
-          case 67:
+          case 38:
             articleCount = _context5.sent;
             indexof = -1;
             art.viewers.forEach(function (element) {
@@ -956,29 +767,28 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context5.next = 81;
+              _context5.next = 51;
               break;
             }
 
-            _context5.next = 73;
+            _context5.next = 44;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 73:
+          case 44:
             _view_article = _context5.sent;
-            _context5.next = 76;
+            _context5.next = 47;
             return _comment["default"].find({
               articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 76:
+          case 47:
             comments = _context5.sent;
             // var article_body = view_article.body;
             // var _res = changeTohtml(article_body);
-            console.log(_view_article);
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
@@ -986,26 +796,23 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               // article_body: _res.article,
               // article_table_content: _res.table_content,
               settings: settings,
-              previous: previousarticle[0],
-              next: nextarticle[0],
-              featured: featured,
-              popular: popular,
-              recommended: recommended,
+              previous: previousarticle,
+              next: nextarticle,
               related: related,
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context5.next = 98;
+            _context5.next = 67;
             break;
 
-          case 81:
+          case 51:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context5.next = 85;
+            _context5.next = 55;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -1014,8 +821,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 85:
-            _context5.next = 87;
+          case 55:
+            _context5.next = 57;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -1024,8 +831,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 87:
-            _context5.next = 89;
+          case 57:
+            _context5.next = 59;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -1034,78 +841,53 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 89:
-            _context5.next = 91;
+          case 59:
+            _context5.next = 61;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 91:
+          case 61:
             _view_article2 = _context5.sent;
-            _context5.next = 94;
+            _context5.next = 64;
             return _comment["default"].find({
               articleId: _view_article2._id
             }).sort({
               upvotecount: -1
             });
 
-          case 94:
+          case 64:
             _comments = _context5.sent;
             article_body = _view_article2.body; // var _res = changeTohtml(article_body);
 
-            console.log(_view_article2);
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
               article: _view_article2,
-              // article_body: _res.article,
-              // article_table_content: _res.table_content,
               settings: settings,
-              previous: previousarticle[0],
-              next: nextarticle[0],
-              featured: featured,
-              popular: popular,
-              recommended: recommended,
+              previous: previousarticle,
+              next: nextarticle,
               related: related,
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: _comments
-            }); // Article.updateOne(
-            //   { slug: req.params.slug.trim() },
-            //   { $inc: { views: 1 } }
-            // ).then(views => {
-            //   res.render("single", {
-            //     articleCount: articleCount,
-            //     title: article[0].title,
-            //     article: article[0],
-            //     settings: settings,
-            //     previous: previousarticle[0],
-            //     next: nextarticle[0],
-            //     featured: featured,
-            //     popular: popular,
-            //     recommended: recommended,
-            //     related: related,
-            //     bookmark: book,
-            //     bookmarkId: bookmark == null ? null : bookmark._id
-            //   });
-            // })
-            //   .catch(err => next(err));
+            });
 
-          case 98:
-            _context5.next = 103;
+          case 67:
+            _context5.next = 72;
             break;
 
-          case 100:
-            _context5.prev = 100;
+          case 69:
+            _context5.prev = 69;
             _context5.t1 = _context5["catch"](0);
             next(_context5.t1);
 
-          case 103:
+          case 72:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[0, 100]]);
+    }, _callee5, null, [[0, 69]]);
   }));
 
   return function (_x13, _x14, _x15) {
@@ -1115,7 +897,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
 router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res, next) {
-    var settings, article, bookmark, book, art, _next2, index, previous, _index, featured, popular, recommended, related, d, customDate, ips, articleCount, indexof, article_body, _res, ip, payload;
+    var settings, article, bookmark, book, art, _next, index, previous, _index, featured, popular, recommended, related, d, customDate, ips, articleCount, indexof, article_body, _res, ip, payload;
 
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
@@ -1247,9 +1029,9 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }).limit(1);
 
           case 25:
-            _next2 = _context6.sent;
+            _next = _context6.sent;
 
-            if (!(_next2.length == 0)) {
+            if (!(_next.length == 0)) {
               _context6.next = 31;
               break;
             }
@@ -1263,7 +1045,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }).limit(1).skip(index);
 
           case 30:
-            _next2 = _context6.sent;
+            _next = _context6.sent;
 
           case 31:
             _context6.next = 33;
@@ -1378,7 +1160,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               article_table_content: _res.table_content,
               settings: settings,
               previous: previous[0],
-              next: _next2[0],
+              next: _next[0],
               featured: featured,
               popular: popular,
               recommended: recommended,
@@ -1424,7 +1206,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
                 article_table_content: _res.table_content,
                 settings: settings,
                 previous: previous[0],
-                next: _next2[0],
+                next: _next[0],
                 featured: featured,
                 popular: popular,
                 recommended: recommended,
@@ -1433,7 +1215,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
                 bookmarkId: bookmark == null ? null : bookmark._id
               });
             })["catch"](function (err) {
-              return _next2(err);
+              return _next(err);
             });
 
           case 70:
