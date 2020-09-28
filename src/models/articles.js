@@ -67,27 +67,18 @@ const articleSchema = new Schema(
         }
       ],
     },
-    downvote: {
-      count: {
-        type: Number,
-        default: 0
-      },
-      users: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "User"
-        }
-      ]
-    },
-    claps: {
-      type: Number,
-      default: 0
-    },
-    editor: {
-      type: String,
-      enum: ["tiny-mce", "editorjs"],
-      default: "tiny-mce"
-    }
+    // downvote: {
+    //   count: {
+    //     type: Number,
+    //     default: 0
+    //   },
+    //   users: [
+    //     {
+    //       type: Schema.Types.ObjectId,
+    //       ref: "User"
+    //     }
+    //   ]
+    // },
   },
   { timestamps: true }
 );

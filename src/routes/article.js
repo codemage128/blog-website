@@ -19,15 +19,16 @@ router.post(
   install.redirectToLogin,
   auth,
   async (req, res, next) => {
-
     // temp
     let articles = await Article.find({});
     articles.forEach(async article => {
       var data = article.body;
       var result = changeTohtml(data);
-      await Article.updateOne({_id: article._id}, {articleTablecontent: result.table_content, articleBody: result.article});
+      Article.updateOne({_id: article._id}, { $set:{articleTablecontent: result.table_content, articleBody: result.article}}).then(data =>{
+      }).catch(error => {
+        console.log(error);
+      });
     });
-
 
     let article_header = req.body.article_header;
     let receive = JSON.parse(req.body.data);
@@ -384,7 +385,7 @@ router.post(
   install.redirectToLogin,
   auth,
   (req, res, next) => {
-    try {
+    try {f
       Article.updateMany({ _id: req.body.ids }, { $set: { active: false } })
         .then(deleted => {
           if (!req.body.ids) {
@@ -665,7 +666,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       if (indexof !== -1) {
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
-        var article_body = view_article.body;
+        // var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
         res.render("single", {
           articleCount: articleCount,
@@ -705,7 +706,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
-
         var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
         res.render("single", {

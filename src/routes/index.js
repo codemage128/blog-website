@@ -707,7 +707,6 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 	// 	let token = crypto.randomBytes(16).toString("hex");
 	// 	await User.updateOne({_id: user._id}, {token: token});
 	// });
-
 	// let media = await Media.deleteMany({});
 	/** This is the after login process initialize part */
 	// let users = await User.find({});
@@ -716,24 +715,24 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 	// });
 
 	try {
-		let users = await User.find({});
-		users.forEach(async element => {
-			let username = element.username.toLowerCase().replace(" ", "");
-			let array = username.split('');
-			array.forEach((item, index) => {
-				if (item == "ß") {
-					array[index] = "ss";
-				}
-				if (item == "ö") { array[index] = "oe"; }
-				if (item == "ä") { array[index] = "ae"; }
-				if (item == "ü") { array[index] = "ue"; }
-			});
-			let usernameslug = array.join("");
-			await User.updateOne(
-				{ _id: element._id },
-				{ usernameslug: usernameslug }
-			);
-		});
+		// let users = await User.find({});
+		// users.forEach(async element => {
+		// 	let username = element.username.toLowerCase().replace(" ", "");
+		// 	let array = username.split('');
+		// 	array.forEach((item, index) => {
+		// 		if (item == "ß") {
+		// 			array[index] = "ss";
+		// 		}
+		// 		if (item == "ö") { array[index] = "oe"; }
+		// 		if (item == "ä") { array[index] = "ae"; }
+		// 		if (item == "ü") { array[index] = "ue"; }
+		// 	});
+		// 	let usernameslug = array.join("");
+		// 	await User.updateOne(
+		// 		{ _id: element._id },
+		// 		{ usernameslug: usernameslug }
+		// 	);
+		// });
 
 		var categories = await Category.find({});
 		let official = await Category.findOne({ slug: "official" });
@@ -767,13 +766,11 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 		if (article.length > 0) {
 			posted = true;
 		}
-		console.log(posted);
 		res.render('publisher', {
 			categories: result,
 			random: random,
 			posted: posted
 		});
-
 	} catch (error) {
 		next(error);
 	}
