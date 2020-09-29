@@ -210,7 +210,7 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               week: "".concat(newDate.getWeek()),
               month: "".concat(months[newDate.getMonth()]),
               year: "".concat(newDate.getFullYear()),
-              title: article_title,
+              title: article_title.replace('$nbsp;', ''),
               body: JSON.stringify(data),
               summary: req.body.summary.trim(),
               "short": _htmlToText["default"].fromString(html, {
@@ -367,7 +367,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               _id: req.body.articleId.trim()
             }, {
               $set: {
-                title: article_title,
+                title: article_title.replace('$nbsp;', ''),
                 slug: articelslug,
                 "short": _short,
                 body: body,

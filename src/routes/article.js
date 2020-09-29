@@ -196,7 +196,7 @@ router.post(
       week: `${newDate.getWeek()}`,
       month: `${months[newDate.getMonth()]}`,
       year: `${newDate.getFullYear()}`,
-      title: article_title,
+      title: article_title.replace('$nbsp;', ''),
       body: JSON.stringify(data),
       summary: req.body.summary.trim(),
       short: htmlToText.fromString(html, {
@@ -315,7 +315,7 @@ router.post(
 
       Article.updateOne({ _id: req.body.articleId.trim() }, {
         $set: {
-          title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
+          title: article_title.replace('$nbsp;', ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
           articleBody: result.article,
           addToNoIndex: req.body.noindex
         }
