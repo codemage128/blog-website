@@ -346,12 +346,12 @@
                     <textarea id="summary_modal" rows="5" class="form-control"><%= article.summary %></textarea>
                     <br>
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="noindex" <%if(article.articlenoindex == true){%> checked <% }%>>
+                        <% var checked = ""; if(article.articlenoindex == true) {checked = "checked";}%>
+                        <input type="checkbox" class="custom-control-input" id="noindex"  <%= checked %> >
                         <label class="custom-control-label" for="noindex">No-index</label>
                     </div>
                     <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;
-                    right: 2vw;
-                    bottom: 14vh;"></span>
+                    right: 1vw;"></span>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-black" id="publish-submit">Update</button>
