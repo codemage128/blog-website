@@ -380,7 +380,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
                 active: active_flag,
                 articleTablecontent: result.table_content,
                 articleBody: result.article,
-                addToNoIndex: req.body.noindex
+                addToNoIndex: req.body.articlenoindex
               }
             }).then(function (updated) {
               req.flash("success_msg", "Article has been updated successfully");

@@ -317,7 +317,7 @@ router.post(
         $set: {
           title: article_title.replace('$nbsp;', ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
           articleBody: result.article,
-          addToNoIndex: req.body.noindex
+          addToNoIndex: req.body.articlenoindex
         }
       })
         .then(updated => {
