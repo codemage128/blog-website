@@ -520,7 +520,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
     let _res = changeTohtml(data);
     await Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: _res.table_content, articleBody: _res.article } });
   })
-  try {
     let settings = await Settings.findOne();
     let user = req.params.user;
     let slug = req.params.slug;
@@ -566,7 +565,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         // var _res = changeTohtml(article_body);
         let _articleBody = view_article.articleBody;
 
-        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user.id });
+        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
         var _res = "";
         if (saveText.length > 0) {
           _res = changeTohtml(saveText[0].articleBody);
@@ -610,7 +609,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         // var _res = changeTohtml(article_body);
         let _articleBody = view_article.articleBody;
 
-        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user.id });
+        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
         var _res = "";
         if (saveText.length > 0) {
           _res = changeTohtml(saveText[0].articleBody);
@@ -631,9 +630,6 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         });
       }
     }
-  } catch (error) {
-    next(error);
-  }
 });
 // Get single article page
 router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next) => {
@@ -740,7 +736,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         var article_body = article[0].body;
         let _articleBody = article[0].articleBody;
 
-        let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user.id });
+        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
         var _res = "";
         if (saveText.length > 0) {
           _res = changeTohtml(saveText[0].articleBody);
@@ -778,7 +774,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         )
           .then(async views => {
             let _articleBody = article[0].articleBody;
-            let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user.id });
+            let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
             var _res = "";
             if (saveText.length > 0) {
               _res = changeTohtml(saveText[0].articleBody);

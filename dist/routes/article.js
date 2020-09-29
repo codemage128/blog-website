@@ -669,7 +669,7 @@ function changeTohtml(data) {
 
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res, next) {
-    var __articles, settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _length, r, related, ips, articleCount, indexof, view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article, _comments, _articleBody2, _saveText;
+    var __articles, settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _length, r, related, ips, articleCount, indexof, _view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article2, _comments, _articleBody2, _saveText;
 
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
@@ -714,67 +714,66 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               };
             }());
 
-            _context6.prev = 4;
-            _context6.next = 7;
+            _context6.next = 6;
             return _settings["default"].findOne();
 
-          case 7:
+          case 6:
             settings = _context6.sent;
             user = req.params.user;
             slug = req.params.slug;
             category = req.params.category;
-            _context6.next = 13;
+            _context6.next = 12;
             return _articles["default"].find({
               slug: slug
             });
 
-          case 13:
+          case 12:
             article = _context6.sent;
 
             if (!(article == "" && article.active == false)) {
-              _context6.next = 18;
+              _context6.next = 17;
               break;
             }
 
             res.render("404");
-            _context6.next = 82;
+            _context6.next = 81;
             break;
 
-          case 18:
+          case 17:
             nextarticle = [];
             previousarticle = [];
 
             if (!(typeof req.user !== "undefined")) {
-              _context6.next = 26;
+              _context6.next = 25;
               break;
             }
 
-            _context6.next = 23;
+            _context6.next = 22;
             return _bookmark["default"].findOne({
               userId: req.user.id,
               articleId: article[0]._id
             });
 
-          case 23:
+          case 22:
             _context6.t0 = _context6.sent;
-            _context6.next = 27;
+            _context6.next = 26;
             break;
 
-          case 26:
+          case 25:
             _context6.t0 = false;
 
-          case 27:
+          case 26:
             bookmark = _context6.t0;
             book = bookmark ? true : false;
-            _context6.next = 31;
+            _context6.next = 30;
             return _articles["default"].findOne({
               slug: req.params.slug,
               active: true
             });
 
-          case 31:
+          case 30:
             art = _context6.sent;
-            _context6.next = 34;
+            _context6.next = 33;
             return _articles["default"].find({
               active: true,
               slug: {
@@ -782,10 +781,10 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 34:
+          case 33:
             _length = _context6.sent;
             r = Math.floor(Math.random() * _length.length);
-            _context6.next = 38;
+            _context6.next = 37;
             return _articles["default"].find({
               active: true,
               slug: {
@@ -795,13 +794,13 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               createdAt: -1
             }).limit(3).skip(r);
 
-          case 38:
+          case 37:
             related = _context6.sent;
             ips = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
-            _context6.next = 42;
+            _context6.next = 41;
             return _articles["default"].countDocuments();
 
-          case 42:
+          case 41:
             articleCount = _context6.sent;
             indexof = -1;
             art.viewers.forEach(function (element) {
@@ -811,36 +810,36 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context6.next = 61;
+              _context6.next = 60;
               break;
             }
 
-            _context6.next = 48;
+            _context6.next = 47;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 48:
-            view_article = _context6.sent;
-            _context6.next = 51;
+          case 47:
+            _view_article = _context6.sent;
+            _context6.next = 50;
             return _comment["default"].find({
-              articleId: view_article._id
+              articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 51:
+          case 50:
             comments = _context6.sent;
             // var article_body = view_article.body;
             // var _res = changeTohtml(article_body);
-            _articleBody = view_article.articleBody;
-            _context6.next = 55;
+            _articleBody = _view_article.articleBody;
+            _context6.next = 54;
             return _savetext["default"].find({
-              articleId: view_article._id,
-              userId: req.user.id
+              articleId: _view_article._id,
+              userId: req.user ? req.user.id : null
             });
 
-          case 55:
+          case 54:
             saveText = _context6.sent;
             _res = "";
 
@@ -852,7 +851,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: view_article,
+              article: _view_article,
               article_body: _articleBody,
               // article_table_content: _res.table_content,
               settings: settings,
@@ -863,16 +862,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context6.next = 82;
+            _context6.next = 81;
             break;
 
-          case 61:
+          case 60:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context6.next = 65;
+            _context6.next = 64;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -881,8 +880,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 65:
-            _context6.next = 67;
+          case 64:
+            _context6.next = 66;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -891,8 +890,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 67:
-            _context6.next = 69;
+          case 66:
+            _context6.next = 68;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -901,32 +900,32 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 69:
-            _context6.next = 71;
+          case 68:
+            _context6.next = 70;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 71:
-            _view_article = _context6.sent;
-            _context6.next = 74;
+          case 70:
+            _view_article2 = _context6.sent;
+            _context6.next = 73;
             return _comment["default"].find({
-              articleId: _view_article._id
+              articleId: _view_article2._id
             }).sort({
               upvotecount: -1
             });
 
-          case 74:
+          case 73:
             _comments = _context6.sent;
             // var _res = changeTohtml(article_body);
-            _articleBody2 = _view_article.articleBody;
-            _context6.next = 78;
+            _articleBody2 = _view_article2.articleBody;
+            _context6.next = 77;
             return _savetext["default"].find({
-              articleId: _view_article._id,
-              userId: req.user.id
+              articleId: _view_article2._id,
+              userId: req.user ? req.user.id : null
             });
 
-          case 78:
+          case 77:
             _saveText = _context6.sent;
             _res = "";
 
@@ -938,7 +937,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: _view_article,
+              article: _view_article2,
               article_body: _articleBody2,
               settings: settings,
               previous: previousarticle,
@@ -949,21 +948,12 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               comments: _comments
             });
 
-          case 82:
-            _context6.next = 87;
-            break;
-
-          case 84:
-            _context6.prev = 84;
-            _context6.t1 = _context6["catch"](4);
-            next(_context6.t1);
-
-          case 87:
+          case 81:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[4, 84]]);
+    }, _callee6);
   }));
 
   return function (_x13, _x14, _x15) {
@@ -1128,8 +1118,8 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             _articleBody = article[0].articleBody;
             _context8.next = 39;
             return _savetext["default"].find({
-              articleId: article[0]._id,
-              userId: req.user.id
+              articleId: view_article._id,
+              userId: req.user ? req.user.id : null
             });
 
           case 39:
@@ -1189,8 +1179,8 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
                         _articleBody = article[0].articleBody;
                         _context7.next = 3;
                         return _savetext["default"].find({
-                          articleId: article[0]._id,
-                          userId: req.user.id
+                          articleId: view_article._id,
+                          userId: req.user ? req.user.id : null
                         });
 
                       case 3:
