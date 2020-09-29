@@ -2886,16 +2886,16 @@ router.get('/dashboard/usermetric', _auth["default"], _install["default"].redire
       while (1) {
         switch (_context34.prev = _context34.next) {
           case 0:
-            _context34.prev = 0;
+            // try {
             perPage = 10;
             page = req.query.page || 1;
 
             if (!req.query.q) {
-              _context34.next = 9;
+              _context34.next = 8;
               break;
             }
 
-            _context34.next = 6;
+            _context34.next = 5;
             return _users["default"].find({
               roleId: {
                 $ne: "admin"
@@ -2913,13 +2913,13 @@ router.get('/dashboard/usermetric', _auth["default"], _install["default"].redire
               }]
             }).skip(perPage * page - perPage).limit(perPage);
 
-          case 6:
+          case 5:
             _context34.t0 = _context34.sent;
-            _context34.next = 12;
+            _context34.next = 11;
             break;
 
-          case 9:
-            _context34.next = 11;
+          case 8:
+            _context34.next = 10;
             return _users["default"].find({
               roleId: {
                 $ne: "admin"
@@ -2928,18 +2928,18 @@ router.get('/dashboard/usermetric', _auth["default"], _install["default"].redire
               createdAt: -1
             }).skip(perPage * page - perPage).limit(perPage);
 
-          case 11:
+          case 10:
             _context34.t0 = _context34.sent;
 
-          case 12:
+          case 11:
             users = _context34.t0;
 
             if (!req.query.q) {
-              _context34.next = 19;
+              _context34.next = 18;
               break;
             }
 
-            _context34.next = 16;
+            _context34.next = 15;
             return _users["default"].countDocuments({
               roleId: {
                 $ne: "admin"
@@ -2957,49 +2957,44 @@ router.get('/dashboard/usermetric', _auth["default"], _install["default"].redire
               }]
             });
 
-          case 16:
+          case 15:
             _context34.t1 = _context34.sent;
-            _context34.next = 22;
+            _context34.next = 21;
             break;
 
-          case 19:
-            _context34.next = 21;
+          case 18:
+            _context34.next = 20;
             return _users["default"].countDocuments({
               roleId: {
                 $ne: "admin"
               }
             });
 
-          case 21:
+          case 20:
             _context34.t1 = _context34.sent;
 
-          case 22:
+          case 21:
             count = _context34.t1;
-            _context34.next = 25;
+            _context34.next = 24;
             return _average["default"].find({}).populate('articleId').populate('userId');
 
-          case 25:
+          case 24:
             countings = _context34.sent;
             res.render("./admin/usermetric", {
               title: "User-Metric",
               allusers: countings,
               current: page,
               pages: Math.ceil(count / perPage)
-            });
-            _context34.next = 32;
-            break;
+            }); // } catch (error) {
+            //   next(error);
+            // }
 
-          case 29:
-            _context34.prev = 29;
-            _context34.t2 = _context34["catch"](0);
-            next(_context34.t2);
-
-          case 32:
+          case 26:
           case "end":
             return _context34.stop();
         }
       }
-    }, _callee34, null, [[0, 29]]);
+    }, _callee34);
   }));
 
   return function (_x100, _x101, _x102) {

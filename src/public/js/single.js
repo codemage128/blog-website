@@ -77,7 +77,7 @@ $(function () {
    //       }
    //    }
    // });
-   
+
    // var _string = "";
    // table_element.forEach((item, index) => {
    //    var template = '<li><a href="#' + idList[index] + '">' + item.data.text + '</a></li>';
@@ -88,13 +88,9 @@ $(function () {
    // $('.table-of-contents').append(table_content_element);
    // init();
 })
-
-
 // function init() {
-
 var body = document.body;
 var articleheight = $('#inner-dark-blog-content-one').height();
-console.log(articleheight);
 var percent = 0;
 var totalheight = $('.dark-blog-banner').height() + articleheight;
 window.addEventListener('scroll', function () {
@@ -129,7 +125,19 @@ $('#darkmode').click(function () {
       $('.sidenav').css('background-color', '#1d1d1b');
       $('#authorname').css("color", "white");
       $('.inner-dark-blog-content-one p a').attr("style", "color: white !important");
+      //comment section
       $('#commentBtn').removeClass('btn-secondary').addClass('btn-primary');
+      $('.form-control').css('color', 'white');
+      $('.form-control').css('background-color', 'black');
+      $('.upvoteBtn').removeClass('btn-secondary').addClass('btn-primary');
+      $('.reply').removeClass('btn-secondary').addClass('btn-primary');
+      $('.delete').removeClass('btn-secondary').addClass('btn-primary');
+      $('.replyBtn').removeClass('btn-secondary').addClass('btn-primary');
+      $('.table-of-contents').css('background', 'black');
+      $('.table-content-title').css('color', 'white');
+      $('.table-contents>li>a').css('color', 'white');
+      $('.table-contents').css('color', 'white');
+      $('.table-content-paragraph').css('color', 'white');
    } else {
       document.body.style.background = 'white';
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');
@@ -149,6 +157,17 @@ $('#darkmode').click(function () {
       $('.sidenav').css('background-color', 'black');
       $('#authorname').css("color", "black");
       $('#commentBtn').removeClass('btn-primary').addClass('btn-secondary');
+      $('.form-control').css('color', '#555');
+      $('.form-control').css('background-color', '#fff');
+      $('.upvoteBtn').removeClass('btn-primary').addClass('btn-secondary');
+      $('.reply').removeClass('btn-primary').addClass('btn-secondary');
+      $('.delete').removeClass('btn-primary').addClass('btn-secondary');
+      $('.replyBtn').removeClass('btn-primary').addClass('btn-secondary');
+      $('.table-of-contents').css('background', 'white');
+      $('.table-content-title').css('color', 'black');
+      $('.table-contents>li>a').css('color', 'black');
+      $('.table-contents').css('color', 'black');
+      $('.table-content-paragraph').css('color', 'black');
    }
 });
 // }
@@ -264,14 +283,14 @@ $('.reply').click(function () {
    $(replyId).toggle();
 })
 
-$('.delete').click(function(){
+$('.delete').click(function () {
    var id = $(this).attr('data');
 
    $.ajax({
       url: '/delete',
       type: 'post',
-      data: {commentId: id},
-      success: function(data){
+      data: { commentId: id },
+      success: function (data) {
          location.reload();
       }
    });
@@ -288,4 +307,13 @@ $('.upvoteBtn').click(function () {
          $(countTxt).text(data);
       }
    });
+})
+
+$('.btn-sider').click(function(){
+   $('aside').toggle();
+   if($('aside').is(':visible') == true){
+      $('.btn-sider').css('left', '16vw');
+   } else {
+      $('.btn-sider').css('left', '-3vw');
+   }
 })

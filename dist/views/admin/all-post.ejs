@@ -245,7 +245,7 @@
                                     <% if(article[key].active== true){ %>
                                     <span class="badge badge-success">Published</span>
                                     <%} else { %>
-                                    <span class="badge badge-danger">Inactive</span>
+                                    <span class="badge badge-danger">Draft</span>
                                     <% } %>
                                 </td>
                                 <td>
@@ -266,10 +266,12 @@
                                     <% } %>
                                 </td>
                                 <td>
+                                    <% if(article[key].active == true) {%>
                                     <% if(article[key].postedBy.roleId == "admin") {%>
                                     <a target="_blank" href="/d/<%= article[key].category.slug%>/<%= article[key].slug%>" class="btn btn-outline-secondary">View</a>
                                     <% } else { %>
                                     <a target="_blank" href="/p/<%= article[key].category.slug%>/<%= article[key].slug%>" class="btn btn-outline-secondary">View</a>
+                                    <% } %>
                                     <% } %>
                                 </td>
                             </tr>

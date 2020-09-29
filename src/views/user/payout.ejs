@@ -214,12 +214,14 @@
                </div>
                <div class="row form-group mt-50">
                   <div class="col-12 text-center">
+                     <% if(user.payoutenable == true) {%>
                      <% if(total < 5){ %>
                      <button class="button button-primary text-left" data-toggle="modal" data-target="#exampleModal"
                         type="button">Geld abheben</button>
                      <% } else { %>
                      <button class="button button-primary text-left" data-toggle="modal" data-target="#withdrawmodal"
                         type="button">Geld abheben</button>
+                     <% } %>
                      <% } %>
                   </div>
                </div>

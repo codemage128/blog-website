@@ -1676,7 +1676,7 @@ router.get(
 );
 
 router.get('/dashboard/usermetric', auth, install.redirectToLogin, role("admin"), async (req, res, next) => {
-  try {
+  // try {
     let perPage = 10;
     let page = req.query.page || 1;
     let users = req.query.q
@@ -1715,9 +1715,9 @@ router.get('/dashboard/usermetric', auth, install.redirectToLogin, role("admin")
       current: page,
       pages: Math.ceil(count / perPage)
     });
-  } catch (error) {
-    next(error);
-  }
+  // } catch (error) {
+  //   next(error);
+  // }
 })
 
 router.get("/dashboard/users", auth, install.redirectToLogin, role("admin"), async (req, res, next) => {

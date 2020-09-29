@@ -333,6 +333,7 @@ $('#darkmode').click(function () {
       $('#publish').removeClass('btn-outline-dark').addClass('grey lighten-1');
       $('body').addClass('black-body');
       $('.sidenav').css('background-color', '#232323');
+      $('.ce-conversion-tool').css('color', 'black');
    } else {
       //white mode
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');

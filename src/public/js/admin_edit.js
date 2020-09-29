@@ -105,6 +105,11 @@ $('#publish-submit').click(function () {
       $('#meta_title').val($('#meta_title_modal').val());
       $('#meta_description').val($('#meta_description_modal').val());
       $('#slug').val($('#slug_modal').val());
+      if ($('#noindex').is(":checked")){
+         $('#articlenoindex').val(true);
+      }else {
+         $('#articlenoindex').val(false);
+      }
       $('#article').submit();
    }
 })
@@ -227,6 +232,7 @@ $('#darkmode').click(function () {
       $('#publish').removeClass('btn-outline-dark').addClass('grey lighten-1');
       $('body').addClass('black-body');
       $('.sidenav').css('background-color', '#232323');
+      $('.ce-conversion-tool').css('color', 'black');
    } else {
       //white mode
       $('#header-logo-image').attr('src', '/images/GOLDEN-PNG.png');

@@ -15,6 +15,8 @@ var _express = _interopRequireDefault(require("express"));
 
 var _bookmark = _interopRequireDefault(require("../models/bookmark"));
 
+var _articles = _interopRequireDefault(require("../models/articles"));
+
 var _savetext = _interopRequireDefault(require("../models/savetext"));
 
 var _auth = _interopRequireDefault(require("../helpers/auth"));
@@ -99,7 +101,7 @@ router.get("/bookmark/delete", _auth["default"], /*#__PURE__*/function () {
 }());
 router.post("/savetext", _auth["default"], /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res, next) {
-    var userId, selectedString, articleId, saveText, textArray, payload, _textArray;
+    var userId, selectedString, articleId, tagId, url, article, textArray, saveText, newParagraph, articleBody, wholeText, newtext, payload, _textArray, _articleBody, _wholeText, _newtext, returndata;
 
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
@@ -108,50 +110,84 @@ router.post("/savetext", _auth["default"], /*#__PURE__*/function () {
             userId = req.body.userId;
             selectedString = req.body.text;
             articleId = req.body.articleId;
-            _context3.next = 5;
+            tagId = req.body.tagId;
+            url = req.body.url;
+            _context3.next = 7;
+            return _articles["default"].findOne({
+              _id: articleId
+            });
+
+          case 7:
+            article = _context3.sent;
+            textArray = [];
+            _context3.next = 11;
             return _savetext["default"].find({
               articleId: articleId,
               userId: userId
             });
 
-          case 5:
+          case 11:
             saveText = _context3.sent;
+            newParagraph = "";
 
             if (!(saveText.length == 0)) {
-              _context3.next = 14;
+              _context3.next = 26;
               break;
             }
 
-            textArray = [];
-            textArray.push(selectedString);
+            console.log("This is the create part");
+            articleBody = JSON.parse(article.body);
+            wholeText = articleBody[tagId].data.text;
+            newtext = '<mark class="cdx-marker">' + selectedString + '</mark>';
+            newParagraph = wholeText.replace(selectedString, newtext);
+            articleBody[tagId].data.text = newParagraph;
+            textArray.push(newParagraph);
             payload = {
               userId: userId,
               text: textArray,
-              articleId: articleId
+              articleId: articleId,
+              url: url,
+              articleBody: JSON.stringify(articleBody)
             };
-            _context3.next = 12;
+            _context3.next = 24;
             return _savetext["default"].create(payload);
 
-          case 12:
-            _context3.next = 18;
+          case 24:
+            _context3.next = 37;
             break;
 
-          case 14:
+          case 26:
+            console.log("This is the update part");
             _textArray = saveText[0].text;
+            _articleBody = JSON.parse(saveText[0].articleBody);
+            _wholeText = _articleBody[tagId].data.text;
+            _newtext = '<mark class="cdx-marker">' + selectedString + '</mark>';
+            newParagraph = _wholeText.replace(selectedString, _newtext);
 
-            _textArray.push(selectedString);
+            _textArray.push(newParagraph);
 
-            _context3.next = 18;
+            _articleBody[tagId].data.text = newParagraph;
+
+            _textArray.push(newParagraph);
+
+            _context3.next = 37;
             return _savetext["default"].updateOne({
               _id: saveText[0].id
             }, {
-              text: _textArray
+              $set: {
+                text: _textArray,
+                articleBody: JSON.stringify(_articleBody)
+              }
             });
 
-          case 18:
-            res.json("successful");
+          case 37:
+            console.log(newParagraph);
+            returndata = {
+              "new": newParagraph
+            };
+            return _context3.abrupt("return", res.json(newParagraph));
 
-          case 19:
+          case 40:
           case "end":
             return _context3.stop();
         }

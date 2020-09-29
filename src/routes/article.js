@@ -3,6 +3,7 @@ import User from "../models/users";
 import Article from "../models/articles";
 import Category from "../models/category";
 import Comment from "../models/comment";
+import SaveText from "../models/savetext";
 import Settings from "../models/settings";
 import auth from "../helpers/auth";
 import htmlToText from "html-to-text";
@@ -52,7 +53,7 @@ router.post(
     let article_header = req.body.article_header;
 
     let header_url = createMedia(article_header);
-    
+    let noindex = req.body.articlenoindex;
 
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
@@ -189,6 +190,7 @@ router.post(
 
     var result = changeTohtml(JSON.stringify(data));
     let payload1 = {
+      addToNoIndex: noindex,
       articleTablecontent: result.table_content,
       articleBody: result.article,
       week: `${newDate.getWeek()}`,
@@ -301,7 +303,7 @@ router.post(
       // }
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
-      
+
       let article_header = req.body.article_header ? createMedia(article_header) : article.file;
       var active_flag = false;
       if (req.body.saveflag == "true") {
@@ -314,7 +316,8 @@ router.post(
       Article.updateOne({ _id: req.body.articleId.trim() }, {
         $set: {
           title: article_title, slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
-          articleBody: result.article
+          articleBody: result.article,
+          addToNoIndex: req.body.noindex
         }
       })
         .then(updated => {
@@ -431,35 +434,35 @@ function changeTohtml(data) {
   let idList = [];
 
   let body_content_element = "";
-
   _data.forEach((element, index) => {
     var _template = "";
     switch (element.type) {
       case "header":
-        if (element.data.level != 1) {
+        if (element.data.level == 2) {
           idList.push(index);
-          _template = '<h' + element.data.level + ' id="' + index + '">' + element.data.text + '</h' + element.data.level + '>';
+          // _template = '<h' + element.data.level + ' id="' + index + '">' + element.data.text + '</h' + element.data.level + '>';
         }
+        _template = '<h' + element.data.level + ' id="' + index + '">' + element.data.text + '</h' + element.data.level + '>';
         break;
       case "paragraph":
-        _template = '<p>' + element.data.text + '</p>';
+        _template = '<p style="margin-top:30px" id="' + index + '">' + element.data.text + '</p>';
         break;
       case "image":
-        _template = '<img src=' + element.data.url + ' alt=' + element.data.caption + '/>';
+        _template = '<img id="' + index + '" src=' + element.data.url + ' alt=' + element.data.caption + '/>';
         break;
       case "code":
         var code = element.data.code;
         code = code.replace(/</g, "&lt;");
         code = code.replace(/>/g, "&gt;");
         console.log(code)
-        _template = '<pre>' + code + '</pre>';
+        _template = '<pre id="' + index + '">' + code + '</pre>';
         break;
       case "embed":
-        _template = '<div class="text-center" style="margin-top:10px;"><iframe src="' + element.data.embed + '" width="' + element.data.width + '" height="' + element.data.height + '" frameborder="0" allowfullscreen></iframe></div>';
+        _template = '<div id="' + index + '" class="text-center" style="margin-top:10px;"><iframe src="' + element.data.embed + '" width="' + element.data.width + '" height="' + element.data.height + '" frameborder="0" allowfullscreen></iframe></div>';
         break;
       case "table":
         var content = element.data.content;
-        _template = '<table class="table table-bordered table-hover" style="width:85%;margin: auto;margin-bottom: 10px;">';
+        _template = '<table id="' + index + '" class="table table-bordered table-hover" style="width:85%;margin: auto;margin-bottom: 10px;">';
         content.forEach((element, index) => {
           var length = element.length;
           var tr_template = "<tr class='text-center'>";
@@ -474,11 +477,11 @@ function changeTohtml(data) {
         _template = _template + "</table>";
         break;
       case "quote":
-        _template = '<blockquote><p class="quotation-mark">“' + element.data.text + '“</p><h3 class="text-right">--- ' + element.data.caption + ' ---</h3></blockquote>'
+        _template = '<blockquote id="' + index + '"><p class="quotation-mark">“' + element.data.text + '“</p><h3 class="text-right">--- ' + element.data.caption + ' ---</h3></blockquote>'
         break;
       case "list":
         var type = element.data.style.charAt(0);
-        _template = '<div><' + type + 'l>';
+        _template = '<div id="' + index + '"><' + type + 'l>';
         element.data.items.forEach(item => {
           _template += '<li>' + item + '</li>';
         })
@@ -487,7 +490,7 @@ function changeTohtml(data) {
     }
     body_content_element = body_content_element + _template;
   });
-  var table_content_element = '<ol class="table-content"><h2>Inhalt</h2>';
+  var table_content_element = '<ol class="table-content table-contents"><h2 class="table-content-title">Inhalt</h2>';
   var table_element = [];
   _data.forEach(element => {
     if (element.type == "header") {
@@ -498,7 +501,7 @@ function changeTohtml(data) {
   });
   var _string = "";
   table_element.forEach((item, index) => {
-    var template = '<li><a style="font-size: 1.2em" href="#' + idList[index] + '">' + item.data.text + '</a></li>';
+    var template = '<li><a href="#' + idList[index] + '"><p class="table-content-paragraph">' + item.data.text + '</p></a></li>';
     _string = _string + template;
   });
   table_content_element = table_content_element + _string + '</ol>';
@@ -510,12 +513,19 @@ function changeTohtml(data) {
 }
 
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
+
+  let __articles = await Article.find({});
+  __articles.forEach(async article => {
+    let data = article.body;
+    let _res = changeTohtml(data);
+    await Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: _res.table_content, articleBody: _res.article } });
+  })
   try {
     let settings = await Settings.findOne();
     let user = req.params.user;
     let slug = req.params.slug;
     let category = req.params.category;
-    let article = await Article.find({slug: slug});
+    let article = await Article.find({ slug: slug });
     if (article == "" && article.active == false) res.render("404");
     else {
       let nextarticle = [];
@@ -523,7 +533,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
       let book = bookmark ? true : false;
       let art = await Article.findOne({ slug: req.params.slug, active: true });
-      
+
       var _length = await Article.find({
         active: true,
         slug: { $ne: article[0].slug }
@@ -554,11 +564,19 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
         // var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
+        let _articleBody = view_article.articleBody;
+
+        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user.id });
+        var _res = "";
+        if (saveText.length > 0) {
+          _res = changeTohtml(saveText[0].articleBody);
+          _articleBody = _res.article;
+        }
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
-          // article_body: _res.article,
+          article_body: _articleBody,
           // article_table_content: _res.table_content,
           settings: settings,
           previous: previousarticle,
@@ -589,12 +607,20 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
         await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
         let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
         let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
-        var article_body = view_article.body;
         // var _res = changeTohtml(article_body);
+        let _articleBody = view_article.articleBody;
+
+        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user.id });
+        var _res = "";
+        if (saveText.length > 0) {
+          _res = changeTohtml(saveText[0].articleBody);
+          _articleBody = _res.article;
+        }
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: view_article,
+          article_body: _articleBody,
           settings: settings,
           previous: previousarticle,
           next: nextarticle,
@@ -688,59 +714,6 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
       let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
       let book = bookmark ? true : false;
       let art = await Article.findOne({ slug: req.params.slug, active: true });
-      let next = await Article.find({
-        active: true,
-        _id: { $gt: article[0]._id },
-        category: article[0].category._id,
-        postedBy: article[0].postedBy._id
-      }).populate(
-        "category"
-      ).populate("postedBy").sort({ _id: 1 })
-        .limit(1);
-      if (next.length == 0) {
-        let index = Math.floor(Math.random() * 100 % 28);
-        next = await Article.find({
-          active: true,
-        }).populate("category").populate("postedBy").sort({ _id: 1 }).limit(1).skip(index);
-      }
-      let previous = await Article.find({
-        active: true,
-        _id: { $lt: article[0]._id },
-        category: article[0].category._id,
-        postedBy: article[0].postedBy._id
-      }).populate(
-        "category"
-      ).populate('postedBy')
-        .sort({ _id: 1 })
-        .limit(1);
-      if (previous.length == 0) {
-        let index = Math.floor(Math.random() * 100 % 28);
-        previous = await Article.find({
-          active: true,
-        }).populate("category").populate("postedBy").sort({ _id: 1 }).limit(1).skip(index);
-      }
-      let featured = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug },
-        addToFeatured: true
-      })
-        .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(5);
-      let popular = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug }
-      })
-        .sort({ views: -1 })
-        .limit(3);
-      let recommended = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug },
-        addToRecommended: true
-      })
-        .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(12);
       let related = await Article.find({
         active: true,
         slug: { $ne: article[0].slug }
@@ -765,19 +738,22 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
       })
       if (indexof !== -1) {
         var article_body = article[0].body;
-        var _res = changeTohtml(article_body);
+        let _articleBody = article[0].articleBody;
+
+        let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user.id });
+        var _res = "";
+        if (saveText.length > 0) {
+          _res = changeTohtml(saveText[0].articleBody);
+          _articleBody = _res.article;
+        }
         res.render("single", {
           articleCount: articleCount,
           title: article[0].title,
           article: article[0],
-          article_body: _res.article,
-          article_table_content: _res.table_content,
           settings: settings,
-          previous: previous[0],
-          next: next[0],
-          featured: featured,
-          popular: popular,
-          recommended: recommended,
+          article_body:_articleBody,
+          previous: [],
+          next: [],
           related: related,
           bookmark: book,
           bookmarkId: bookmark == null ? null : bookmark._id
@@ -800,21 +776,22 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
           { slug: req.params.slug.trim() },
           { $inc: { views: 1 } }
         )
-          .then(views => {
-            var article_body = view_article.body;
-            var _res = changeTohtml(article_body);
+          .then(async views => {
+            let _articleBody = article[0].articleBody;
+            let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user.id });
+            var _res = "";
+            if (saveText.length > 0) {
+              _res = changeTohtml(saveText[0].articleBody);
+              _articleBody = _res.article;
+            }
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
               article: article[0],
-              article_body: _res.article,
-              article_table_content: _res.table_content,
+              article_body:_articleBody,
+              previous: [],
+              next: [],
               settings: settings,
-              previous: previous[0],
-              next: next[0],
-              featured: featured,
-              popular: popular,
-              recommended: recommended,
               related: related,
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id

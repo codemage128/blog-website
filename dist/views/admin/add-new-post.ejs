@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/mdb/css/mdb.min.css">
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/mdb/css/style.css">
-    <link rel="stylesheet" href="/css/upload.css">
+    <!-- <link rel="stylesheet" href="/css/upload.css"> -->
     <link rel="stylesheet" href="/css/emojionearea.min.css">
 
     <link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
@@ -229,10 +229,12 @@
                     <% }%>
                 </select>
                 <input type="hidden" name="data" id="data" />
+                <input type="hidden" name="saveflag" id="saveflag" value="false" />
                 <input type="hidden" name="summary" id="summary" />
-                <input type="hidden" id="article_header" name="article_header"/>
+                <input type="hidden" id="article_header" name="article_header" />
                 <input type="hidden" id="meta_title" name="meta_title" />
                 <input type="hidden" id="meta_description" name="meta_description" />
+                <input type="hidden" id="articlenoindex" name="articlenoindex" />
                 <input type="hidden" id="slug" name="slug" />
             </form>
         </li>
@@ -246,6 +248,7 @@
             <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche
                 Tipps zur Gestaltung</a>
             <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
+            <a href="/Editor-Erklärung.pdf" target="_blank" class="btn btn-outline-blue btn-md">Anleitung Editor</a>
             <button type="button" id="save" class="btn btn-white btn-md">Save</button>
             <button type="button" id="publish" class="btn btn-outline-dark btn-md">Publish</button>
         </li>
@@ -327,14 +330,18 @@
                     <label>Slug:</label>
                     <input id="slug_modal" class="form-control" required />
                     <label>Meta Title :</label>
-                    <input id="meta_title_modal" class="form-control" required/>
+                    <input id="meta_title_modal" class="form-control" required />
                     <label>Meta Description :</label>
                     <textarea id="meta_description_modal" rows="5" class="form-control" required></textarea>
                     <label>Summary :</label>
                     <textarea id="summary_modal" rows="5" class="form-control" required></textarea>
-                    <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;
-                    right: 2vw;
-                    bottom: 14vh;"></span>
+                    <br>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="noindex">
+                        <label class="custom-control-label" for="noindex">No-index</label>
+                    </div>
+                    <span class="badge badge-pill badge-danger" id="word_left"
+                        style="position: absolute; right: 2vw; bottom: 14vh;"></span>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-black" id="publish-submit">Publish</button>

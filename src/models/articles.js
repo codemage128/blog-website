@@ -7,6 +7,7 @@ const articleSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User"
     },
+    addToNoIndex: Boolean,
     title: String,
     metatitle: String,
     metadescription: String,

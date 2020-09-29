@@ -21,7 +21,7 @@ var router = _express["default"].Router(); // Create a new comment
 
 router.post('/comment', /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
-    var set, ipAddress, payload;
+    var set, comment, regular, re, linkreg, lin, ipAddress, payload;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -31,38 +31,48 @@ router.post('/comment', /*#__PURE__*/function () {
 
           case 2:
             set = _context.sent;
+            comment = req.body.comment;
+            regular = /\S+@\S+\.\S+/;
+            re = regular.test(comment);
+            linkreg = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+            lin = linkreg.test(comment);
+            console.log(lin);
 
-            try {
-              ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
-              payload = {
-                name: req.body.name,
-                email: req.body.email,
-                comment: req.body.comment,
-                articleId: req.body.articleId,
-                userId: req.body.userId,
-                upvoteCount: 0,
-                profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
-                // crypto
-                // 	.createHash('md5')
-                // 	.update(req.body.email)
-                // 	.digest('hex')
-                // 	.toString() +
-                // '?s=200' +
-                // '&d=retro',
+            if (re == true && lin == true) {
+              req.flash("error_msg", "You can't include the email, link in the comment");
+            } else {
+              try {
+                ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
+                payload = {
+                  name: req.body.name,
+                  email: req.body.email,
+                  comment: req.body.comment,
+                  articleId: req.body.articleId,
+                  userId: req.body.userId,
+                  upvoteCount: 0,
+                  profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
+                  // crypto
+                  // 	.createHash('md5')
+                  // 	.update(req.body.email)
+                  // 	.digest('hex')
+                  // 	.toString() +
+                  // '?s=200' +
+                  // '&d=retro',
 
-              };
+                };
 
-              _comment["default"].create(payload).then(function (done) {
-                // res.send({data: done});
-                res.redirect('back');
-              })["catch"](function (e) {
-                return next(e);
-              });
-            } catch (error) {
-              next(error);
+                _comment["default"].create(payload).then(function (done) {
+                  // res.send({data: done});
+                  res.redirect('back');
+                })["catch"](function (e) {
+                  return next(e);
+                });
+              } catch (error) {
+                next(error);
+              }
             }
 
-          case 4:
+          case 10:
           case "end":
             return _context.stop();
         }

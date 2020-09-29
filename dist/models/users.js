@@ -25,6 +25,10 @@ var userSchema = new Schema({
     type: Boolean,
     "default": false
   },
+  payoutenable: {
+    type: Boolean,
+    "default": false
+  },
   closed: {
     type: Boolean,
     "default": false

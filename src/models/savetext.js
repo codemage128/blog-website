@@ -10,6 +10,7 @@ const savetextSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Article"
     },
+    articleBody: String,
     text: Array,
     url: String
   },

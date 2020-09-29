@@ -717,6 +717,7 @@ router.get('/', install.redirectToLogin, async (req, res, next) => {
 	// 		{ usernameslug: usernameslug }
 	// 	);
 	// });
+
 	var categories = await Category.find({});
 	let official = await Category.findOne({ slug: "official" });
 	var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');

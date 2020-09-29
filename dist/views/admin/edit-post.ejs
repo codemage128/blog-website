@@ -237,6 +237,7 @@
                 <input type="hidden" id="article_header" name="article_header" />
                 <input type="hidden" id="meta_title" name="meta_title" />
                 <input type="hidden" id="meta_description" name="meta_description" />
+                <input type="hidden" id="articlenoindex" name="articlenoindex" />
                 <input type="hidden" id="slug" name="article_slug" />
             </form>
         </li>
@@ -250,7 +251,7 @@
             <a href="/Backenddatei_Qualifzieren.pdf" target="_blank" class="btn btn-outline-blue btn-md">Hilfreiche
                 Tipps zur Gestaltung</a>
             <a href="/Backenddatei_Reichweite.pdf" target="_blank" class="btn btn-outline-blue btn-md">Reichweite</a>
-            <button type="button" id="save" class="btn btn-white btn-md">Save</button>
+            <a href="/Editor-Erklärung.pdf" target="_blank" class="btn btn-outline-blue btn-md">Anleitung Editor</a>
             <button type="button" id="publish" class="btn btn-outline-dark btn-md">Update</button>
         </li>
     </ul>
@@ -343,6 +344,11 @@
                         required><%= article.metadescription %></textarea>
                     <label>Summary :</label>
                     <textarea id="summary_modal" rows="5" class="form-control"><%= article.summary %></textarea>
+                    <br>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="noindex">
+                        <label class="custom-control-label" for="noindex">No-index</label>
+                    </div>
                     <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;
                     right: 2vw;
                     bottom: 14vh;"></span>
