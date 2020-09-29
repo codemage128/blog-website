@@ -303,8 +303,7 @@ router.post(
       // }
       let date = new Date();
       let article = await Article.findOne({ _id: req.body.articleId });
-
-      let article_header = req.body.article_header ? createMedia(article_header) : article.file;
+      let article_header = req.body.article_header ? createMedia(req.body.article_header) : article.file;
       var active_flag = false;
       if (req.body.saveflag == "true") {
         active_flag = false;

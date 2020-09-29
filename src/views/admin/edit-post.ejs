@@ -346,7 +346,7 @@
                     <textarea id="summary_modal" rows="5" class="form-control"><%= article.summary %></textarea>
                     <br>
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="noindex">
+                        <input type="checkbox" class="custom-control-input" id="noindex" <%if(article.articlenoindex == true){%> checked <% }%>>
                         <label class="custom-control-label" for="noindex">No-index</label>
                     </div>
                     <span class="badge badge-pill badge-danger" id="word_left" style="position: absolute;

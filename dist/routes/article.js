@@ -352,7 +352,7 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
 
           case 22:
             article = _context2.sent;
-            article_header = req.body.article_header ? createMedia(article_header) : article.file;
+            article_header = req.body.article_header ? createMedia(req.body.article_header) : article.file;
             active_flag = false;
 
             if (req.body.saveflag == "true") {
