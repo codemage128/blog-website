@@ -669,7 +669,7 @@ function changeTohtml(data) {
 
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res, next) {
-    var __articles, settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _length, r, related, ips, articleCount, indexof, _view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article2, _comments, _articleBody2, _saveText;
+    var __articles, settings, user, slug, category, article, nextarticle, previousarticle, bookmark, book, art, _length, r, related, ips, articleCount, indexof, view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article, _comments, _articleBody2, _saveText;
 
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
@@ -820,10 +820,10 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }).populate("postedBy").populate('category');
 
           case 47:
-            _view_article = _context6.sent;
+            view_article = _context6.sent;
             _context6.next = 50;
             return _comment["default"].find({
-              articleId: _view_article._id
+              articleId: view_article._id
             }).sort({
               upvotecount: -1
             });
@@ -832,10 +832,10 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             comments = _context6.sent;
             // var article_body = view_article.body;
             // var _res = changeTohtml(article_body);
-            _articleBody = _view_article.articleBody;
+            _articleBody = view_article.articleBody;
             _context6.next = 54;
             return _savetext["default"].find({
-              articleId: _view_article._id,
+              articleId: view_article._id,
               userId: req.user ? req.user.id : null
             });
 
@@ -851,7 +851,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: _view_article,
+              article: view_article,
               article_body: _articleBody,
               // article_table_content: _res.table_content,
               settings: settings,
@@ -907,10 +907,10 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }).populate("postedBy").populate('category');
 
           case 70:
-            _view_article2 = _context6.sent;
+            _view_article = _context6.sent;
             _context6.next = 73;
             return _comment["default"].find({
-              articleId: _view_article2._id
+              articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
@@ -918,10 +918,10 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
           case 73:
             _comments = _context6.sent;
             // var _res = changeTohtml(article_body);
-            _articleBody2 = _view_article2.articleBody;
+            _articleBody2 = _view_article.articleBody;
             _context6.next = 77;
             return _savetext["default"].find({
-              articleId: _view_article2._id,
+              articleId: _view_article._id,
               userId: req.user ? req.user.id : null
             });
 
@@ -937,7 +937,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             res.render("single", {
               articleCount: articleCount,
               title: article[0].title,
-              article: _view_article2,
+              article: _view_article,
               article_body: _articleBody2,
               settings: settings,
               previous: previousarticle,
@@ -1118,7 +1118,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             _articleBody = article[0].articleBody;
             _context8.next = 39;
             return _savetext["default"].find({
-              articleId: view_article._id,
+              articleId: article[0]._id,
               userId: req.user ? req.user.id : null
             });
 
@@ -1179,7 +1179,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
                         _articleBody = article[0].articleBody;
                         _context7.next = 3;
                         return _savetext["default"].find({
-                          articleId: view_article._id,
+                          articleId: article[0]._id,
                           userId: req.user ? req.user.id : null
                         });
 
