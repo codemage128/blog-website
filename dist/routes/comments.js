@@ -38,8 +38,9 @@ router.post('/comment', /*#__PURE__*/function () {
             lin = linkreg.test(comment);
             console.log(lin);
 
-            if (re == true && lin == true) {
+            if (re != true || lin != true) {
               req.flash("error_msg", "You can't include the email, link in the comment");
+              res.redirect('back');
             } else {
               try {
                 ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);

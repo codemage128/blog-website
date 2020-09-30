@@ -14,11 +14,12 @@ router.post('/comment', async (req, res, next) => {
 	let linkreg = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 	let lin = linkreg.test(comment);
 	console.log(lin)
-	if (re == true && lin == true) {
+	if (re != true || lin != true) {
 		req.flash(
 			"error_msg",
 			"You can't include the email, link in the comment"
 		);
+		res.redirect('back');
 	} else {
 		try {
 			let ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress

@@ -699,6 +699,7 @@ router.post('/suggestion', async (req, res, next) => {
 });
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
+	
 	// let users = await User.find({});
 	// users.forEach(async element => {
 	// 	let username = element.username.toLowerCase().replace(" ", "");

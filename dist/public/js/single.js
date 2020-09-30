@@ -312,8 +312,10 @@ $('.upvoteBtn').click(function () {
 $('.btn-sider').click(function(){
    $('aside').toggle();
    if($('aside').is(':visible') == true){
-      $('.btn-sider').css('left', '16vw');
+      var width  = $('aside').width() - 40;
+      console.log(width);
+      $('.btn-sider').css('left', width);
    } else {
-      $('.btn-sider').css('left', '-3vw');
+      $('.btn-sider').css('left', '-40px');
    }
 })

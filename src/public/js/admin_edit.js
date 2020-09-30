@@ -73,11 +73,11 @@ var editor = new EditorJS({
    },
    onReady: function () {
       var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
-      $('#wordCount').text(wordCount);
+      $('#wordCount').text("Wortanzahl:" + wordCount);
    },
    onChange: function () {
       var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
-      $('#wordCount').text(wordCount);
+      $('#wordCount').text("Wortanzahl:" + wordCount);
    }
 });
 

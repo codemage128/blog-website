@@ -196,7 +196,7 @@ router.post(
       week: `${newDate.getWeek()}`,
       month: `${months[newDate.getMonth()]}`,
       year: `${newDate.getFullYear()}`,
-      title: article_title.replace('$nbsp;', ''),
+      title: article_title.replace(/&nbsp;/gi, ''),
       body: JSON.stringify(data),
       summary: req.body.summary.trim(),
       short: htmlToText.fromString(html, {
@@ -314,7 +314,7 @@ router.post(
 
       Article.updateOne({ _id: req.body.articleId.trim() }, {
         $set: {
-          title: article_title.replace('$nbsp;', ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
+          title: article_title.replace(/&nbsp;/gi, ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
           articleBody: result.article,
           addToNoIndex: req.body.articlenoindex
         }
@@ -322,9 +322,9 @@ router.post(
         .then(updated => {
           req.flash("success_msg", "Article has been updated successfully");
           if (req.user.roleId == "admin") {
-            return res.redirect(`/dashboard/all-posts/`);
+            return res.redirect('/dashboard/all-posts/');
           } else {
-            return res.redirect(`/user/all-posts/`);
+            return res.redirect('/user/all-posts/');
           }
         })
         .catch(e => next(e));
@@ -519,116 +519,121 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
     let _res = changeTohtml(data);
     await Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: _res.table_content, articleBody: _res.article } });
   })
-    let settings = await Settings.findOne();
-    let user = req.params.user;
-    let slug = req.params.slug;
-    let category = req.params.category;
-    let article = await Article.find({ slug: slug });
-    if (article == "" && article.active == false) res.render("404");
-    else {
-      let nextarticle = [];
-      let previousarticle = [];
-      let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
-      let book = bookmark ? true : false;
-      let art = await Article.findOne({ slug: req.params.slug, active: true });
+  let settings = await Settings.findOne();
+  let user = req.params.user;
+  let slug = req.params.slug;
+  let article = await Article.find({ slug: slug });
+  if (article == "" && article.active == false) res.render("404");
+  else {
+    let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
+    let book = bookmark ? true : false;
+    let art = await Article.findOne({ slug: req.params.slug, active: true });
+    let category = await Category.findOne({ slug: req.params.category });
+    var _length = await Article.find({
+      active: true, category: category._id
+    });
+    var r = Math.floor(Math.random() * _length.length);
+    let related = await Article.find({
+      active: true,
+      category: category._id,
+    })
+      .populate("postedBy")
+      .populate("category")
+      .limit(3).skip(r).sort({ createdAt: -1 });
+    let nextprev = await Article.find({
+      active: true,
+      category: category._id,
+    })
+      .populate("postedBy")
+      .populate("category")
+      .limit(2).skip(r);
+    let ips =
+      req.headers["x-forwarded-for"] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-      var _length = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug }
+    let sameArticle = await Article.find({ active: true, category: category._id }).populate("category").populate("postedBy");
+    let articleCount = sameArticle.length;
+
+    let indexof = -1;
+    art.viewers.forEach(element => {
+      if (element.ip == ips) {
+        indexof = 1;
+      }
+    })
+    if (indexof !== -1) {
+      let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+      let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
+      // var article_body = view_article.body;
+      // var _res = changeTohtml(article_body);
+      let _articleBody = view_article.articleBody;
+
+      let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
+      var _res = "";
+      if (saveText.length > 0) {
+        _res = changeTohtml(saveText[0].articleBody);
+        _articleBody = _res.article;
+      }
+      res.render("single", {
+        articleCount: articleCount,
+        title: article[0].title,
+        article: view_article,
+        article_body: _articleBody,
+        // article_table_content: _res.table_content,
+        settings: settings,
+        previous: nextprev[0],
+        next: nextprev[1],
+        related: related,
+        bookmark: book,
+        bookmarkId: bookmark == null ? null : bookmark._id,
+        comments: comments
       });
-      var r = Math.floor(Math.random() * _length.length);
-      let related = await Article.find({
-        active: true,
-        slug: { $ne: article[0].slug },
-      })
-        .populate("postedBy")
-        .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(3).skip(r);
-      let ips =
+    } else {
+      let ip =
         req.headers["x-forwarded-for"] ||
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         (req.connection.socket ? req.connection.socket.remoteAddress : null);
-      let articleCount = await Article.countDocuments();
-      let indexof = -1;
-      art.viewers.forEach(element => {
-        if (element.ip == ips) {
-          indexof = 1;
-        }
-      })
-      if (indexof !== -1) {
-        let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
-        let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
-        // var article_body = view_article.body;
-        // var _res = changeTohtml(article_body);
-        let _articleBody = view_article.articleBody;
-
-        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
-        var _res = "";
-        if (saveText.length > 0) {
-          _res = changeTohtml(saveText[0].articleBody);
-          _articleBody = _res.article;
-        }
-        res.render("single", {
-          articleCount: articleCount,
-          title: article[0].title,
-          article: view_article,
-          article_body: _articleBody,
-          // article_table_content: _res.table_content,
-          settings: settings,
-          previous: previousarticle,
-          next: nextarticle,
-          related: related,
-          bookmark: book,
-          bookmarkId: bookmark == null ? null : bookmark._id,
-          comments: comments
-        });
-      } else {
-        let ip =
-          req.headers["x-forwarded-for"] ||
-          req.connection.remoteAddress ||
-          req.socket.remoteAddress ||
-          (req.connection.socket ? req.connection.socket.remoteAddress : null);
-        let payload = {
-          ip: ip,
-          date: new Date()
-        }
-        await User.updateOne(
-          { _id: art.postedBy },
-          { $inc: { contentviews: 1 } }
-        );
-        await Article.updateOne(
-          { slug: req.params.slug.trim() },
-          { $push: { viewers: payload } }
-        );
-        await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
-        let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
-        let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
-        // var _res = changeTohtml(article_body);
-        let _articleBody = view_article.articleBody;
-
-        let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id: null });
-        var _res = "";
-        if (saveText.length > 0) {
-          _res = changeTohtml(saveText[0].articleBody);
-          _articleBody = _res.article;
-        }
-        res.render("single", {
-          articleCount: articleCount,
-          title: article[0].title,
-          article: view_article,
-          article_body: _articleBody,
-          settings: settings,
-          previous: previousarticle,
-          next: nextarticle,
-          related: related,
-          bookmark: book,
-          bookmarkId: bookmark == null ? null : bookmark._id,
-          comments: comments
-        });
+      let payload = {
+        ip: ip,
+        date: new Date()
       }
+      await User.updateOne(
+        { _id: art.postedBy },
+        { $inc: { contentviews: 1 } }
+      );
+      await Article.updateOne(
+        { slug: req.params.slug.trim() },
+        { $push: { viewers: payload } }
+      );
+      await Article.updateOne({ slug: req.params.slug.trim() }, { $inc: { views: 1 } });
+      let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
+      let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
+      // var _res = changeTohtml(article_body);
+      let _articleBody = view_article.articleBody;
+
+      let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
+      var _res = "";
+      if (saveText.length > 0) {
+        _res = changeTohtml(saveText[0].articleBody);
+        _articleBody = _res.article;
+      }
+      res.render("single", {
+        articleCount: articleCount,
+        title: article[0].title,
+        article: view_article,
+        article_body: _articleBody,
+        settings: settings,
+        previous: nextprev[0],
+        next: nextprev[1],
+        related: related,
+        bookmark: book,
+        bookmarkId: bookmark == null ? null : bookmark._id,
+        comments: comments
+      });
     }
+  }
 });
 // Get single article page
 router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next) => {
@@ -709,14 +714,25 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
       let bookmark = typeof req.user !== "undefined" ? await Bookmark.findOne({ userId: req.user.id, articleId: article[0]._id }) : false;
       let book = bookmark ? true : false;
       let art = await Article.findOne({ slug: req.params.slug, active: true });
+      let category = await Category.findOne({ slug: req.params.category });
+      var _length = await Article.find({
+        active: true, category: category._id
+      });
+      var r = Math.floor(Math.random() * _length.length);
       let related = await Article.find({
         active: true,
-        slug: { $ne: article[0].slug }
+        category: category._id,
       })
         .populate("postedBy")
         .populate("category")
-        .sort({ createdAt: -1 })
-        .limit(3);
+        .limit(3).skip(r).sort({ createdAt: -1 });
+      let nextprev = await Article.find({
+        active: true,
+        category: category._id,
+      })
+        .populate("postedBy")
+        .populate("category")
+        .limit(2).skip(r);
       let d = new Date();
       let customDate = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
       let ips =
@@ -724,7 +740,9 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         (req.connection.socket ? req.connection.socket.remoteAddress : null);
-      let articleCount = await Article.countDocuments();
+      //
+      let sameArticle = await Article.find({ active: true, category: category._id }).populate("category").populate("postedBy");
+      let articleCount = sameArticle.length;
       let indexof = -1;
       art.viewers.forEach(element => {
         if (element.ip == ips) {
@@ -735,7 +753,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         var article_body = article[0].body;
         let _articleBody = article[0].articleBody;
 
-        let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id: null });
+        let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });
         var _res = "";
         if (saveText.length > 0) {
           _res = changeTohtml(saveText[0].articleBody);
@@ -746,9 +764,9 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
           title: article[0].title,
           article: article[0],
           settings: settings,
-          article_body:_articleBody,
-          previous: [],
-          next: [],
+          article_body: _articleBody,
+          previous: nextprev[0],
+          next: nextprev[1],
           related: related,
           bookmark: book,
           bookmarkId: bookmark == null ? null : bookmark._id
@@ -773,7 +791,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         )
           .then(async views => {
             let _articleBody = article[0].articleBody;
-            let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id: null });
+            let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });
             var _res = "";
             if (saveText.length > 0) {
               _res = changeTohtml(saveText[0].articleBody);
@@ -783,9 +801,9 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
               articleCount: articleCount,
               title: article[0].title,
               article: article[0],
-              article_body:_articleBody,
-              previous: [],
-              next: [],
+              article_body: _articleBody,
+              previous: nextprev[0],
+              next: nextprev[1],
               settings: settings,
               related: related,
               bookmark: book,

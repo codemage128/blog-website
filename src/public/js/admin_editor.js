@@ -85,11 +85,11 @@ var editor = new EditorJS({
    onReady: function () {
       console.log("perfect");
       var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
-      $('#wordCount').text(wordCount);
+      $('#wordCount').text("Wortanzahl:" + wordCount);
    },
    onChange: function () {
       var wordCount = $('#editor').text().trim().replace(/[\s]+/g, " ").split(" ").length;
-      $('#wordCount').text(wordCount);
+      $('#wordCount').text("Wortanzahl:" + wordCount);
    }
 });
 $('#publish').click(function () {

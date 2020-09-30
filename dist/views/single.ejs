@@ -157,7 +157,7 @@
         .btn-sider {
             position: fixed;
             top: 50%;
-            left: -3vw;
+            left: -40px;
             border-radius: 50%;
             font-size: 1.5em;
             width: 75px;
@@ -178,6 +178,16 @@
             .confirm {
                 right: 25% !important;
             }
+
+            .table-of-contents {
+                position: fixed;
+                background: white;
+                width: 80vw;
+                top: 0;
+                left: 0;
+                z-index: 9999999;
+                height: 100%;
+            }
         }
 
         @media screen and (min-width: 1000px) {
@@ -187,18 +197,18 @@
                 left: 20vh;
                 z-index: 999999;
                 display: block;
-                width: 76vw;
+                width: 60vw;
             }
-        }
 
-        .table-of-contents {
-            position: fixed;
-            background: white;
-            width: 19vw;
-            top: 0;
-            left: 0;
-            z-index: 9999999;
-            height: 100%;
+            .table-of-contents {
+                position: fixed;
+                background: white;
+                width: 20vw;
+                top: 0;
+                left: 0;
+                z-index: 9999999;
+                height: 100%;
+            }
         }
 
         .table-of-contents ul,
@@ -441,9 +451,9 @@
                                         <a class="prev-next" url="/kategorie/<%= article.category.slug %>"
                                             style="color: white;"><%= article.category.name%></a></span>
                                 </div>
-                                <div class="dark-blog-banner-heading text-center row"
+                                <div itemscope itemtype="http://schema.org/Article" class="dark-blog-banner-heading text-center row"
                                     style="text-align: center; margin-left: auto; margin-right: auto;">
-                                    <h1 style="color: white;overflow-wrap: break-word; font-family: EB Garamond;">
+                                    <h1 itemprop="name" style="color: white;overflow-wrap: break-word; font-family: EB Garamond;">
                                         <%= article.title%></h1>
                                 </div>
                                 <div class="dark-blog-banner-headingdown text-center row">
@@ -488,7 +498,7 @@
                         width: auto;
                         color: #fff;
                         text-align: center;
-                        margin-left: 2.25vw;
+                        margin-left: 30px;
                         color: black;
                     "></i></button>
                     <aside class="table-of-contents" style="display: none;">
@@ -683,7 +693,6 @@
                     </div>
                 </div>
                 <!-- End of the comment section -->
-
                 <% if (articleCount > 2) {%>
                 <div class="dark-blog-posts">
                     <div class="container-fluid">
@@ -708,7 +717,7 @@
                                                     <%= previous.title%></h2>
                                             </a>
                                             <%}%>
-                            <%}%>
+                                    <%}%>
 
                                         </div>
                                     </div>
@@ -741,6 +750,7 @@
                     </div>
                 </div>
                 <% }%>
+                <% if(articleCount > 3) {%>
                 <div class="recommended-for-you">
                     <div class="container">
                         <div class="inner-recommended-for-you">
@@ -802,6 +812,7 @@
                         </div>
                     </div>
                 </div>
+                <% } %>
                 <section class="footer-main" id="footer">
                     <div class="container">
                         <div class="innner-footer-main">
@@ -997,7 +1008,7 @@
                                             url: '/savetext',
                                             dataType: 'json',
                                             type: 'post',
-                                            data: { userId: userId, text: _selectedText, articleId: articleId, url: url , tagId: _selectedTextId},
+                                            data: { userId: userId, text: _selectedText, articleId: articleId, url: url, tagId: _selectedTextId },
                                             success: function (data) {
                                                 var _paragraph = "#" + _selectedTextId;
                                                 $(_paragraph).html(data);
@@ -1159,6 +1170,7 @@
                                     })
                                 });
                             </script>
+
                             <!-- //calculation part -->
 </body>
 
