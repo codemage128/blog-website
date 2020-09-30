@@ -142,12 +142,14 @@
         }
 
         .table-contents>li:before {
-            content: '--------'counter(li)'.---------';
+            /* content: '--------'counter(li)'.---------'; */
             font-size: 1.5em;
+            
         }
 
         .table-contents>li {
-            counter-increment: li
+            counter-increment: li;
+            border-bottom: 3px dashed #98e0f2
         }
 
         html {

@@ -58,13 +58,11 @@ router.post("/savetext", auth, async (req, res, next) => {
     }
     await SaveText.create(payload);
   } else {
-    console.log("This is the update part");
     let textArray = saveText[0].text;
     let articleBody = JSON.parse(saveText[0].articleBody);
     let wholeText = articleBody[tagId].data.text;
     let newtext = '<mark class="cdx-marker">' + selectedString + '</mark>';
     newParagraph = wholeText.replace(selectedString, newtext);
-    textArray.push(newParagraph);
     articleBody[tagId].data.text = newParagraph;
     textArray.push(newParagraph);
     await SaveText.updateOne({ _id: saveText[0].id }, { $set: { text: textArray, articleBody: JSON.stringify(articleBody) } });

@@ -489,7 +489,7 @@ function changeTohtml(data) {
     }
     body_content_element = body_content_element + _template;
   });
-  var table_content_element = '<ol class="table-content table-contents"><h2 class="table-content-title">Inhalt</h2>';
+  var table_content_element = '<ol class="table-content table-contents"><h2 class="text-center table-content-title">Inhalt</h2>';
   var table_element = [];
   _data.forEach(element => {
     if (element.type == "header") {
@@ -513,12 +513,12 @@ function changeTohtml(data) {
 
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
 
-  // let __articles = await Article.find({});
-  // __articles.forEach(async article => {
-  //   let data = article.body;
-  //   let _res = changeTohtml(data);
-  //   await Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: _res.table_content, articleBody: _res.article } });
-  // })
+  let __articles = await Article.find({});
+  __articles.forEach(async article => {
+    let data = article.body;
+    let _res = changeTohtml(data);
+    await Article.updateOne({ _id: article._id }, { $set: { articleTablecontent: _res.table_content, articleBody: _res.article } });
+  })
   let settings = await Settings.findOne();
   let user = req.params.user;
   let slug = req.params.slug;

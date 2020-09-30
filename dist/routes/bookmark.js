@@ -153,24 +153,20 @@ router.post("/savetext", _auth["default"], /*#__PURE__*/function () {
             return _savetext["default"].create(payload);
 
           case 24:
-            _context3.next = 37;
+            _context3.next = 35;
             break;
 
           case 26:
-            console.log("This is the update part");
             _textArray = saveText[0].text;
             _articleBody = JSON.parse(saveText[0].articleBody);
             _wholeText = _articleBody[tagId].data.text;
             _newtext = '<mark class="cdx-marker">' + selectedString + '</mark>';
             newParagraph = _wholeText.replace(selectedString, _newtext);
-
-            _textArray.push(newParagraph);
-
             _articleBody[tagId].data.text = newParagraph;
 
             _textArray.push(newParagraph);
 
-            _context3.next = 37;
+            _context3.next = 35;
             return _savetext["default"].updateOne({
               _id: saveText[0].id
             }, {
@@ -180,14 +176,14 @@ router.post("/savetext", _auth["default"], /*#__PURE__*/function () {
               }
             });
 
-          case 37:
+          case 35:
             console.log(newParagraph);
             returndata = {
               "new": newParagraph
             };
             return _context3.abrupt("return", res.json(newParagraph));
 
-          case 40:
+          case 38:
           case "end":
             return _context3.stop();
         }
