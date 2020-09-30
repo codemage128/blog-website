@@ -40,7 +40,7 @@ router.post('/comment', async (req, res, next) => {
 	} else {
 		req.flash(
 			"error_msg",
-			"You can't include the email, link in the comment"
+			"Leider kannst du keine Links oder Mail Addressen einsetzen."
 		);
 		res.redirect('back');
 	}
