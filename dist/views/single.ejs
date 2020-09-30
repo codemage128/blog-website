@@ -731,7 +731,7 @@
                                         style="background-image: linear-gradient(#0000003d, #00000040) , url('<%= next.file%>');">
                                         <div class="dark-blog-next-posts-content">
                                             <h5>Nächsten Artikel ansehen</h5>
-                                            <% if(previous.postedBy){%>
+                                            <% if(next.postedBy){%>
                                             <% if(next.postedBy.roleId == "admin") {%>
                                             <a class="prev-next"
                                                 url="/d/<%= next.category.slug.toLowerCase();%>/<%= next.slug %>">
