@@ -36,12 +36,8 @@ router.post('/comment', /*#__PURE__*/function () {
             re = regular.test(comment);
             linkreg = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
             lin = linkreg.test(comment);
-            console.log(lin);
 
-            if (re != true || lin != true) {
-              req.flash("error_msg", "You can't include the email, link in the comment");
-              res.redirect('back');
-            } else {
+            if (re == false && lin == false) {
               try {
                 ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
                 payload = {
@@ -51,15 +47,7 @@ router.post('/comment', /*#__PURE__*/function () {
                   articleId: req.body.articleId,
                   userId: req.body.userId,
                   upvoteCount: 0,
-                  profilePicture: req.body.profilePicture // 'https://gravatar.com/avatar/' +
-                  // crypto
-                  // 	.createHash('md5')
-                  // 	.update(req.body.email)
-                  // 	.digest('hex')
-                  // 	.toString() +
-                  // '?s=200' +
-                  // '&d=retro',
-
+                  profilePicture: req.body.profilePicture
                 };
 
                 _comment["default"].create(payload).then(function (done) {
@@ -71,9 +59,12 @@ router.post('/comment', /*#__PURE__*/function () {
               } catch (error) {
                 next(error);
               }
+            } else {
+              req.flash("error_msg", "You can't include the email, link in the comment");
+              res.redirect('back');
             }
 
-          case 10:
+          case 9:
           case "end":
             return _context.stop();
         }
