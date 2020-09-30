@@ -668,124 +668,85 @@ function changeTohtml(data) {
 }
 
 router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res, next) {
-    var __articles, settings, user, slug, article, bookmark, book, art, category, _length, r, related, nextprev, ips, sameArticle, articleCount, indexof, view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article, _comments, _articleBody2, _saveText;
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res, next) {
+    var settings, user, slug, article, bookmark, book, art, category, _length, r, related, nextprev, ips, sameArticle, articleCount, indexof, view_article, comments, _articleBody, saveText, _res, ip, payload, _view_article, _comments, _articleBody2, _saveText;
 
-    return _regenerator["default"].wrap(function _callee6$(_context6) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
-            _context6.next = 2;
-            return _articles["default"].find({});
-
-          case 2:
-            __articles = _context6.sent;
-
-            __articles.forEach( /*#__PURE__*/function () {
-              var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(article) {
-                var data, _res;
-
-                return _regenerator["default"].wrap(function _callee5$(_context5) {
-                  while (1) {
-                    switch (_context5.prev = _context5.next) {
-                      case 0:
-                        data = article.body;
-                        _res = changeTohtml(data);
-                        _context5.next = 4;
-                        return _articles["default"].updateOne({
-                          _id: article._id
-                        }, {
-                          $set: {
-                            articleTablecontent: _res.table_content,
-                            articleBody: _res.article
-                          }
-                        });
-
-                      case 4:
-                      case "end":
-                        return _context5.stop();
-                    }
-                  }
-                }, _callee5);
-              }));
-
-              return function (_x16) {
-                return _ref6.apply(this, arguments);
-              };
-            }());
-
-            _context6.next = 6;
+            _context5.next = 2;
             return _settings["default"].findOne();
 
-          case 6:
-            settings = _context6.sent;
+          case 2:
+            settings = _context5.sent;
             user = req.params.user;
             slug = req.params.slug;
-            _context6.next = 11;
+            _context5.next = 7;
             return _articles["default"].find({
               slug: slug
             });
 
-          case 11:
-            article = _context6.sent;
+          case 7:
+            article = _context5.sent;
 
             if (!(article == "" && article.active == false)) {
-              _context6.next = 16;
+              _context5.next = 12;
               break;
             }
 
             res.render("404");
-            _context6.next = 85;
+            _context5.next = 81;
             break;
 
-          case 16:
+          case 12:
             if (!(typeof req.user !== "undefined")) {
-              _context6.next = 22;
+              _context5.next = 18;
               break;
             }
 
-            _context6.next = 19;
+            _context5.next = 15;
             return _bookmark["default"].findOne({
               userId: req.user.id,
               articleId: article[0]._id
             });
 
-          case 19:
-            _context6.t0 = _context6.sent;
-            _context6.next = 23;
+          case 15:
+            _context5.t0 = _context5.sent;
+            _context5.next = 19;
             break;
 
-          case 22:
-            _context6.t0 = false;
+          case 18:
+            _context5.t0 = false;
 
-          case 23:
-            bookmark = _context6.t0;
+          case 19:
+            bookmark = _context5.t0;
             book = bookmark ? true : false;
-            _context6.next = 27;
+            _context5.next = 23;
             return _articles["default"].findOne({
               slug: req.params.slug,
               active: true
             });
 
-          case 27:
-            art = _context6.sent;
-            _context6.next = 30;
+          case 23:
+            art = _context5.sent;
+            _context5.next = 26;
             return _category["default"].findOne({
               slug: req.params.category
             });
 
-          case 30:
-            category = _context6.sent;
-            _context6.next = 33;
+          case 26:
+            category = _context5.sent;
+            _context5.next = 29;
             return _articles["default"].find({
               active: true,
               category: category._id
             });
 
-          case 33:
-            _length = _context6.sent;
+          case 29:
+            _length = _context5.sent;
             r = Math.floor(Math.random() * _length.length);
-            _context6.next = 37;
+            _context5.next = 33;
             return _articles["default"].find({
               active: true,
               category: category._id
@@ -793,25 +754,25 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               createdAt: -1
             });
 
-          case 37:
-            related = _context6.sent;
-            _context6.next = 40;
+          case 33:
+            related = _context5.sent;
+            _context5.next = 36;
             return _articles["default"].find({
               active: true,
               category: category._id
             }).populate("postedBy").populate("category").limit(2).skip(r);
 
-          case 40:
-            nextprev = _context6.sent;
+          case 36:
+            nextprev = _context5.sent;
             ips = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
-            _context6.next = 44;
+            _context5.next = 40;
             return _articles["default"].find({
               active: true,
               category: category._id
             }).populate("category").populate("postedBy");
 
-          case 44:
-            sameArticle = _context6.sent;
+          case 40:
+            sameArticle = _context5.sent;
             articleCount = sameArticle.length;
             indexof = -1;
             art.viewers.forEach(function (element) {
@@ -821,37 +782,37 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context6.next = 64;
+              _context5.next = 60;
               break;
             }
 
-            _context6.next = 51;
+            _context5.next = 47;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 51:
-            view_article = _context6.sent;
-            _context6.next = 54;
+          case 47:
+            view_article = _context5.sent;
+            _context5.next = 50;
             return _comment["default"].find({
               articleId: view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 54:
-            comments = _context6.sent;
+          case 50:
+            comments = _context5.sent;
             // var article_body = view_article.body;
             // var _res = changeTohtml(article_body);
             _articleBody = view_article.articleBody;
-            _context6.next = 58;
+            _context5.next = 54;
             return _savetext["default"].find({
               articleId: view_article._id,
               userId: req.user ? req.user.id : null
             });
 
-          case 58:
-            saveText = _context6.sent;
+          case 54:
+            saveText = _context5.sent;
             _res = "";
 
             if (saveText.length > 0) {
@@ -873,16 +834,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context6.next = 85;
+            _context5.next = 81;
             break;
 
-          case 64:
+          case 60:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context6.next = 68;
+            _context5.next = 64;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -891,8 +852,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 68:
-            _context6.next = 70;
+          case 64:
+            _context5.next = 66;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -901,8 +862,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 70:
-            _context6.next = 72;
+          case 66:
+            _context5.next = 68;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -911,33 +872,33 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 72:
-            _context6.next = 74;
+          case 68:
+            _context5.next = 70;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 74:
-            _view_article = _context6.sent;
-            _context6.next = 77;
+          case 70:
+            _view_article = _context5.sent;
+            _context5.next = 73;
             return _comment["default"].find({
               articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 77:
-            _comments = _context6.sent;
+          case 73:
+            _comments = _context5.sent;
             // var _res = changeTohtml(article_body);
             _articleBody2 = _view_article.articleBody;
-            _context6.next = 81;
+            _context5.next = 77;
             return _savetext["default"].find({
               articleId: _view_article._id,
               userId: req.user ? req.user.id : null
             });
 
-          case 81:
-            _saveText = _context6.sent;
+          case 77:
+            _saveText = _context5.sent;
             _res = "";
 
             if (_saveText.length > 0) {
@@ -959,12 +920,12 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               comments: _comments
             });
 
-          case 85:
+          case 81:
           case "end":
-            return _context6.stop();
+            return _context5.stop();
         }
       }
-    }, _callee6);
+    }, _callee5);
   }));
 
   return function (_x13, _x14, _x15) {
@@ -973,20 +934,20 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 }()); // Get single article page
 
 router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(req, res, next) {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(req, res, next) {
     var settings, article, bookmark, book, art, category, _length, r, related, nextprev, d, customDate, ips, sameArticle, articleCount, indexof, article_body, _articleBody, saveText, _res, ip, payload;
 
-    return _regenerator["default"].wrap(function _callee8$(_context8) {
+    return _regenerator["default"].wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context8.prev = 0;
-            _context8.next = 3;
+            _context7.prev = 0;
+            _context7.next = 3;
             return _settings["default"].findOne();
 
           case 3:
-            settings = _context8.sent;
-            _context8.next = 6;
+            settings = _context7.sent;
+            _context7.next = 6;
             return _articles["default"].aggregate([{
               $match: {
                 active: true,
@@ -1051,65 +1012,65 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }]);
 
           case 6:
-            article = _context8.sent;
+            article = _context7.sent;
 
             if (!(article == "")) {
-              _context8.next = 11;
+              _context7.next = 11;
               break;
             }
 
             res.render("404");
-            _context8.next = 61;
+            _context7.next = 61;
             break;
 
           case 11:
             if (!(typeof req.user !== "undefined")) {
-              _context8.next = 17;
+              _context7.next = 17;
               break;
             }
 
-            _context8.next = 14;
+            _context7.next = 14;
             return _bookmark["default"].findOne({
               userId: req.user.id,
               articleId: article[0]._id
             });
 
           case 14:
-            _context8.t0 = _context8.sent;
-            _context8.next = 18;
+            _context7.t0 = _context7.sent;
+            _context7.next = 18;
             break;
 
           case 17:
-            _context8.t0 = false;
+            _context7.t0 = false;
 
           case 18:
-            bookmark = _context8.t0;
+            bookmark = _context7.t0;
             book = bookmark ? true : false;
-            _context8.next = 22;
+            _context7.next = 22;
             return _articles["default"].findOne({
               slug: req.params.slug,
               active: true
             });
 
           case 22:
-            art = _context8.sent;
-            _context8.next = 25;
+            art = _context7.sent;
+            _context7.next = 25;
             return _category["default"].findOne({
               slug: req.params.category
             });
 
           case 25:
-            category = _context8.sent;
-            _context8.next = 28;
+            category = _context7.sent;
+            _context7.next = 28;
             return _articles["default"].find({
               active: true,
               category: category._id
             });
 
           case 28:
-            _length = _context8.sent;
+            _length = _context7.sent;
             r = Math.floor(Math.random() * _length.length);
-            _context8.next = 32;
+            _context7.next = 32;
             return _articles["default"].find({
               active: true,
               category: category._id
@@ -1118,27 +1079,27 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
           case 32:
-            related = _context8.sent;
-            _context8.next = 35;
+            related = _context7.sent;
+            _context7.next = 35;
             return _articles["default"].find({
               active: true,
               category: category._id
             }).populate("postedBy").populate("category").limit(2).skip(r);
 
           case 35:
-            nextprev = _context8.sent;
+            nextprev = _context7.sent;
             d = new Date();
             customDate = "".concat(d.getDate(), "/").concat(d.getMonth(), "/").concat(d.getFullYear());
             ips = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null); //
 
-            _context8.next = 41;
+            _context7.next = 41;
             return _articles["default"].find({
               active: true,
               category: category._id
             }).populate("category").populate("postedBy");
 
           case 41:
-            sameArticle = _context8.sent;
+            sameArticle = _context7.sent;
             articleCount = sameArticle.length;
             indexof = -1;
             art.viewers.forEach(function (element) {
@@ -1148,20 +1109,20 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context8.next = 56;
+              _context7.next = 56;
               break;
             }
 
             article_body = article[0].body;
             _articleBody = article[0].articleBody;
-            _context8.next = 50;
+            _context7.next = 50;
             return _savetext["default"].find({
               articleId: article[0]._id,
               userId: req.user ? req.user.id : null
             });
 
           case 50:
-            saveText = _context8.sent;
+            saveText = _context7.sent;
             _res = "";
 
             if (saveText.length > 0) {
@@ -1181,7 +1142,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id
             });
-            _context8.next = 61;
+            _context7.next = 61;
             break;
 
           case 56:
@@ -1190,7 +1151,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               ip: ip,
               date: new Date()
             };
-            _context8.next = 60;
+            _context7.next = 60;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -1207,22 +1168,22 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
                 views: 1
               }
             }).then( /*#__PURE__*/function () {
-              var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(views) {
+              var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(views) {
                 var _articleBody, saveText, _res;
 
-                return _regenerator["default"].wrap(function _callee7$(_context7) {
+                return _regenerator["default"].wrap(function _callee6$(_context6) {
                   while (1) {
-                    switch (_context7.prev = _context7.next) {
+                    switch (_context6.prev = _context6.next) {
                       case 0:
                         _articleBody = article[0].articleBody;
-                        _context7.next = 3;
+                        _context6.next = 3;
                         return _savetext["default"].find({
                           articleId: article[0]._id,
                           userId: req.user ? req.user.id : null
                         });
 
                       case 3:
-                        saveText = _context7.sent;
+                        saveText = _context6.sent;
                         _res = "";
 
                         if (saveText.length > 0) {
@@ -1245,71 +1206,71 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
                       case 7:
                       case "end":
-                        return _context7.stop();
+                        return _context6.stop();
                     }
                   }
-                }, _callee7);
+                }, _callee6);
               }));
 
-              return function (_x20) {
-                return _ref8.apply(this, arguments);
+              return function (_x19) {
+                return _ref7.apply(this, arguments);
               };
             }())["catch"](function (err) {
               return next(err);
             });
 
           case 61:
-            _context8.next = 66;
+            _context7.next = 66;
             break;
 
           case 63:
-            _context8.prev = 63;
-            _context8.t1 = _context8["catch"](0);
-            next(_context8.t1);
+            _context7.prev = 63;
+            _context7.t1 = _context7["catch"](0);
+            next(_context7.t1);
 
           case 66:
           case "end":
-            return _context8.stop();
+            return _context7.stop();
         }
       }
-    }, _callee8, null, [[0, 63]]);
+    }, _callee7, null, [[0, 63]]);
   }));
 
-  return function (_x17, _x18, _x19) {
-    return _ref7.apply(this, arguments);
+  return function (_x16, _x17, _x18) {
+    return _ref6.apply(this, arguments);
   };
 }()); // Get article based on a category
 
 router.get("/all-post", _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res, next) {
+  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(req, res, next) {
     var perPage, page;
-    return _regenerator["default"].wrap(function _callee10$(_context10) {
+    return _regenerator["default"].wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context10.prev = _context10.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
             perPage = 7;
             page = req.query.page || 1;
-            _context10.prev = 2;
-            _context10.next = 5;
+            _context9.prev = 2;
+            _context9.next = 5;
             return _category["default"].findOne({
               name: req.query.category
             }).then( /*#__PURE__*/function () {
-              var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(category) {
-                return _regenerator["default"].wrap(function _callee9$(_context9) {
+              var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(category) {
+                return _regenerator["default"].wrap(function _callee8$(_context8) {
                   while (1) {
-                    switch (_context9.prev = _context9.next) {
+                    switch (_context8.prev = _context8.next) {
                       case 0:
                         if (category) {
-                          _context9.next = 4;
+                          _context8.next = 4;
                           break;
                         }
 
                         res.status(404).render("404");
-                        _context9.next = 6;
+                        _context8.next = 6;
                         break;
 
                       case 4:
-                        _context9.next = 6;
+                        _context8.next = 6;
                         return _articles["default"].find({
                           category: category._id
                         }).populate("postedBy").sort({
@@ -1330,56 +1291,56 @@ router.get("/all-post", _install["default"].redirectToLogin, /*#__PURE__*/functi
 
                       case 6:
                       case "end":
-                        return _context9.stop();
+                        return _context8.stop();
                     }
                   }
-                }, _callee9);
+                }, _callee8);
               }));
 
-              return function (_x24) {
-                return _ref10.apply(this, arguments);
+              return function (_x23) {
+                return _ref9.apply(this, arguments);
               };
             }())["catch"](function (e) {
               return next(e);
             });
 
           case 5:
-            _context10.next = 10;
+            _context9.next = 10;
             break;
 
           case 7:
-            _context10.prev = 7;
-            _context10.t0 = _context10["catch"](2);
-            next(_context10.t0);
+            _context9.prev = 7;
+            _context9.t0 = _context9["catch"](2);
+            next(_context9.t0);
 
           case 10:
           case "end":
-            return _context10.stop();
+            return _context9.stop();
         }
       }
-    }, _callee10, null, [[2, 7]]);
+    }, _callee9, null, [[2, 7]]);
   }));
 
-  return function (_x21, _x22, _x23) {
-    return _ref9.apply(this, arguments);
+  return function (_x20, _x21, _x22) {
+    return _ref8.apply(this, arguments);
   };
 }());
 router.post('/api/kategorie', /*#__PURE__*/function () {
-  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res, next) {
+  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res, next) {
     var slug, category, articles;
-    return _regenerator["default"].wrap(function _callee11$(_context11) {
+    return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
             slug = req.body.slug;
-            _context11.next = 3;
+            _context10.next = 3;
             return _category["default"].findOne({
               slug: slug
             });
 
           case 3:
-            category = _context11.sent;
-            _context11.next = 6;
+            category = _context10.sent;
+            _context10.next = 6;
             return _articles["default"].find({
               category: category.id
             }).sort({
@@ -1387,41 +1348,41 @@ router.post('/api/kategorie', /*#__PURE__*/function () {
             }).limit(10);
 
           case 6:
-            articles = _context11.sent;
-            return _context11.abrupt("return", res.json({
+            articles = _context10.sent;
+            return _context10.abrupt("return", res.json({
               "data": articles
             }));
 
           case 8:
           case "end":
-            return _context11.stop();
+            return _context10.stop();
         }
       }
-    }, _callee11);
+    }, _callee10);
   }));
 
-  return function (_x25, _x26, _x27) {
-    return _ref11.apply(this, arguments);
+  return function (_x24, _x25, _x26) {
+    return _ref10.apply(this, arguments);
   };
 }()); // Get all the posts in a category
 
 router.post('/kategory-ajax', /*#__PURE__*/function () {
-  var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res, next) {
+  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res, next) {
     var page, slug, cat, articles, length, totalsize, r, return_article;
-    return _regenerator["default"].wrap(function _callee12$(_context12) {
+    return _regenerator["default"].wrap(function _callee11$(_context11) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
             page = req.body.page;
             slug = req.body.slug;
-            _context12.next = 4;
+            _context11.next = 4;
             return _category["default"].findOne({
               slug: slug
             });
 
           case 4:
-            cat = _context12.sent;
-            _context12.next = 7;
+            cat = _context11.sent;
+            _context11.next = 7;
             return _articles["default"].find({
               active: true,
               category: cat._id
@@ -1430,11 +1391,11 @@ router.post('/kategory-ajax', /*#__PURE__*/function () {
             });
 
           case 7:
-            articles = _context12.sent;
+            articles = _context11.sent;
             length = articles.length;
             totalsize = Math.floor(length / 6) + 1;
             r = 6 * page;
-            _context12.next = 13;
+            _context11.next = 13;
             return _articles["default"].find({
               active: true,
               category: cat._id
@@ -1443,8 +1404,8 @@ router.post('/kategory-ajax', /*#__PURE__*/function () {
             }).limit(6).skip(r);
 
           case 13:
-            return_article = _context12.sent;
-            return _context12.abrupt("return", res.json({
+            return_article = _context11.sent;
+            return _context11.abrupt("return", res.json({
               'data': return_article,
               'page': page,
               'total': totalsize
@@ -1452,45 +1413,45 @@ router.post('/kategory-ajax', /*#__PURE__*/function () {
 
           case 15:
           case "end":
-            return _context12.stop();
+            return _context11.stop();
         }
       }
-    }, _callee12);
+    }, _callee11);
   }));
 
-  return function (_x28, _x29, _x30) {
-    return _ref12.apply(this, arguments);
+  return function (_x27, _x28, _x29) {
+    return _ref11.apply(this, arguments);
   };
 }());
 router.get("/kategorie/:slug", _install["default"].redirectToLogin, /*#__PURE__*/function () {
-  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
+  var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res, next) {
     var perPage, page, cat, post, count, featured;
-    return _regenerator["default"].wrap(function _callee13$(_context13) {
+    return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context13.prev = 0;
+            _context12.prev = 0;
             perPage = 6;
             page = req.query.page || 1;
-            _context13.next = 5;
+            _context12.next = 5;
             return _category["default"].findOne({
               slug: req.params.slug
             });
 
           case 5:
-            cat = _context13.sent;
+            cat = _context12.sent;
 
             if (cat) {
-              _context13.next = 10;
+              _context12.next = 10;
               break;
             }
 
             res.render("404");
-            _context13.next = 20;
+            _context12.next = 20;
             break;
 
           case 10:
-            _context13.next = 12;
+            _context12.next = 12;
             return _articles["default"].find({
               active: true,
               category: cat._id
@@ -1499,16 +1460,16 @@ router.get("/kategorie/:slug", _install["default"].redirectToLogin, /*#__PURE__*
             });
 
           case 12:
-            post = _context13.sent;
-            _context13.next = 15;
+            post = _context12.sent;
+            _context12.next = 15;
             return _articles["default"].countDocuments({
               active: true,
               category: cat._id
             });
 
           case 15:
-            count = _context13.sent;
-            _context13.next = 18;
+            count = _context12.sent;
+            _context12.next = 18;
             return _articles["default"].find({
               active: true,
               addToFeatured: true
@@ -1517,7 +1478,7 @@ router.get("/kategorie/:slug", _install["default"].redirectToLogin, /*#__PURE__*
             }).limit(5);
 
           case 18:
-            featured = _context13.sent;
+            featured = _context12.sent;
             res.render("category", {
               title: cat.name,
               cat: cat.name,
@@ -1530,24 +1491,24 @@ router.get("/kategorie/:slug", _install["default"].redirectToLogin, /*#__PURE__*
             });
 
           case 20:
-            _context13.next = 25;
+            _context12.next = 25;
             break;
 
           case 22:
-            _context13.prev = 22;
-            _context13.t0 = _context13["catch"](0);
-            next(_context13.t0);
+            _context12.prev = 22;
+            _context12.t0 = _context12["catch"](0);
+            next(_context12.t0);
 
           case 25:
           case "end":
-            return _context13.stop();
+            return _context12.stop();
         }
       }
-    }, _callee13, null, [[0, 22]]);
+    }, _callee12, null, [[0, 22]]);
   }));
 
-  return function (_x31, _x32, _x33) {
-    return _ref13.apply(this, arguments);
+  return function (_x30, _x31, _x32) {
+    return _ref12.apply(this, arguments);
   };
 }()); // Add to slider
 
@@ -1648,31 +1609,31 @@ router.post("/article/add-to-breaking", function (req, res, next) {
 }); // Upvote a post
 
 router.post("/article/upvote", _auth["default"], /*#__PURE__*/function () {
-  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
-    return _regenerator["default"].wrap(function _callee14$(_context14) {
+  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res, next) {
+    return _regenerator["default"].wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            return _context14.abrupt("return", res.redirect("back"));
+            return _context13.abrupt("return", res.redirect("back"));
 
           case 1:
           case "end":
-            return _context14.stop();
+            return _context13.stop();
         }
       }
-    }, _callee14);
+    }, _callee13);
   }));
 
-  return function (_x34, _x35, _x36) {
-    return _ref14.apply(this, arguments);
+  return function (_x33, _x34, _x35) {
+    return _ref13.apply(this, arguments);
   };
 }());
 router.post('/article/upvote-ajax', /*#__PURE__*/function () {
-  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
+  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res, next) {
     var date, articleId, userId, payload, article_origin, indexof, article, upvotecount, result;
-    return _regenerator["default"].wrap(function _callee15$(_context15) {
+    return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
             date = new Date();
             articleId = req.body.articleId;
@@ -1681,13 +1642,13 @@ router.post('/article/upvote-ajax', /*#__PURE__*/function () {
               date: date,
               user: req.user.id
             };
-            _context15.next = 6;
+            _context14.next = 6;
             return _articles["default"].findOne({
               _id: articleId
             });
 
           case 6:
-            article_origin = _context15.sent;
+            article_origin = _context14.sent;
             indexof = -1;
             article_origin.upvote.users.forEach(function (element) {
               if (element.user == req.user.id) {
@@ -1696,11 +1657,11 @@ router.post('/article/upvote-ajax', /*#__PURE__*/function () {
             });
 
             if (!(indexof == -1 && articleId != userId)) {
-              _context15.next = 12;
+              _context14.next = 12;
               break;
             }
 
-            _context15.next = 12;
+            _context14.next = 12;
             return _articles["default"].updateOne({
               _id: req.body.articleId
             }, {
@@ -1713,13 +1674,13 @@ router.post('/article/upvote-ajax', /*#__PURE__*/function () {
             });
 
           case 12:
-            _context15.next = 14;
+            _context14.next = 14;
             return _articles["default"].findOne({
               _id: articleId
             });
 
           case 14:
-            article = _context15.sent;
+            article = _context14.sent;
             upvotecount = article.upvote.count;
             result = {
               upvotecount: upvotecount,
@@ -1729,24 +1690,24 @@ router.post('/article/upvote-ajax', /*#__PURE__*/function () {
 
           case 18:
           case "end":
-            return _context15.stop();
+            return _context14.stop();
         }
       }
-    }, _callee15);
+    }, _callee14);
   }));
 
-  return function (_x37, _x38, _x39) {
-    return _ref15.apply(this, arguments);
+  return function (_x36, _x37, _x38) {
+    return _ref14.apply(this, arguments);
   };
 }()); // Downvote a post
 
 router.post("/article/downvote", _auth["default"], /*#__PURE__*/function () {
-  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res, next) {
-    return _regenerator["default"].wrap(function _callee16$(_context16) {
+  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res, next) {
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context16.next = 2;
+            _context15.next = 2;
             return _articles["default"].updateOne({
               _id: req.body.articleId
             }, {
@@ -1763,24 +1724,24 @@ router.post("/article/downvote", _auth["default"], /*#__PURE__*/function () {
 
           case 3:
           case "end":
-            return _context16.stop();
+            return _context15.stop();
         }
       }
-    }, _callee16);
+    }, _callee15);
   }));
 
-  return function (_x40, _x41, _x42) {
-    return _ref16.apply(this, arguments);
+  return function (_x39, _x40, _x41) {
+    return _ref15.apply(this, arguments);
   };
 }()); // Flag an article
 
 router.post("/article/flag", /*#__PURE__*/function () {
-  var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee17(req, res, next) {
-    return _regenerator["default"].wrap(function _callee17$(_context17) {
+  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res, next) {
+    return _regenerator["default"].wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context17.prev = _context17.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
-            _context17.next = 2;
+            _context16.next = 2;
             return _flag["default"].create({
               articleId: req.body.articleId,
               reason: req.body.reason.trim(),
@@ -1792,24 +1753,24 @@ router.post("/article/flag", /*#__PURE__*/function () {
 
           case 3:
           case "end":
-            return _context17.stop();
+            return _context16.stop();
         }
       }
-    }, _callee17);
+    }, _callee16);
   }));
 
-  return function (_x43, _x44, _x45) {
-    return _ref17.apply(this, arguments);
+  return function (_x42, _x43, _x44) {
+    return _ref16.apply(this, arguments);
   };
 }()); // Clap under an article
 
 router.post("/article/clap", /*#__PURE__*/function () {
-  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee18(req, res, next) {
-    return _regenerator["default"].wrap(function _callee18$(_context18) {
+  var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee17(req, res, next) {
+    return _regenerator["default"].wrap(function _callee17$(_context17) {
       while (1) {
-        switch (_context18.prev = _context18.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
-            _context18.next = 2;
+            _context17.next = 2;
             return _articles["default"].updateOne({
               _id: req.body.articleId
             }, {
@@ -1823,14 +1784,14 @@ router.post("/article/clap", /*#__PURE__*/function () {
 
           case 3:
           case "end":
-            return _context18.stop();
+            return _context17.stop();
         }
       }
-    }, _callee18);
+    }, _callee17);
   }));
 
-  return function (_x46, _x47, _x48) {
-    return _ref18.apply(this, arguments);
+  return function (_x45, _x46, _x47) {
+    return _ref17.apply(this, arguments);
   };
 }());
 module.exports = router;
