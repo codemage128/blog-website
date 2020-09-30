@@ -55,7 +55,11 @@
               "name": "<%= article.metatitle %>",
               "url": "https://dype.me",
               "description": "<%= article.metadescription %>",
-              "image": "<%= siteLink%><%= article.file %>"
+              "image": "<%= siteLink%><%= article.file %>",
+              "author": "<%= article.postedBy.username%>",
+              "datePublished" : "<%= article.createdAt%>",
+              "headline" : "<%= article.title%>",
+              "publisher" : "<%= article.postedBy.username%>"
             }
         </script>
     <style>
