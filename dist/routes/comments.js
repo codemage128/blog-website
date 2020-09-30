@@ -60,7 +60,7 @@ router.post('/comment', /*#__PURE__*/function () {
                 next(error);
               }
             } else {
-              req.flash("error_msg", "Leider kannst du keine Links oder Mail Addressen einsetzen.");
+              req.flash("error_msg", "Leider kannst du keine Links oder Mail Adressen einsetzen.");
               res.redirect('back');
             }
 

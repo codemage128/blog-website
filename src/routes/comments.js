@@ -40,7 +40,7 @@ router.post('/comment', async (req, res, next) => {
 	} else {
 		req.flash(
 			"error_msg",
-			"Leider kannst du keine Links oder Mail Addressen einsetzen."
+			"Leider kannst du keine Links oder Mail Adressen einsetzen."
 		);
 		res.redirect('back');
 	}
