@@ -797,7 +797,7 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
         switch (_context8.prev = _context8.next) {
           case 0:
             if (!req.user) {
-              _context8.next = 92;
+              _context8.next = 91;
               break;
             }
 
@@ -1031,7 +1031,6 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
                 }
               });
             });
-            console.log(randoms.length);
             res.render('blogrecent', {
               title: 'Blog recent',
               editorsPicker: feed,
@@ -1043,75 +1042,75 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
               random: randoms,
               favorites: favorites
             });
-            _context8.next = 129;
+            _context8.next = 128;
             break;
 
-          case 92:
-            _context8.next = 94;
+          case 91:
+            _context8.next = 93;
             return _category["default"].findOne({
               slug: "official"
             });
 
-          case 94:
+          case 93:
             _official = _context8.sent;
-            _context8.next = 97;
+            _context8.next = 96;
             return _articles["default"].find({
               "category": {
                 $ne: _official.id
               }
             }).populate('postedBy').populate('category');
 
-          case 97:
+          case 96:
             articlelength = _context8.sent;
             articlelength = articlelength.length;
             r = Math.floor(Math.random() * articlelength);
-            _context8.next = 102;
+            _context8.next = 101;
             return _articles["default"].find({
               "category": {
                 $ne: _official.id
               }
             }).populate('postedBy').populate('category').limit(3).skip(r);
 
-          case 102:
+          case 101:
             editorsPicker = _context8.sent;
-            _context8.next = 105;
+            _context8.next = 104;
             return _category["default"].find({
               "slug": {
                 "$ne": "official"
               }
             });
 
-          case 105:
+          case 104:
             categorylength = _context8.sent;
             categorylength = categorylength.length;
             r = Math.floor(Math.random() * categorylength);
-            _context8.next = 110;
+            _context8.next = 109;
             return _category["default"].find({
               "slug": {
                 "$ne": "official"
               }
             }).limit(6).skip(r);
 
-          case 110:
+          case 109:
             _categories = _context8.sent;
             r = Math.floor(Math.random() * articlelength);
-            _context8.next = 114;
+            _context8.next = 113;
             return _articles["default"].find({}).populate('postedBy').populate('category').limit(6).skip(r);
 
-          case 114:
+          case 113:
             _trendings = _context8.sent;
             r = Math.floor(Math.random() * articlelength);
-            _context8.next = 118;
+            _context8.next = 117;
             return _articles["default"].find({}).populate('postedBy').populate('category').limit(3).skip(r);
 
-          case 118:
+          case 117:
             _authorarticle = _context8.sent;
-            _context8.next = 121;
+            _context8.next = 120;
             return _articles["default"].find({}).sort({
               createdAt: -1
             }).populate('category').populate('postedBy');
 
-          case 121:
+          case 120:
             newest = _context8.sent;
             _news = [];
             newest.forEach(function (element) {
@@ -1122,10 +1121,10 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
               }
             });
             r = Math.floor(Math.random() * articlelength);
-            _context8.next = 127;
+            _context8.next = 126;
             return _articles["default"].find({}).populate('postedBy').populate('category').limit(6).skip(r);
 
-          case 127:
+          case 126:
             random = _context8.sent;
             res.render('blogrecent', {
               title: 'Blog recent',
@@ -1138,7 +1137,7 @@ router.get('/blogrecent', _install["default"].redirectToLogin, /*#__PURE__*/func
               random: random
             });
 
-          case 129:
+          case 128:
           case "end":
             return _context8.stop();
         }

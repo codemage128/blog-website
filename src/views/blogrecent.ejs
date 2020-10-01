@@ -30,6 +30,17 @@
 
    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
    <link rel="stylesheet" href="/css/blogrecent.css">
+   <style>
+      .social-media {
+         margin: 0px;
+         margin-top: 40px !important;
+      }
+      .btn-primary{
+         color: black;
+         background-color: transparent;
+         border-color: black;
+      }
+   </style>
 </head>
 
 <body class="Blog-recent-post">
@@ -190,7 +201,7 @@
                      style="background-image: url('<%= editorsPicker[i].file %>');">
                   </div>
                   <a class="underline" target="_blank" href="/kategorie/<%= editorsPicker[i].category.slug%>">
-                  <p><%= editorsPicker[i].category.name%></p>
+                     <p><%= editorsPicker[i].category.name%></p>
                   </a>
                   <h3><a href="<%= url%>" target="_blank"><%= editorsPicker[i].title%></a></h3>
                </div>
@@ -370,9 +381,9 @@
                      <% }%>
                   </div>
                   <div class="row">
-                     <div class="col-2 offset-5 mt-5">
+                     <div class="col-12 text-center mt-5">
                         <input type="hidden" id="length">
-                        <button class="form-control" id="loadmore">Load more...</button>
+                        <button class="btn btn-primary" id="loadmore">Load more...</button>
                      </div>
                   </div>
                </div>
@@ -388,6 +399,8 @@
                         <a style="padding: 11px 20px;" href="<%= facebook %>"><i class="fa fa-facebook"
                               aria-hidden="true"></i></a>
                         <a href="<%= linkedin %>"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                     </div>
+                     <div class="col-md-12 col-sm-12 social-media">
                         <a href="<%= youtube %>"><i class="fa fa-youtube" aria-hidden="true"></i></a>
                         <a href="<%= instagram %>"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                         <a href="<%= pinterest %>"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
@@ -665,7 +678,7 @@
                })
 
             })
-           
+
 
             $('#loadmore').click(function () {
                var count = $('#length').val();
@@ -679,9 +692,9 @@
                      console.log("asajc call is success ful");
                      data.forEach(article => {
                         var url = "";
-                        if(article.postedBy.roleId == "admin"){
+                        if (article.postedBy.roleId == "admin") {
                            url = "/d/" + article.category.slug + "/" + article.slug;
-                        }else {
+                        } else {
                            url = "/p/" + article.category.slug + "/" + article.slug
                         }
                         var tempalte = '<div class="col-md-12 col-lg-4 mt-5 random-article">' +
