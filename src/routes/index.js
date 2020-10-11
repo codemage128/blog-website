@@ -699,25 +699,6 @@ router.post('/suggestion', async (req, res, next) => {
 // Get index page
 router.get('/', install.redirectToLogin, async (req, res, next) => {
 	
-	// let users = await User.find({});
-	// users.forEach(async element => {
-	// 	let username = element.username.toLowerCase().replace(" ", "");
-	// 	let array = username.split('');
-	// 	array.forEach((item, index) => {
-	// 		if (item == "ß") {
-	// 			array[index] = "ss";
-	// 		}
-	// 		if (item == "ö") { array[index] = "oe"; }
-	// 		if (item == "ä") { array[index] = "ae"; }
-	// 		if (item == "ü") { array[index] = "ue"; }
-	// 	});
-	// 	let usernameslug = array.join("");
-	// 	await User.updateOne(
-	// 		{ _id: element._id },
-	// 		{ usernameslug: usernameslug }
-	// 	);
-	// });
-
 	var categories = await Category.find({});
 	let official = await Category.findOne({ slug: "official" });
 	var articlelength = await Article.find({ "category": { $ne: official.id } }).populate('postedBy').populate('category');

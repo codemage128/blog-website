@@ -12,7 +12,10 @@ const articleSchema = new Schema(
     metatitle: String,
     metadescription: String,
     body: String,
-    articleBody: String,
+    articleBody: {
+      type: Schema.Types.ObjectId,
+      ref :"Body",
+    },
     articleTablecontent: String,
     file: String,
     slug: String,

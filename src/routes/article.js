@@ -11,6 +11,7 @@ import install from "../helpers/install";
 import Flag from "../models/flag";
 import Bookmark from "../models/bookmark";
 import Media from '../models/media';
+import Body from '../models/body';
 import { json } from "body-parser";
 import crypto from "crypto";
 import path from "path";
@@ -187,12 +188,10 @@ router.post(
     parse.forEach(element => {
       html = html + element;
     })
-
     var result = changeTohtml(JSON.stringify(data));
     let payload1 = {
       addToNoIndex: noindex,
       articleTablecontent: result.table_content,
-      articleBody: result.article,
       week: `${newDate.getWeek()}`,
       month: `${months[newDate.getMonth()]}`,
       year: `${newDate.getFullYear()}`,
@@ -216,6 +215,8 @@ router.post(
       payload1.active = true;
     }
     let createdArticle = await Article.create(payload1);
+    let articlebody = await Body.create({ articleId: createdArticle._id, html: result.article });
+    await Article.updateOne({ _id: createdArticle._id }, { $set: { articleBody: articlebody._id } });
     req.flash(
       "success_msg",
       "New article has been posted successfully"
@@ -312,11 +313,11 @@ router.post(
       }
       var result = changeTohtml(JSON.stringify(data));
 
+      let articlebody = await Body.updateOne({ articleId: article._id, html: result.article });
+
       Article.updateOne({ _id: req.body.articleId.trim() }, {
         $set: {
-          title: article_title.replace(/&nbsp;/gi, ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content,
-          articleBody: result.article,
-          addToNoIndex: req.body.articlenoindex
+          title: article_title.replace(/&nbsp;/gi, ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content, addToNoIndex: req.body.articlenoindex
         }
       })
         .then(updated => {
@@ -510,8 +511,13 @@ function changeTohtml(data) {
   }
   return returnData;
 }
-
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
+  let temp_articles = await Article.find({});
+  temp_articles.forEach(async article => {
+    var _result = changeTohtml(article.body);
+    let articlebody = await Body.create({ articleId: article._id, html: _result.article });
+    await Article.updateOne({ _id: article._id }, { $set: { articleBody: articlebody._id } });
+  })
 
   // let __articles = await Article.find({});
   // __articles.forEach(async article => {
@@ -567,8 +573,8 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
       // var article_body = view_article.body;
       // var _res = changeTohtml(article_body);
-      let _articleBody = view_article.articleBody;
-
+      let _articleBody = await Body.findOne({ _id: view_article.articleBody });
+      _articleBody = _articleBody.html;
       let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
       var _res = "";
       if (saveText.length > 0) {
@@ -611,7 +617,10 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
       let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
       // var _res = changeTohtml(article_body);
-      let _articleBody = view_article.articleBody;
+      console.log(view_article.articleBody);
+      let _articleBody = await Body.findOne({ _id: view_article.articleBody });
+      console.log(_articleBody.length);
+      _articleBody = _articleBody.html;
 
       let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
       var _res = "";
@@ -750,8 +759,9 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
         }
       })
       if (indexof !== -1) {
-        var article_body = article[0].body;
-        let _articleBody = article[0].articleBody;
+
+        let _articleBody = await Body.findOne({ _id: article[0].articleBody });
+        _articleBody = _articleBody.html;
 
         let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });
         var _res = "";
@@ -790,7 +800,10 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
           { $inc: { views: 1 } }
         )
           .then(async views => {
-            let _articleBody = article[0].articleBody;
+
+            let _articleBody = await Body.findOne({ _id: article[0].articleBody });
+            _articleBody = _articleBody.html;
+
             let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });
             var _res = "";
             if (saveText.length > 0) {
