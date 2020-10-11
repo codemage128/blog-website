@@ -512,12 +512,12 @@ function changeTohtml(data) {
   return returnData;
 }
 router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next) => {
-  let temp_articles = await Article.find({});
-  temp_articles.forEach(async article => {
-    var _result = changeTohtml(article.body);
-    let articlebody = await Body.create({ articleId: article._id, html: _result.article });
-    await Article.updateOne({ _id: article._id }, { $set: { articleBody: articlebody._id } });
-  })
+  // let temp_articles = await Article.find({});
+  // temp_articles.forEach(async article => {
+  //   var _result = changeTohtml(article.body);
+  //   let articlebody = await Body.create({ articleId: article._id, html: _result.article });
+  //   await Article.updateOne({ _id: article._id }, { $set: { articleBody: articlebody._id } });
+  // })
 
   // let __articles = await Article.find({});
   // __articles.forEach(async article => {
