@@ -369,8 +369,8 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               meta_title = req.body.meta_title;
             }
 
-            parse = edjsParser.parse(receive);
-            html = "";
+            parse = changeTohtml(JSON.stringify(data));
+            html = parse.article;
             parse.forEach(function (element) {
               html = html + element;
             });

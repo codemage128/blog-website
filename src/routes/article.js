@@ -306,8 +306,8 @@ router.post(
         meta_description = req.body.meta_description;
         meta_title = req.body.meta_title;
       }
-      let parse = edjsParser.parse(receive);
-      let html = "";
+      let parse =  changeTohtml(JSON.stringify(data));
+      let html = parse.article;
       parse.forEach(element => {
         html = html + element;
       })
