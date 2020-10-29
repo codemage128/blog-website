@@ -25,7 +25,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 let server = http.createServer(app);
 server.listen(port, () => console.log(`App started on port: ${port}`));
-server.on("connection", function(socket) {
+server.on("connection", function (socket) {
   socket.setTimeout(600 * 60 * 1000); // now works perfectly...
 });
 //Load views directory and view engine
@@ -45,7 +45,6 @@ mongoose
       `There was an error connecting to database, the err is ${err}`
     )
   );
-
 // Import all routes
 import index from "./routes/index";
 import article from "./routes/article";
@@ -87,7 +86,7 @@ app.use(
   })
 );
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("X-powered-by", "Dype");
   next();
 });
@@ -128,7 +127,7 @@ app.use(install.redirectToLogin, (req, res, next) => {
   }
 });
 //Error handling
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV === "development" ? err : {};
