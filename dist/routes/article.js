@@ -44,24 +44,54 @@ var _path = _interopRequireDefault(require("path"));
 
 var _fs = _interopRequireWildcard(require("fs"));
 
+var _check = require("express-validator/check");
+
+var _awsSdk = _interopRequireDefault(require("aws-sdk"));
+
 var edjsHTML = require("editorjs-html");
 
 var edjsParser = edjsHTML();
 
 var router = _express["default"].Router();
 
-// Create a new article
-function createMedia(string) {
+var BUCKET_NAME = "dype";
+var IAM_USER_KEY = "AKIAJA3WZIND5NHIWH7Q";
+var IAM_USER_SECRET = "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";
+var s3 = new _awsSdk["default"].S3({
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET
+}); // Create a new article
+
+var createMedia = function createMedia(string) {
+  var type = string.split(';')[0].split('/')[1];
   var name = "".concat(Date.now().toString(), ".png");
   var dest = "".concat(_path["default"].join(__dirname, "..", "public", "media", "".concat(name)));
-  var data = string.replace('data:application/octet-stream;base64', '');
-  var fileContents = new Buffer(data, 'base64');
+  var data = string.replace(/data.*;base64/gm, '');
+  var fileContents = Buffer.from(data, 'base64');
 
   var file = _fs["default"].writeFileSync(dest, fileContents);
 
   var profilePicture = "/media/".concat(name);
+  var params = {
+    Bucket: BUCKET_NAME,
+    Key: name,
+    Body: "_data"
+  };
+
+  _fs["default"].readFile(dest, function (err, _data) {
+    if (err) throw err;
+    params.Body = _data;
+  });
+
+  s3.upload(params, function (err, data) {
+    if (err) {} else {
+      console.log(data);
+      console.log("file upload is successfully");
+    }
+  });
+  var url = "https://dype.s3.amazonaws.com/" + name;
   return profilePicture;
-}
+};
 
 router.post("/article/create", _install["default"].redirectToLogin, _auth["default"], /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
@@ -97,8 +127,6 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             data.forEach(function (block) {
               switch (block.type) {
                 case "header":
-                  console.log(block.data.level);
-
                   if (block.data.level == 1) {
                     article_title = block.data.text;
                   }
@@ -199,12 +227,9 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
             newDate = new Date(); //List months cos js months starts from zero to 11
 
             months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            parse = edjsParser.parse(receive);
-            html = "";
-            parse.forEach(function (element) {
-              html = html + element;
-            });
-            result = changeTohtml(JSON.stringify(data));
+            parse = changeTohtml(JSON.stringify(data));
+            html = parse.article;
+            result = parse;
             payload1 = {
               addToNoIndex: noindex,
               articleTablecontent: result.table_content,
@@ -232,20 +257,20 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               payload1.active = true;
             }
 
-            _context.next = 41;
+            _context.next = 40;
             return _articles["default"].create(payload1);
 
-          case 41:
+          case 40:
             createdArticle = _context.sent;
-            _context.next = 44;
+            _context.next = 43;
             return _body["default"].create({
               articleId: createdArticle._id,
               html: result.article
             });
 
-          case 44:
+          case 43:
             articlebody = _context.sent;
-            _context.next = 47;
+            _context.next = 46;
             return _articles["default"].updateOne({
               _id: createdArticle._id
             }, {
@@ -254,20 +279,20 @@ router.post("/article/create", _install["default"].redirectToLogin, _auth["defau
               }
             });
 
-          case 47:
+          case 46:
             req.flash("success_msg", "New article has been posted successfully");
 
             if (!(user.roleId == "user")) {
-              _context.next = 52;
+              _context.next = 51;
               break;
             }
 
             return _context.abrupt("return", res.redirect("/user/all-posts"));
 
-          case 52:
+          case 51:
             return _context.abrupt("return", res.redirect("/dashboard/all-posts"));
 
-          case 53:
+          case 52:
           case "end":
             return _context.stop();
         }
@@ -618,14 +643,17 @@ function changeTohtml(data) {
         break;
 
       case "image":
-        _template = '<img id="' + index + '" src=' + element.data.url + ' alt=' + element.data.caption + '/>';
+        // create the image and save that to the s3 buckets.
+        // return the image url
+        var _localurl = createMedia(element.data.url);
+
+        _template = '<img id="' + index + '" src="' + _localurl + '" alt=' + element.data.caption + '/>';
         break;
 
       case "code":
         var code = element.data.code;
         code = code.replace(/</g, "&lt;");
         code = code.replace(/>/g, "&gt;");
-        console.log(code);
         _template = '<pre id="' + index + '">' + code + '</pre>';
         break;
 
@@ -722,7 +750,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }
 
             res.render("404");
-            _context5.next = 89;
+            _context5.next = 88;
             break;
 
           case 12:
@@ -808,7 +836,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context5.next = 63;
+              _context5.next = 64;
               break;
             }
 
@@ -835,14 +863,19 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
           case 53:
             _articleBody = _context5.sent;
+
+            if (_articleBody == null) {
+              _articleBody = "";
+            }
+
             _articleBody = _articleBody.html;
-            _context5.next = 57;
+            _context5.next = 58;
             return _savetext["default"].find({
               articleId: view_article._id,
               userId: req.user ? req.user.id : null
             });
 
-          case 57:
+          case 58:
             saveText = _context5.sent;
             _res = "";
 
@@ -865,16 +898,16 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmarkId: bookmark == null ? null : bookmark._id,
               comments: comments
             });
-            _context5.next = 89;
+            _context5.next = 88;
             break;
 
-          case 63:
+          case 64:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context5.next = 67;
+            _context5.next = 68;
             return _users["default"].updateOne({
               _id: art.postedBy
             }, {
@@ -883,8 +916,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 67:
-            _context5.next = 69;
+          case 68:
+            _context5.next = 70;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -893,8 +926,8 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 69:
-            _context5.next = 71;
+          case 70:
+            _context5.next = 72;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -903,25 +936,23 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 71:
-            _context5.next = 73;
+          case 72:
+            _context5.next = 74;
             return _articles["default"].findOne({
               slug: req.params.slug.trim()
             }).populate("postedBy").populate('category');
 
-          case 73:
+          case 74:
             _view_article = _context5.sent;
-            _context5.next = 76;
+            _context5.next = 77;
             return _comment["default"].find({
               articleId: _view_article._id
             }).sort({
               upvotecount: -1
             });
 
-          case 76:
+          case 77:
             _comments = _context5.sent;
-            // var _res = changeTohtml(article_body);
-            console.log(_view_article.articleBody);
             _context5.next = 80;
             return _body["default"].findOne({
               _id: _view_article.articleBody
@@ -929,15 +960,14 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
           case 80:
             _articleBody2 = _context5.sent;
-            console.log(_articleBody2.length);
             _articleBody2 = _articleBody2.html;
-            _context5.next = 85;
+            _context5.next = 84;
             return _savetext["default"].find({
               articleId: _view_article._id,
               userId: req.user ? req.user.id : null
             });
 
-          case 85:
+          case 84:
             _saveText = _context5.sent;
             _res = "";
 
@@ -960,7 +990,7 @@ router.get("/p/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               comments: _comments
             });
 
-          case 89:
+          case 88:
           case "end":
             return _context5.stop();
         }

@@ -19,8 +19,19 @@ const edjsHTML = require("editorjs-html");
 const edjsParser = edjsHTML();
 const router = express.Router();
 import fs, { stat } from "fs";
+import { param } from "express-validator/check";
+import AWS from 'aws-sdk';
+const BUCKET_NAME = "dype";
+
+const IAM_USER_KEY = "AKIAJA3WZIND5NHIWH7Q";
+const IAM_USER_SECRET = "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";
+const s3 = new AWS.S3({
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET
+})
 // Create a new article
-function createMedia(string) {
+const createMedia = (string) => {
+  const type = string.split(';')[0].split('/')[1];
   const name = `${Date.now().toString()}.png`;
   const dest = `${path.join(
     __dirname,
@@ -29,12 +40,30 @@ function createMedia(string) {
     "media",
     `${name}`
   )}`;
-  var data = string.replace('data:application/octet-stream;base64', '');
-  let fileContents = new Buffer(data, 'base64')
+  var data = string.replace(/data.*;base64/gm, '');
+  let fileContents = Buffer.from(data, 'base64')
   let file = fs.writeFileSync(dest, fileContents);
   let profilePicture = `/media/${name}`;
+  const params = {
+    Bucket: BUCKET_NAME,
+    Key: name,
+    Body: "_data"
+  };
+  fs.readFile(dest, (err, _data) => {
+    if (err) throw err;
+    params.Body = _data;
+  })
+  s3.upload(params, function(err,data){
+    if(err){}
+    else{
+      console.log(data);
+      console.log("file upload is successfully");
+    }
+  })
+  var url = "https://dype.s3.amazonaws.com/" + name;
   return profilePicture;
 }
+
 router.post(
   "/article/create",
   install.redirectToLogin,
@@ -50,20 +79,17 @@ router.post(
     //     console.log(error);
     //   });
     // });
-
     let article_header = req.body.article_header;
-
     let header_url = createMedia(article_header);
     let noindex = req.body.articlenoindex;
-
     let receive = JSON.parse(req.body.data);
     let data = receive.blocks;
     let user = await User.findById({ _id: req.user.id });
     let article_title = "";
+
     data.forEach(block => {
       switch (block.type) {
         case "header":
-          console.log(block.data.level);
           if (block.data.level == 1) {
             article_title = block.data.text;
           }
@@ -183,12 +209,9 @@ router.post(
       "Nov",
       "Dec"
     ];
-    let parse = edjsParser.parse(receive);
-    let html = "";
-    parse.forEach(element => {
-      html = html + element;
-    })
-    var result = changeTohtml(JSON.stringify(data));
+    let parse = changeTohtml(JSON.stringify(data));
+    let html = parse.article;
+    var result = parse;
     let payload1 = {
       addToNoIndex: noindex,
       articleTablecontent: result.table_content,
@@ -448,13 +471,15 @@ function changeTohtml(data) {
         _template = '<p style="margin-top:30px" id="' + index + '">' + element.data.text + '</p>';
         break;
       case "image":
-        _template = '<img id="' + index + '" src=' + element.data.url + ' alt=' + element.data.caption + '/>';
+        // create the image and save that to the s3 buckets.
+        // return the image url
+        var _localurl = createMedia(element.data.url);
+        _template = '<img id="' + index + '" src="' + _localurl + '" alt=' + element.data.caption + '/>';
         break;
       case "code":
         var code = element.data.code;
         code = code.replace(/</g, "&lt;");
         code = code.replace(/>/g, "&gt;");
-        console.log(code)
         _template = '<pre id="' + index + '">' + code + '</pre>';
         break;
       case "embed":
@@ -574,6 +599,9 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       // var article_body = view_article.body;
       // var _res = changeTohtml(article_body);
       let _articleBody = await Body.findOne({ _id: view_article.articleBody });
+      if (_articleBody == null) {
+        _articleBody = ""
+      }
       _articleBody = _articleBody.html;
       let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
       var _res = "";
@@ -617,9 +645,7 @@ router.get("/p/:category/:slug", install.redirectToLogin, async (req, res, next)
       let view_article = await Article.findOne({ slug: req.params.slug.trim() }).populate("postedBy").populate('category');
       let comments = await Comment.find({ articleId: view_article._id }).sort({ upvotecount: -1 });
       // var _res = changeTohtml(article_body);
-      console.log(view_article.articleBody);
       let _articleBody = await Body.findOne({ _id: view_article.articleBody });
-      console.log(_articleBody.length);
       _articleBody = _articleBody.html;
 
       let saveText = await SaveText.find({ articleId: view_article._id, userId: req.user ? req.user.id : null });
