@@ -308,9 +308,6 @@ router.post(
       }
       let parse =  changeTohtml(JSON.stringify(data));
       let html = parse.article;
-      parse.forEach(element => {
-        html = html + element;
-      })
       let body = JSON.stringify(data);
       let short = htmlToText.fromString(html, {
         wordwrap: false

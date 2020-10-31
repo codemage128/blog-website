@@ -371,9 +371,6 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
 
             parse = changeTohtml(JSON.stringify(data));
             html = parse.article;
-            parse.forEach(function (element) {
-              html = html + element;
-            });
             body = JSON.stringify(data);
             _short = _htmlToText["default"].fromString(html, {
               wordwrap: false
@@ -389,12 +386,12 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             // }
 
             date = new Date();
-            _context2.next = 22;
+            _context2.next = 21;
             return _articles["default"].findOne({
               _id: req.body.articleId
             });
 
-          case 22:
+          case 21:
             article = _context2.sent;
             article_header = req.body.article_header ? createMedia(req.body.article_header) : article.file;
             active_flag = false;
@@ -406,13 +403,13 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             }
 
             result = changeTohtml(JSON.stringify(data));
-            _context2.next = 29;
+            _context2.next = 28;
             return _body["default"].updateOne({
               articleId: article._id,
               html: result.article
             });
 
-          case 29:
+          case 28:
             articlebody = _context2.sent;
 
             _articles["default"].updateOne({
@@ -445,20 +442,20 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
               return next(e);
             });
 
-            _context2.next = 36;
+            _context2.next = 35;
             break;
 
-          case 33:
-            _context2.prev = 33;
+          case 32:
+            _context2.prev = 32;
             _context2.t0 = _context2["catch"](0);
             next(_context2.t0);
 
-          case 36:
+          case 35:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 33]]);
+    }, _callee2, null, [[0, 32]]);
   }));
 
   return function (_x4, _x5, _x6) {
