@@ -333,8 +333,7 @@ router.post(
       }
       var result = changeTohtml(JSON.stringify(data));
 
-      let articlebody = await Body.updateOne({ articleId: article._id, html: result.article });
-
+      let articlebody = await Body.updateOne({ articleId: article._id}, {$set: {html: result.article }});
       Article.updateOne({ _id: req.body.articleId.trim() }, {
         $set: {
           title: article_title.replace(/&nbsp;/gi, ''), slug: articelslug, short: short, body: body, updatedAt: date, category: req.body.category, summary: req.body.summary, file: article_header, metatitle: meta_title, metadescription: meta_description, active: active_flag, articleTablecontent: result.table_content, addToNoIndex: req.body.articlenoindex
@@ -784,6 +783,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
       if (indexof !== -1) {
 
         let _articleBody = await Body.findOne({ _id: article[0].articleBody });
+        console.log(article[0].articleBody);
         _articleBody = _articleBody.html;
 
         let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });
@@ -825,6 +825,7 @@ router.get("/d/:category/:slug", install.redirectToLogin, async (req, res, next)
           .then(async views => {
 
             let _articleBody = await Body.findOne({ _id: article[0].articleBody });
+            
             _articleBody = _articleBody.html;
 
             let saveText = await SaveText.find({ articleId: article[0]._id, userId: req.user ? req.user.id : null });

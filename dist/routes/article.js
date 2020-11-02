@@ -405,8 +405,11 @@ router.post("/article/edit", _install["default"].redirectToLogin, _auth["default
             result = changeTohtml(JSON.stringify(data));
             _context2.next = 28;
             return _body["default"].updateOne({
-              articleId: article._id,
-              html: result.article
+              articleId: article._id
+            }, {
+              $set: {
+                html: result.article
+              }
             });
 
           case 28:
@@ -1087,7 +1090,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             }
 
             res.render("404");
-            _context7.next = 63;
+            _context7.next = 64;
             break;
 
           case 11:
@@ -1176,7 +1179,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
             });
 
             if (!(indexof !== -1)) {
-              _context7.next = 58;
+              _context7.next = 59;
               break;
             }
 
@@ -1187,14 +1190,15 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
 
           case 48:
             _articleBody = _context7.sent;
+            console.log(article[0].articleBody);
             _articleBody = _articleBody.html;
-            _context7.next = 52;
+            _context7.next = 53;
             return _savetext["default"].find({
               articleId: article[0]._id,
               userId: req.user ? req.user.id : null
             });
 
-          case 52:
+          case 53:
             saveText = _context7.sent;
             _res = "";
 
@@ -1215,16 +1219,16 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               bookmark: book,
               bookmarkId: bookmark == null ? null : bookmark._id
             });
-            _context7.next = 63;
+            _context7.next = 64;
             break;
 
-          case 58:
+          case 59:
             ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null);
             payload = {
               ip: ip,
               date: new Date()
             };
-            _context7.next = 62;
+            _context7.next = 63;
             return _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -1233,7 +1237,7 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               }
             });
 
-          case 62:
+          case 63:
             _articles["default"].updateOne({
               slug: req.params.slug.trim()
             }, {
@@ -1299,21 +1303,21 @@ router.get("/d/:category/:slug", _install["default"].redirectToLogin, /*#__PURE_
               return next(err);
             });
 
-          case 63:
-            _context7.next = 68;
+          case 64:
+            _context7.next = 69;
             break;
 
-          case 65:
-            _context7.prev = 65;
+          case 66:
+            _context7.prev = 66;
             _context7.t1 = _context7["catch"](0);
             next(_context7.t1);
 
-          case 68:
+          case 69:
           case "end":
             return _context7.stop();
         }
       }
-    }, _callee7, null, [[0, 65]]);
+    }, _callee7, null, [[0, 66]]);
   }));
 
   return function (_x16, _x17, _x18) {
